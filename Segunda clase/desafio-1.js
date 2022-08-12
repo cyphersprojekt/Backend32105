@@ -33,7 +33,7 @@ class Usuario {
     };
 }
 
-const juancito = new Usuario('Juan', '', [], []);
+const juancito = new Usuario('Juan', 'Pelotas', [], []);
 console.log(juancito.getFullName());
 console.log('\r\n----------------------------------------------------\r\n');
 juancito.addMascota('Perro');
