@@ -1,0 +1,17 @@
+[
+  {
+    "name": "Juan",
+    "price": "$2",
+    "id": 1
+  },
+  {
+    "name": "Pedro",
+    "price": "$3",
+    "id": 2
+  },
+  {
+    "name": "Pedro",
+    "price": "$3",
+    "id": 3
+  }
+]
