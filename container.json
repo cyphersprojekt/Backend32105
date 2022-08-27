@@ -1,0 +1,14 @@
+[
+  {
+    "name": "guardame",
+    "price": "$1",
+    "thumbnail": "favicon.ico",
+    "id": 1
+  },
+  {
+    "name": "buscame",
+    "price": "$3",
+    "thumbnail": "favicon.ico",
+    "id": 2
+  }
+]

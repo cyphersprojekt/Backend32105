@@ -14,11 +14,10 @@ class Product{
 class Container{
     constructor(path){
         this.path = path;
-        this.createFileIfNotExists();
     }
 
     async createFile(){
-        fs.writeFile(this.path, '[]', (e) =>{
+        fs.appendFileSync(this.path, '[]', (e) =>{
             if(e){
                 console.log(e);
                 }
@@ -36,7 +35,14 @@ class Container{
     }
 
     async getAllData(){
-        return JSON.parse(await fs.promises.readFile(this.path, 'utf8'));
+        try {
+            const allData = JSON.parse(await fs.promises.readFile(this.path, 'utf8'));
+            return allData;
+        } catch(e) {
+            const allData = [];
+            return allData;
+        }
+        
     }
 
     async getById(id){
@@ -71,7 +77,7 @@ class Container{
             const allData = await this.getAllData();
             obj.id = allData.length +1;
             allData.push(obj);
-            await fs.promises.writeFile(this.path, JSON.stringify(allData, null, 2));
+            await fs.promises.appendFile(this.path, JSON.stringify(allData, null, 2));
             return obj.id;
         } catch(e){
             console.log(e);
