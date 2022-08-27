@@ -6,9 +6,15 @@
     "id": 1
   },
   {
+    "name": "borrame",
+    "price": "$2",
+    "thumbnail": "favicon.ico",
+    "id": 2
+  },
+  {
     "name": "buscame",
     "price": "$3",
     "thumbnail": "favicon.ico",
-    "id": 2
+    "id": 3
   }
 ]

@@ -87,16 +87,20 @@ class Contenedor {
 
 
 console.log(`\r\n`)
-const container1 = new Contenedor('container.json');
-const producto1 = new Product('guardame', '$1', 'favicon.ico');
-const producto2 = new Product('borrame', '$2', 'favicon.ico');
-const producto3 = new Product('buscame', '$3', 'favicon.ico');
-container1.save(producto1);
-container1.save(producto2);
-container1.save(producto3);
-console.log(`\r\nCONTENIDO DEL CONTAINER ANTES DE HACER NADA:`)
-console.log(container1.getAllData())
-console.log(`\r\nBUSCO POR ID`)
-console.log(container1.getById(3));
-console.log(`\r\nBORRO POR ID`)
-console.log(container1.deleteById(2));
+// const container1 = new Contenedor('productos.txt');
+// const producto1 = new Product('guardame', '$1', 'favicon.ico');
+// const producto2 = new Product('borrame', '$2', 'favicon.ico');
+// const producto3 = new Product('buscame', '$3', 'favicon.ico');
+
+// container1.save(producto1);
+// container1.save(producto2);
+// container1.save(producto3);
+// console.log(`\r\nCONTENIDO DEL CONTAINER ANTES DE HACER NADA:`)
+// console.log(container1.getAllData())
+// console.log(`\r\nBUSCO POR ID`)
+// console.log(container1.getById(3));
+// console.log(`\r\nBORRO POR ID`)
+// console.log(container1.deleteById(2));
+
+module.exports = Contenedor;
+//module.exports = Product;
