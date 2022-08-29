@@ -14,7 +14,7 @@ router.get('/productos', (req, res) => {
     )
 
 router.get('/productoRandom', (req, res) => {
-    let randomIdx = random.int((min = 0), (max = contenedor1.getAllData().length+1))
+    let randomIdx = random.int((min = 0), (max = contenedor1.getAllData().length))
     const data = contenedor1.getAllData();
     //const randomProduct = contenedor1.getById(randomIdx);
     res.send(data[randomIdx]);
