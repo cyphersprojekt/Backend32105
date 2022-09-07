@@ -16,5 +16,20 @@
     "price": "$3",
     "thumbnail": "favicon.ico",
     "id": 3
+  },
+  {
+    "title": "insertame",
+    "price": "$4",
+    "thumbnail": "favicon.ico",
+    "id": 4
+  },
+  {
+    "title": "teactualice",
+    "price": "$10",
+    "thumbnail": "nolatengo.png",
+    "id": 5
+  },
+  {
+    "id": 6
   }
 ]
