@@ -26,16 +26,6 @@ router.post('/productos', (req, res) => {
     }
 );
 
-// router.post('/productos/form', (req, res) => {
-//     const product = {
-//         "title": req.body.title,
-//         "price": req.body.price,
-//         "thumbnail": req.body.thumbnail,
-//         }
-//     res.send(contenedor1.save(product));
-//     }
-// );
-
 router.put('/productos/:id', (req, res) => {
     const id = parseInt(req.params.id);
     const itemToUpdate = req.body;

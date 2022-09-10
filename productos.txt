@@ -30,9 +30,9 @@
     "id": 5
   },
   {
+    "title": "dsadsa",
+    "price": "dsadsa",
+    "thumbnail": "dsadas",
     "id": 6
-  },
-  {
-    "id": 7
   }
 ]
