@@ -93,7 +93,7 @@
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon start octava-clase/restful.js"
+    "start": "nodemon start 8-Octava-clase/restful.js"
   },
   "repository": {
     "type": "git",
