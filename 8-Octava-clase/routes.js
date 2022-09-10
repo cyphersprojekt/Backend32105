@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const random = require('random');
-const Contenedor = require('../Cuarta-clase/desafio-2-revised.js')
+const Contenedor = require('../4-Cuarta-clase/desafio-2-revised.js')
 const contenedor1 = new Contenedor('./productos.txt')
 const bodyParser = require('body-parser')
 
