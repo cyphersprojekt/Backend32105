@@ -1,0 +1,19 @@
+<style>
+input[type=text] {
+  width: 100%;
+  padding: 12px 20px;
+  margin: 8px 0;
+  box-sizing: border-box;
+}
+</style>
+
+<body>
+    <form action="/api/productos/" method="post" enctype="application/x-www-form-urlencoded">
+        <input type="text" name="title" id="title" placeholder="Titulo del producto a agregar"><br>
+        <input type="text" name="price" id="price" placeholder="Precio del producto a agregar"><br>
+        <input type="text" name="thumbnail" id="thumbnail" placeholder="URL del thumbnail para el producto a agregar"><br>
+        <input type="submit" value="Enviar">
+    </form>
+    
+    <a href="/api/productos"><button>Ver Productos</button></a>
+</body>

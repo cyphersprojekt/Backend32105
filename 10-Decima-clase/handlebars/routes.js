@@ -1,14 +1,13 @@
 const express = require('express');
 const router = express.Router();
-const random = require('random');
-const Contenedor = require('../4-Cuarta-clase/desafio-2-revised.js')
+const Contenedor = require('../../4-Cuarta-clase/desafio-2-revised')
 const contenedor1 = new Contenedor('./productos.txt')
-const bodyParser = require('body-parser')
-
+const path = require('path');
+const handlebars = require('handlebars')
 
 router.get('/productos', (req, res) => {
     const data = contenedor1.getAllData();
-    res.send(data);
+    res.render('productos', {'data': data});
     }
 );
 
@@ -21,7 +20,8 @@ router.get('/productos/:id', (req, res) => {
 
 router.post('/productos', (req, res) => {
     const itemToAdd = req.body;
-    res.send(contenedor1.save(itemToAdd));
+    contenedor1.save(itemToAdd);
+    res.redirect('/api/productos/');
     }
 );
 

@@ -29,6 +29,7 @@
     "escape-html": "^1.0.3",
     "etag": "^1.8.1",
     "express": "^4.18.1",
+    "express-handlebars": "^6.0.6",
     "fill-range": "^7.0.1",
     "finalhandler": "^1.2.0",
     "forwarded": "^0.2.0",
@@ -36,6 +37,7 @@
     "function-bind": "^1.1.1",
     "get-intrinsic": "^1.1.2",
     "glob-parent": "^5.1.2",
+    "handlebars": "^4.7.7",
     "has": "^1.0.3",
     "has-flag": "^3.0.0",
     "has-symbols": "^1.0.3",
@@ -93,7 +95,7 @@
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon start 8-Octava-clase/restful.js"
+    "handlebars": "nodemon start 10-Decima-clase/handlebars/restful.js"
   },
   "repository": {
     "type": "git",

@@ -1,38 +1,14 @@
 [
   {
-    "name": "guardame",
-    "price": "$1",
-    "thumbnail": "favicon.ico",
+    "title": "dsadas",
+    "price": "dasdas",
+    "thumbnail": "dsadsa",
     "id": 1
   },
   {
-    "name": "borrame",
-    "price": "$2",
-    "thumbnail": "favicon.ico",
+    "title": "dfghtyj",
+    "price": "hjhgjg",
+    "thumbnail": "jghjgh",
     "id": 2
-  },
-  {
-    "name": "buscame",
-    "price": "$3",
-    "thumbnail": "favicon.ico",
-    "id": 3
-  },
-  {
-    "title": "insertame",
-    "price": "$4",
-    "thumbnail": "favicon.ico",
-    "id": 4
-  },
-  {
-    "title": "teactualice",
-    "price": "$10",
-    "thumbnail": "nolatengo.png",
-    "id": 5
-  },
-  {
-    "title": "dsadsa",
-    "price": "dsadsa",
-    "thumbnail": "dsadas",
-    "id": 6
   }
 ]
