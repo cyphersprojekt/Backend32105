@@ -1,0 +1,21 @@
+<meta charset="UTF-8" />
+<title> Todos los productos </title>
+
+<body>
+    <h1>Todos los productos </h1>
+    <a href="/">
+        <button>Volver al formulario</button>
+    </a>
+
+    <% if(data){ %>
+        <% data.forEach((product) => { %>
+            <h3><%= product.title %></h3>
+            <p><%= product.price %></p>
+            <img src="<%= product.thumbnail %>">
+            <p><%= product.id %></p>
+        <% }) %>
+    <% } else { %>
+        <h3>No se encontraron productos</h3>
+    <% } %>
+
+</body>

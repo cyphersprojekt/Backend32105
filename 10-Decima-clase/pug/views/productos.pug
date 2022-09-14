@@ -1,0 +1,17 @@
+doctype html
+html(lang='en')
+    head
+        title Productos-pug 
+    h1 Todos los productos
+    a(href="/")
+        button Volver al formulario
+    if data
+        each product in data
+            h3=product.title
+            p=product.price
+            ul
+                li
+                    img(src=product.thumbnail)
+            p=product.id
+    else
+        h3 No se encontraron productos

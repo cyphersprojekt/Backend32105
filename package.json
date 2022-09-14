@@ -25,11 +25,13 @@
     "depd": "^2.0.0",
     "destroy": "^1.2.0",
     "ee-first": "^1.1.1",
+    "ejs": "^3.1.8",
     "encodeurl": "^1.0.2",
     "escape-html": "^1.0.3",
     "etag": "^1.8.1",
     "express": "^4.18.1",
     "express-handlebars": "^6.0.6",
+    "express-pug": "^1.0.0",
     "fill-range": "^7.0.1",
     "finalhandler": "^1.2.0",
     "forwarded": "^0.2.0",
@@ -69,6 +71,7 @@
     "picomatch": "^2.3.1",
     "proxy-addr": "^2.0.7",
     "pstree.remy": "^1.1.8",
+    "pug": "^3.0.2",
     "qs": "^6.10.3",
     "random": "^3.0.6",
     "range-parser": "^1.2.1",
@@ -95,7 +98,9 @@
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "handlebars": "nodemon start 10-Decima-clase/handlebars/restful.js"
+    "handlebars": "nodemon start 10-Decima-clase/handlebars/restful.js",
+    "pug": "nodemon start 10-Decima-clase/pug/restful.js",
+    "ejs": "nodemon start 10-Decima-clase/ejs/restful.js"
   },
   "repository": {
     "type": "git",

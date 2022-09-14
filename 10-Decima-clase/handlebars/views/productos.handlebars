@@ -1,14 +1,16 @@
 <body>
 
     <h1>Todos los productos</h1>
-    <a href="/"><button>Volver al formulario</button></a>
+    <a href="/">
+        <button>Volver al formulario</button>
+    </a>
 
 {{#if data}}
     {{#each data}}
     <div>
     <h3>{{this.title}}</h3>
     <p>{{this.price}}</p>
-    <p>{{this.thumbnail}}</p>
+    <img src={{this.thumbnail}}>
     <p>{{this.id}}</p>
     <hr/>
     </div>
