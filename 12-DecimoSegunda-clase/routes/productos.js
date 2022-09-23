@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
-const Contenedor = require('../../4-Cuarta-clase/desafio-2-revised')
-const contenedor1 = new Contenedor('./productos.txt')
+const Contenedor = require('../helpers/contenedor.js');
+const contenedor1 = new Contenedor('12-DecimoSegunda-clase/data/productos.txt');
 const path = require('path');
 const handlebars = require('handlebars')
 
@@ -21,7 +21,10 @@ router.get('/productos/:id', (req, res) => {
 router.post('/productos', (req, res) => {
     const itemToAdd = req.body;
     contenedor1.save(itemToAdd);
-    res.redirect('/api/productos/');
+    const io = req.app.get('socketio')
+    const allProducts = contenedor1.getAllData()
+    io.sockets.emit('currentProducts', allProducts)
+    res.end()
     }
 );
 
