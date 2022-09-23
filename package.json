@@ -59,6 +59,7 @@
     "mime-db": "^1.52.0",
     "mime-types": "^2.1.35",
     "minimatch": "^3.1.2",
+    "moment": "^2.29.4",
     "ms": "^2.0.0",
     "negotiator": "^0.6.3",
     "nodemon": "^2.0.19",
@@ -85,6 +86,7 @@
     "setprototypeof": "^1.2.0",
     "side-channel": "^1.0.4",
     "simple-update-notifier": "^1.0.7",
+    "socket.io": "^4.5.2",
     "statuses": "^2.0.1",
     "supports-color": "^5.5.0",
     "to-regex-range": "^5.0.1",
@@ -100,7 +102,8 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "handlebars": "nodemon start 10-Decima-clase/handlebars/restful.js",
     "pug": "nodemon start 10-Decima-clase/pug/restful.js",
-    "ejs": "nodemon start 10-Decima-clase/ejs/restful.js"
+    "ejs": "nodemon start 10-Decima-clase/ejs/restful.js",
+    "websocket": "nodemon start 12-DecimoSegunda-clase/main.js"
   },
   "repository": {
     "type": "git",

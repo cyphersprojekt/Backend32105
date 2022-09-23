@@ -1,13 +1,13 @@
 [
   {
     "title": "dsadas",
-    "price": "dasdas",
+    "price": "$1",
     "thumbnail": "https://w7.pngwing.com/pngs/630/871/png-transparent-heart-eyes-emoji-emoji-heart-iphone-love-emoji-smiley-sticker-emoticon-thumbnail.png",
     "id": 1
   },
   {
     "title": "dfghtyj",
-    "price": "hjhgjg",
+    "price": "$2",
     "thumbnail": "https://images.vexels.com/media/users/3/134485/isolated/preview/bcde859a8ad3a45cb93aed78d8a63686-emoticon-emoji-cool.png",
     "id": 2
   },
@@ -28,5 +28,53 @@
     "price": "$3",
     "thumbnail": "https://upload.wikimedia.org/wikipedia/commons/6/6a/JavaScript-logo.png",
     "id": 5
+  },
+  {
+    "title": "pindonga",
+    "price": "$2",
+    "thumbnail": "https://socialistmodernism.com/wp-content/uploads/2017/07/placeholder-image.png?w=640",
+    "id": 6
+  },
+  {
+    "title": "producto test",
+    "price": "$10000",
+    "thumbnail": "favicon.ico",
+    "id": 7
+  },
+  {
+    "title": "producto test",
+    "price": "$10000",
+    "thumbnail": "favicon.ico",
+    "id": 8
+  },
+  {
+    "title": "producto test",
+    "price": "$10000",
+    "thumbnail": "favicon.ico",
+    "id": 9
+  },
+  {
+    "title": "test websocket",
+    "price": "423432",
+    "thumbnail": "5345435",
+    "id": 10
+  },
+  {
+    "title": "test websocket 2",
+    "price": "423648732",
+    "thumbnail": "favicon.ico",
+    "id": 11
+  },
+  {
+    "title": "test websocket 2",
+    "price": "423648732",
+    "thumbnail": "favicon.ico",
+    "id": 12
+  },
+  {
+    "title": "test websocket 3",
+    "price": "un millon",
+    "thumbnail": "favicon.ico",
+    "id": 13
   }
 ]
