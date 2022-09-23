@@ -1,5 +1,10 @@
 # Coderhouse backend, comision 32105
 
+## 22/09/22
+### Sexto desafio, decimosegunda clase
+* websockets, chat y esos yuyos
+  * npm run websockets
+
 ## 14/09/2022
 ### Quinto desafio, decima clase
 * Motores de plantillas: pug, ejs, handlebars
