@@ -1,14 +1,8 @@
 [
   {
-    "correo": "mecago@enexpress",
-    "mensaje": "dadsa",
-    "fecha": "[ September 22nd 2022, 11:37 ]",
+    "correo": "dsdsds",
+    "mensaje": "dsdssd",
+    "fecha": "[ September 22nd 2022, 11:44 ]",
     "id": 1
-  },
-  {
-    "correo": "mecago@enexpress",
-    "mensaje": "dadsadasdas",
-    "fecha": "[ September 22nd 2022, 11:37 ]",
-    "id": 2
   }
 ]
