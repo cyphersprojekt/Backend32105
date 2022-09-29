@@ -91,7 +91,11 @@ class Contenedor {
         try {
             let data = JSON.parse(fs.readFileSync(this.path));
             //console.log(data);
-            return data }catch(e){ console.log(e)
+            return data }catch(e){
+                if (e.code === "ENOENT") {
+                    console.log(`Se creo el archivo ${this.path}`)
+                    this.createFile()}
+                else {console.log(e);}
         }
     }
 

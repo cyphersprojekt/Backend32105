@@ -1,0 +1,20 @@
+[
+  {
+    "title": "dsadas",
+    "price": "4",
+    "thumbnail": "jhjghjg",
+    "id": 1
+  },
+  {
+    "title": "dsadas",
+    "price": "4",
+    "thumbnail": "jhjghjg",
+    "id": 2
+  },
+  {
+    "title": "dsadas",
+    "price": "4",
+    "thumbnail": "jhjghjg",
+    "id": 3
+  }
+]
