@@ -78,6 +78,17 @@ class Contenedor {
         }
     }
 
+    getByIdCarrito(id) {
+        try {
+            let data = JSON.parse(fs.readFileSync(this.path));
+            let index = data.findIndex(x => x.id === id);
+            if (index == -1) { return null }
+            else { return (data[index]) }
+        } catch(e) {
+            console.log('cuack')
+        }
+    }
+
 
     // Busco el indice de del item que queremos borrar.
     // Si no lo encuentro, hago un console log 'negativo'

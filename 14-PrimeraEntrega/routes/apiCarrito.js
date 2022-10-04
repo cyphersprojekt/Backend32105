@@ -1,43 +1,30 @@
 const express = require('express');
 const router = express.Router();
 const Contenedor = require('../helpers/contenedor.js');
-const apiContenedor = new Contenedor('14-PrimeraEntrega/data/productos.txt');
-//const apiCart = new Contenedor('14-PrimeraEntrega/data/cart.txt');
+const apiContenedor = new Contenedor('14-PrimeraEntrega/data/carritos.txt');
 
-router.get('/productos', (req, res) => {
-    sessionId = req.session.id
-    console.log(sessionId)
-    apiCart = new Contenedor(`14-PrimeraEntrega/data/carrito-${sessionId}.txt`)
-    const data = apiCart.getAllData();
-    res.send(data)
+
+
+router.post('/', (req, res) => {
+    const itemToAdd = {
+        "id": null,
+        "timestamp": Date.now(),
+        "productos": [],
+    };
+    res.send(apiContenedor.save(itemToAdd));
     }
 );
 
-router.get('/productos/:id', (req, res) => {
-    const id = parseInt(req.params.id);
-    const prod = apiContenedor.getById(id);
-    const error = {'error':'producto no encontrado'}
-    if (!prod) {res.send(error) } else { res.send(prod); } }
-);
-
-router.post('/productos', (req, res) => {
-    const itemToAdd = req.body;
-    res.send(contenedor1.save(itemToAdd));
-    }
-);
-
-router.put('/productos/:id', (req, res) => {
-    const id = parseInt(req.params.id);
-    const itemToUpdate = req.body;
-    res.send(apiContenedor.update(id, itemToUpdate));
-    }
-);
-
-router.delete('/productos/:id', (req, res) => {
+router.delete('/:id', (req, res) => {
     const id = parseInt(req.params.id);
     res.send(apiContenedor.deleteById(id))
     }
 );
 
+router.get('/:id/productos', (req, res) => {
+    const id = parseInt(req.params.id);
+    const carrito = apiContenedor.getById(id);
+    res.send(carrito.productos)
+})
 
 module.exports = router;

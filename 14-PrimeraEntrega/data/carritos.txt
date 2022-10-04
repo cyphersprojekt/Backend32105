@@ -1,0 +1,12 @@
+[
+  {
+    "id": 1,
+    "timestamp": 1664926285169,
+    "productos": [{"laconcha":"detuhermana"}, {}, {}, {}, {}, {}, {}, {}]
+  },
+  {
+    "id": 2,
+    "timestamp": 1664926287337,
+    "productos": []
+  }
+]
