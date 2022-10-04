@@ -20,6 +20,7 @@
     "content-disposition": "^0.5.4",
     "content-type": "^1.0.4",
     "cookie": "^0.5.0",
+    "cookie-parser": "^1.4.6",
     "cookie-signature": "^1.0.6",
     "debug": "^2.6.9",
     "depd": "^2.0.0",
@@ -32,6 +33,7 @@
     "express": "^4.18.1",
     "express-handlebars": "^6.0.6",
     "express-pug": "^1.0.0",
+    "express-session": "^1.17.3",
     "fill-range": "^7.0.1",
     "finalhandler": "^1.2.0",
     "forwarded": "^0.2.0",
@@ -103,7 +105,8 @@
     "handlebars": "nodemon start 10-Decima-clase/handlebars/restful.js",
     "pug": "nodemon start 10-Decima-clase/pug/restful.js",
     "ejs": "nodemon start 10-Decima-clase/ejs/restful.js",
-    "websocket": "nodemon start 12-DecimoSegunda-clase/main.js"
+    "websocket": "nodemon start 12-DecimoSegunda-clase/main.js",
+    "primeraentrega": "nodemon start 14-PrimeraEntrega/main.js"
   },
   "repository": {
     "type": "git",

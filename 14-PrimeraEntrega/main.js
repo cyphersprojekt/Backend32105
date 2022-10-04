@@ -2,12 +2,17 @@ const express = require('express');
 const { Server: HttpServer } = require('http')
 const { Server: IOServer } = require('socket.io')
 const moment = require('moment/moment')
+const cookieParser = require('cookie-parser')
+const session = require('express-session')
 
 const Contenedor = require('./helpers/contenedor.js')
 const container = new Contenedor(__dirname + '/data/productos.txt')
 const messenger = new Contenedor(__dirname + '/data/mensajes.txt')
+const cart = new Contenedor(__dirname + '/data/cart.txt')
 
-const productosRouter = require('./routes/productos.js')
+const mainRouter = require('./routes/mainRouter.js')
+const apiCarrito = require('./routes/apiCarrito.js')
+const apiProductos = require('./routes/apiProductos.js')
 const handlebars = require('express-handlebars')
 
 const app = express()
@@ -31,9 +36,17 @@ app.use((req,res,next) => {
     next()
 })
 app.use(bodyParser.json())
+app.use(cookieParser())
+app.use(session({
+    secret: '34SDgsdgspxxxxxxxdfsG', // just a long random string
+    resave: false,
+    saveUninitialized: true
+}))
 app.use(bodyParser.urlencoded({ extended: true }))
-app.use(express.static('12-DecimoSegunda-clase/public'))
-app.use(productosRouter)
+app.use(express.static(__dirname + '/public'))
+app.use(mainRouter)
+app.use('/api', apiProductos)
+app.use('/api/carrito', apiCarrito)
 
 io.on('connection', (socket) => {
     let products = container.getAllData()
