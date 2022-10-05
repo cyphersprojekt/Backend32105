@@ -67,6 +67,23 @@ class Contenedor {
                 console.log(e)
             }
         }
+
+        addProductoToCarrito(id, producto) {
+            try {
+                let data = JSON.parse(fs.readFileSync(this.path));
+                let index = data.findIndex(x => x.id === id);
+                if (index == -1 ) {
+                    return {"error": "no se encontro el id para actualizer"}
+                } else {
+                    data[index].productos.push(producto);
+                    fs.writeFileSync(this.path, JSON.stringify(data, null, 2));
+                    return {"success": `se guardo el producto id ${producto.id} en el carrito id ${id}`}
+                }} catch(e) { 
+                    console.log(e)
+                }
+            }
+
+
     getById(id) {
         try {
             let data = JSON.parse(fs.readFileSync(this.path));
@@ -77,18 +94,6 @@ class Contenedor {
             console.log(e)
         }
     }
-
-    getByIdCarrito(id) {
-        try {
-            let data = JSON.parse(fs.readFileSync(this.path));
-            let index = data.findIndex(x => x.id === id);
-            if (index == -1) { return null }
-            else { return (data[index]) }
-        } catch(e) {
-            console.log('cuack')
-        }
-    }
-
 
     // Busco el indice de del item que queremos borrar.
     // Si no lo encuentro, hago un console log 'negativo'

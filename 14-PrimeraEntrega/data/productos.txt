@@ -1,1 +1,8 @@
-[]
+[
+  {
+    "title": "dasdas",
+    "price": "3",
+    "thumbnail": "dsadassd",
+    "id": 1
+  }
+]
