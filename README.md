@@ -1,5 +1,14 @@
 # Coderhouse backend, comision 32105
 
+## 07/10/22
+### Primera entrega del trabajo final
+* npm run primeraentrega
+  * ruta de productos: /api
+    * metodos: GET /api, GET /api/id, POST /api, PUT /api/id, DELETE /api/id
+    * autorizacion por header, usar "isadmin":true
+  * ruta de carritos: /carrito
+    * metodos: POST /carrito, DELETE /carrito/id, GET /carrito/id/productos, POST /carrito/id1/productos/id2, DELETE /carrito/id1/productos/id2
+
 ## 22/09/22
 ### Sexto desafio, decimosegunda clase
 * websockets, chat y esos yuyos
