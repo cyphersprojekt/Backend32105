@@ -2,50 +2,7 @@
   {
     "id": 1,
     "timestamp": 1664926285169,
-    "productos": [
-      {
-        "title": "dasdas",
-        "price": "3",
-        "thumbnail": "dsadassd",
-        "id": 1
-      },
-      {
-        "title": "dasdas",
-        "price": "3",
-        "thumbnail": "dsadassd",
-        "id": 1
-      },
-      {
-        "title": "dasdas",
-        "price": "3",
-        "thumbnail": "dsadassd",
-        "id": 1
-      },
-      {
-        "title": "dasdas",
-        "price": "3",
-        "thumbnail": "dsadassd",
-        "id": 1
-      },
-      {
-        "title": "dasdas",
-        "price": "3",
-        "thumbnail": "dsadassd",
-        "id": 1
-      },
-      {
-        "title": "dasdas",
-        "price": "3",
-        "thumbnail": "dsadassd",
-        "id": 1
-      },
-      {
-        "title": "dasdas",
-        "price": "3",
-        "thumbnail": "dsadassd",
-        "id": 1
-      }
-    ]
+    "productos": []
   },
   {
     "id": 2,

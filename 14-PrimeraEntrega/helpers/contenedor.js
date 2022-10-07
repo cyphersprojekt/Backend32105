@@ -68,20 +68,37 @@ class Contenedor {
             }
         }
 
-        addProductoToCarrito(id, producto) {
+    addProductoToCarrito(id, producto) {
+        try {
+            let data = JSON.parse(fs.readFileSync(this.path));
+            let index = data.findIndex(x => x.id === id);
+            if (index == -1 ) {
+                return {"error": "no se encontro el id para actualizer"}
+            } else {
+                data[index].productos.push(producto);
+                fs.writeFileSync(this.path, JSON.stringify(data, null, 2));
+                return {"success": `se guardo el producto id ${producto.id} en el carrito id ${id}`}
+            }} catch(e) { 
+                console.log(e)
+            }
+        }
+
+        deleteFromCarrito(idCarrito, idProducto) {
             try {
                 let data = JSON.parse(fs.readFileSync(this.path));
-                let index = data.findIndex(x => x.id === id);
+                let index = data.findIndex(x => x.id === idCarrito);
                 if (index == -1 ) {
-                    return {"error": "no se encontro el id para actualizer"}
-                } else {
-                    data[index].productos.push(producto);
-                    fs.writeFileSync(this.path, JSON.stringify(data, null, 2));
-                    return {"success": `se guardo el producto id ${producto.id} en el carrito id ${id}`}
-                }} catch(e) { 
-                    console.log(e)
-                }
-            }
+                    return {"error": "no se encontro el carrito"}
+                } else { 
+                    const productosEnCarrito = data[index].productos;
+                    const productoIndex = productosEnCarrito.findIndex(x => x.id === idProducto)
+                    if (productoIndex == -1) {
+                        return {"error": "no se encontro el producto en el carrito"}
+                    } else {
+                        productosEnCarrito.splice(productoIndex,1)
+                        fs.writeFileSync(this.path, JSON.stringify(data, null, 2));
+                        return {"success":`se borro el prodocto ${idProducto} en el carrito ${idCarrito}}`}
+                    }}} catch(e){ console.log(e)  }}
 
 
     getById(id) {

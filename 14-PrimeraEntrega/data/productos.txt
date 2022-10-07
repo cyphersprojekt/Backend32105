@@ -4,5 +4,17 @@
     "price": "3",
     "thumbnail": "dsadassd",
     "id": 1
+  },
+  {
+    "title": "dasdas",
+    "price": "3",
+    "thumbnail": "dsadassd",
+    "id": 2
+  },
+  {
+    "title": "dasdas",
+    "price": "3",
+    "thumbnail": "dsadassd",
+    "id": 3
   }
 ]

@@ -41,6 +41,20 @@ router.post('/:id1/productos/:id2', (req, res) => {
 })
 
 router.delete('/:id1/productos/:id2', (req, res) => {
+    const carritoId = parseInt(req.params.id1);
+    const productoId = parseInt(req.params.id2);
+
+    const carrito = apiContenedor.getById(carritoId);
+    const producto = productosContenedor.getById(productoId);
+
+    console.log(carritoId,productoId,carrito,producto);
+    
+    if (carrito && producto) {
+        res.send(apiContenedor.deleteFromCarrito(carritoId, productoId)) }
+    else {
+        res.send({"no":"entendi"})
+    }
+
 })
 
 module.exports = router;
