@@ -16,5 +16,11 @@
     "price": "3",
     "thumbnail": "dsadassd",
     "id": 3
+  },
+  {
+    "title": "tete",
+    "price": "$3",
+    "thumbnail": "favicon.ico",
+    "id": 4
   }
 ]
