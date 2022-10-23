@@ -11,6 +11,7 @@ let compiledMensajes = Handlebars.compile(emptyTemplateMensajes)
 socket.on('currentProducts', (data) =>{
     /* render */
     $(".lista-productos").html(compiledProductos({data: data}))
+    console.log(data)
 
 })
 

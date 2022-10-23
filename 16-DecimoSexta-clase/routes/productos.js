@@ -41,7 +41,7 @@ router.get('/', isAdmin, async (req, res)=>{
     let currentData
 
     try{
-        currentData = mariadb.getAll()
+        currentData = await mariadb.getAll()
     }
     catch (err){
         console.log(err)

@@ -19,7 +19,7 @@ const mariadb = new SQLHelper({
         host: "localhost",
         user: "root",
         password: "root",
-        database: "munozcoderhouse"
+        database: "coderhouse"
     }
 }, "productos")
 
@@ -81,7 +81,7 @@ app.all("*", (req, res) => {
 /* Envio la lista inicial de productos y mensajes a quien se conecte, el resto, se encarga el router (productosRouter con su evento newProduct) y el evento newMessage */
 io.on('connection', async (socket) => {
 
-    let products
+    //let products = null;
     try{
         products = await mariadb.getAll()
     }
@@ -96,7 +96,7 @@ io.on('connection', async (socket) => {
     catch (err){
         console.log(err)
     }
-
+    console.log(products)
     socket.emit("currentProducts", products)
     socket.emit("currentMessages", mensajes)
 
