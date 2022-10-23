@@ -11,6 +11,8 @@ Una vez arreglado eso, de haber sido necesario\
 * Backend> node .\16-DecimoSexta-clase\db\mariaCreateDb.js
 * Backend> node .\16-DecimoSexta-clase\db\mariaCreateTable.js
 * Backend> node .\16-DecimoSexta-clase\db\sqliteCreateTable.js
+y por último
+* Backend > npm run wswithdb
 
 ## 07/10/22
 ### Primera entrega del trabajo final
