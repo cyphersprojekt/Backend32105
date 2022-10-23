@@ -31,7 +31,7 @@ class Contenedor {
             if (!fs.existsSync(this.path) || fs.readFileSync(this.path).length === 0) {
                 this.createFile();
                 obj.id = 1;
-                let data = [obj];
+                let data = obj;
                 fs.writeFileSync(this.path, JSON.stringify(data, null, 2));
                 console.log(`Se creo el archivo nuevo y se inserto ${obj.name} porque no existia`)
                 return {"created":`${obj.id}`};
@@ -83,22 +83,27 @@ class Contenedor {
             }
         }
 
-        deleteFromCarrito(idCarrito, idProducto) {
-            try {
-                let data = JSON.parse(fs.readFileSync(this.path));
-                let index = data.findIndex(x => x.id === idCarrito);
-                if (index == -1 ) {
-                    return {"error": "no se encontro el carrito"}
-                } else { 
-                    const productosEnCarrito = data[index].productos;
-                    const productoIndex = productosEnCarrito.findIndex(x => x.id === idProducto)
-                    if (productoIndex == -1) {
-                        return {"error": "no se encontro el producto en el carrito"}
-                    } else {
-                        productosEnCarrito.splice(productoIndex,1)
-                        fs.writeFileSync(this.path, JSON.stringify(data, null, 2));
-                        return {"success":`se borro el prodocto ${idProducto} en el carrito ${idCarrito}}`}
-                    }}} catch(e){ console.log(e)  }}
+    deleteFromCarrito(idCarrito, idProducto) {
+        try {
+            let data = JSON.parse(fs.readFileSync(this.path));
+            let index = data.findIndex(x => x.id === idCarrito);
+            if (index == -1 ) {
+                return {"error": "no se encontro el carrito"}
+            } else { 
+                const productosEnCarrito = data[index].productos;
+                const productoIndex = productosEnCarrito.findIndex(x => x.id === idProducto)
+                if (productoIndex == -1) {
+                    return {"error": "no se encontro el producto en el carrito"}
+                } else {
+                    productosEnCarrito.splice(productoIndex,1)
+                    fs.writeFileSync(this.path, JSON.stringify(data, null, 2));
+                    return {"success":`se borro el prodocto ${idProducto} en el carrito ${idCarrito}}`}
+                }
+            }
+        } catch(e){ 
+            console.log(e)  
+        }
+    }
 
 
     getById(id) {

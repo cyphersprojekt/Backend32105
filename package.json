@@ -9,6 +9,7 @@
     "anymatch": "^3.1.2",
     "array-flatten": "^1.1.1",
     "balanced-match": "^1.0.2",
+    "better-sqlite3": "^7.6.2",
     "binary-extensions": "^2.2.0",
     "body-parser": "^1.20.0",
     "brace-expansion": "^1.1.11",
@@ -54,6 +55,7 @@
     "is-extglob": "^2.1.1",
     "is-glob": "^4.0.3",
     "is-number": "^7.0.0",
+    "knex": "^2.3.0",
     "media-typer": "^0.3.0",
     "merge-descriptors": "^1.0.1",
     "methods": "^1.1.2",
@@ -63,6 +65,7 @@
     "minimatch": "^3.1.2",
     "moment": "^2.29.4",
     "ms": "^2.0.0",
+    "mysql": "^2.18.1",
     "negotiator": "^0.6.3",
     "nodemon": "^2.0.19",
     "nopt": "^1.0.10",
@@ -89,6 +92,7 @@
     "side-channel": "^1.0.4",
     "simple-update-notifier": "^1.0.7",
     "socket.io": "^4.5.2",
+    "sqlite3": "^5.1.2",
     "statuses": "^2.0.1",
     "supports-color": "^5.5.0",
     "to-regex-range": "^5.0.1",
@@ -106,7 +110,8 @@
     "pug": "nodemon start 10-Decima-clase/pug/restful.js",
     "ejs": "nodemon start 10-Decima-clase/ejs/restful.js",
     "websocket": "nodemon start 12-DecimoSegunda-clase/main.js",
-    "primeraentrega": "nodemon start 14-PrimeraEntrega/main.js"
+    "primeraentrega": "nodemon start 14-PrimeraEntrega/main.js",
+    "wswithdb": "nodemon start 16-DecimoSexta-clase/main.js"
   },
   "repository": {
     "type": "git",

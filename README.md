@@ -1,5 +1,17 @@
 # Coderhouse backend, comision 32105
 
+## 22/10/22
+### Primera base de datos
+mi conexión con mysql estaba rotísima porque hace un tiempo desinstalé workbench, no se borró todo, y cuando lo instalé otra vez reventó por todos lados.\
+para arreglarlo tuve que hacer:\
+* ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'root';
+* FLUSH PRIVILEGES;
+(obviamente se puede poner otra contraseña, pero está hardcodeada en 16-DecimoSexta-clase/db/maria*)\
+Una vez arreglado eso, de haber sido necesario\
+* Backend> node .\16-DecimoSexta-clase\db\mariaCreateDb.js
+* Backend> node .\16-DecimoSexta-clase\db\mariaCreateTable.js
+* Backend> node .\16-DecimoSexta-clase\db\sqliteCreateTable.js
+
 ## 07/10/22
 ### Primera entrega del trabajo final
 * npm run primeraentrega
