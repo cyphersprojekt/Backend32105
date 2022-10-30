@@ -63,7 +63,7 @@ db.messages.insertMany([
 ````
 
 ````
-db.products.insertMany([
+db.productos.insertMany([
     {
         "name": "product1",
         "description": "description1",

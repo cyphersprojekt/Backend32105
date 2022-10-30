@@ -1,82 +1,67 @@
 const express = require('express')
 const router = express.Router()
 const random = require('random')
-/* const Contenedor = require('./helpers/contenedor-sync.js') */
+const dotenv = require('dotenv')
+dotenv.config()
+const productosMongoDto = require("../dtos/productos/productosMongoDto")
+const productosFireDto = require("../dtos/productos/productosFirestoreDto")
 
-const SQLHelper = require('../helpers/sql-helper.js')
+switch (process.env.dbType){
+    case "mongo":
+        productos = new productosMongoDto();
+        break
+    case "firestore":
+        productos = new productosFireDto();
+        break
+}
 
-const mariadb = new SQLHelper({
-    client: "mysql",
-    connection: {
-        host: "127.0.0.1",
-        user: "root",
-        password: "root",
-        database: "coderhouse"
-    }
-}, "productos")
-
-/* const contenedor = new Contenedor('src/data/productos.txt') */
-
-// Middleware para autorizar o no ciertas rutas. Queda hardcodeado para bloquear todo menos GET.
-const isAdmin = ((req, res, next) => {
-    const isAdmin = req.headers["isadmin"]
-    let needsAuth = false
-    if (req.method == "POST" || req.method == "PUT" || req.method == "DELETE"){
-        needsAuth = true
-    }
-
-    if (needsAuth && isAdmin == "true"){
-        next()
-    }
-    else if(!needsAuth){
-        next()
-    }
-    if(needsAuth && (isAdmin == null || isAdmin != "true")){
-        res.send({
-            error: -1,
-            descripcion: `ruta ${req.method} ${req.originalUrl} no autorizada`
-         })
-    }
-})
-
-
-router.get('/', isAdmin, async (req, res)=>{
+router.get('/', async (req, res)=>{
     let currentData
 
     try{
-        currentData = mariadb.getAll()
+        currentData = await productos.getAll()
     }
     catch (err){
         console.log(err)
     }
-
     if(currentData){
         res.send(currentData)
     }
     else{
         res.send({error: 'No hay productos'})
     }
-
 })
 
-router.get('/:id', (req, res)=>{
-    const currentData = contenedor.getbyId(parseInt(req.params.id))
-    if(currentData){
+router.get('/:id', async (req, res)=>{
+    let currentData
+    const {id} = req.params
+    try {
+        currentData = await productos.getByID(id)
+    }
+    catch (e) {
+        console.log(e)
+    }
+    if (currentData) {
         res.send(currentData)
     }
-    else{
+    else {
         res.send({error: 'Producto no encontrado'})
+        }
     }
-})
+)
+
 
 router.post('/', async (req, res)=>{
-    const product = req.body
-    await mariadb.insert(product)
-    const io = req.app.get('socketio')
-    const allProducts = await mariadb.getAll()
-    io.sockets.emit("currentProducts", allProducts)
-    res.send(`Se guardo el objeto.`)
-})
+    const productInsert = req.body
+    const newProduct = await productos.save(productInsert)
+    //console.log(newProduct)
+    if (newProduct) {
+        res.send(`Se guardo el producto ${newProduct._id}`)
+    }
+    else {
+        res.send(`Error guardando el producto ${productInsert}`)
+    } } )
+
 
 router.put('/:id', (req, res) =>{
     const product = req.body

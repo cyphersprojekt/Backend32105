@@ -4,7 +4,6 @@ firebaseAdmin.initializeApp({
     credential: firebaseAdmin.credential.cert(firebase)
 })
 
-
 const firedb = firebaseAdmin.firestore()
 
 
@@ -14,12 +13,12 @@ class firestoreHelper {
     }
 
     async getByID(id){
-        const data =  await this.collection.doc(id).get()
+        const data = await this.collection.doc(id).get()
         return data
     }
 
     async getAll(){
-        const data =  await this.collection.doc().get()
+        const data = await this.collection.doc().get()
         return data
     }
 }

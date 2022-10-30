@@ -1,10 +1,24 @@
 const express = require('express')
 const router = express.Router()
 const Contenedor = require('../helpers/contenedor-sync.js')
+const dotenv = require('dotenv')
+dotenv.config()
+const carritosMongoDto = require("../dtos/carrito/carritoMongoDto")
+const carritosFireDto = require("../dtos/carrito/carritoFirestoreDto")
 
+switch (process.env.dbType){
+    case "mongo":
+        //productos = new productosMongoDto();
+        carrito = new carritosMongoDto();
+        break
+    case "firestore":
+        //productos = new productosFireDto();
+        carrito = new carritosFireDto();
+        break
+}
 
-const contenedor = new Contenedor('src/data/carritos.txt')
-const productos = new Contenedor('src/data/productos.txt')
+// const contenedor = new Contenedor('src/data/carritos.txt')
+// const productos = new Contenedor('src/data/productos.txt')
 
 router.post('/', (req, res)=>{
     // Creo un objeto carrito que voy a guardar commo si fuera un producto (mi helper le agrega id y timestamp). Le agrego manualmente la lista de productos del body
