@@ -26,6 +26,7 @@
     "debug": "^2.6.9",
     "depd": "^2.0.0",
     "destroy": "^1.2.0",
+    "dotenv": "^16.0.3",
     "ee-first": "^1.1.1",
     "ejs": "^3.1.8",
     "encodeurl": "^1.0.2",
@@ -37,6 +38,7 @@
     "express-session": "^1.17.3",
     "fill-range": "^7.0.1",
     "finalhandler": "^1.2.0",
+    "firebase-admin": "^11.2.0",
     "forwarded": "^0.2.0",
     "fresh": "^0.5.2",
     "function-bind": "^1.1.1",
@@ -64,6 +66,7 @@
     "mime-types": "^2.1.35",
     "minimatch": "^3.1.2",
     "moment": "^2.29.4",
+    "mongoose": "^6.7.0",
     "ms": "^2.0.0",
     "mysql": "^2.18.1",
     "negotiator": "^0.6.3",
@@ -111,7 +114,8 @@
     "ejs": "nodemon start 10-Decima-clase/ejs/restful.js",
     "websocket": "nodemon start 12-DecimoSegunda-clase/main.js",
     "primeraentrega": "nodemon start 14-PrimeraEntrega/main.js",
-    "wswithdb": "nodemon start 16-DecimoSexta-clase/main.js"
+    "wswithdb": "nodemon start 16-DecimoSexta-clase/main.js",
+    "segundaentrega": "nodemon start 20-SegundaEntrega/main.js"
   },
   "repository": {
     "type": "git",
