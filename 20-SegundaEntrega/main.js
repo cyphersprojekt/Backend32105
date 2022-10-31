@@ -16,6 +16,10 @@ const carritoRouter = require('./routes/carrito.js')
 
 const app = express()
 const httpServer = new HttpServer(app)
+const bodyParser = require('body-parser')
+
+app.use(bodyParser.json())
+app.use(bodyParser.urlencoded({ extended: true }))
 
 app.use((req, res, next) => {
     console.log(new Date().toLocaleDateString(), new Date().toLocaleTimeString(), req.method, req.originalUrl)

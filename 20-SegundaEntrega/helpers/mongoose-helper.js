@@ -20,21 +20,20 @@ class mongooseHelper{
         return data
     }
 
-    async save(obj) {
-        const product = await this.collection.create(obj)
-        return product
+    async insert(obj) {
+        const model = new this.collection(obj);
+        await model.save();
     }
 
     async update(obj, id) {
-
+        obj.date = new Date();
+        const model = await this.collection.findOne({_id: id})
+        model.overwrite(obj)
+        model.save();
     }
 
-    async deleteId(obj, id) {
-
-    }
-
-    async deleteAll() {
-
+    async delete(id) {
+        await this.collection.deleteOne({_id: id})
     }
 }
 
