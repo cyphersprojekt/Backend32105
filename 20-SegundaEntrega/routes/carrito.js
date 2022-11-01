@@ -3,7 +3,7 @@ const router = express.Router()
 const moongose = require('mongoose')
 
 const carritoMongoDto = require('../dtos/carrito/carritoMongoDto')
-const carritoFirestoreDto = require("../dtos/productos/productosFirestoreDto.js")
+const carritoFirestoreDto = require("../dtos/carrito/carritoFirestoreDto.js")
 const productoFirestoreDto = require("../dtos/productos/productosFirestoreDto")
 const productoMongoDto = require('../dtos/productos/productosMongoDto.js')
 const { default: mongoose } = require('mongoose')
