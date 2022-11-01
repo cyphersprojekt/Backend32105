@@ -1,5 +1,48 @@
 # Coderhouse backend, comision 32105
 
+## 01/11/22
+#### Segunda entrega del trabajo final
+* npm run segundaentrega
+    * rutas de productos:
+        * GET /api/productos/
+        * GET /api/productos/:id
+        * POST /api/productos/ (mandando como json el objeto a insertar en el body)
+        * PUT /api/productos/:id (mandando como json el objeto modificado en el body)
+        * DELETE /api/productos/:id
+    * rutas de carritos:
+        * GET /api/carrito/
+        * GET /api/carrito/:id/productos
+        * POST /api/carrito/
+        * DELETE /api/carrito/:id
+        * POST /api/carrito/:id_carrito/productos/:id_producto
+        * DELETE /api/carrito/:id_carrito/productos/:id_producto
+
+Setear el motor de base de datos modificando el .env con:
+````
+dbType="mongo"
+````
+ó
+````
+dbType="firestore"
+````
+En el caso de mongo, se debe generar un archivo firestore-config.js dentro de 20-SegundaEntrega/helpers/firestore-config.js con el formato:
+````
+const firebase =  {
+    "type": 
+    "project_id": 
+    "private_key_id": 
+    "private_key": 
+    "client_email":
+    "client_id": 
+    "auth_uri": 
+    "token_uri": 
+    "auth_provider_x509_cert_url": 
+    "client_x509_cert_url": 
+    }
+module.exports = firebase;
+````
+
+
 ## 22/10/22
 ### Primera base de datos
 mi conexión con mysql estaba rotísima porque hace un tiempo desinstalé workbench, no se borró todo, y cuando lo instalé otra vez reventó por todos lados.\
