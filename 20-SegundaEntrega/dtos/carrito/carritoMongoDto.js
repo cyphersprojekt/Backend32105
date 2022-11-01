@@ -2,7 +2,7 @@ const mongooseHelper = require('../../helpers/mongoose-helper.js')
 const mongoose = require('mongoose')
 
 const carritoSchema = mongoose.Schema({
-    fecha: {type: Date, require: true, default: new Date()},
+    date: {type: Date, require: true, default: new Date()},
     productos: {type: Array, require: true}
 })
 

@@ -1,42 +1,90 @@
 const express = require('express')
 const router = express.Router()
-const Contenedor = require('../helpers/contenedor-sync.js')
-const dotenv = require('dotenv')
-dotenv.config()
-const carritosMongoDto = require("../dtos/carrito/carritoMongoDto")
-const carritosFireDto = require("../dtos/carrito/carritoFirestoreDto")
+const moongose = require('mongoose')
+
+const carritoMongoDto = require('../dtos/carrito/carritoMongoDto')
+const carritoFirestoreDto = require("../dtos/productos/productosFirestoreDto.js")
+const productoFirestoreDto = require("../dtos/productos/productosFirestoreDto")
+const productoMongoDto = require('../dtos/productos/productosMongoDto.js')
+const { default: mongoose } = require('mongoose')
+
+
+let carritos
+let productos
 
 switch (process.env.dbType){
     case "mongo":
-        //productos = new productosMongoDto();
-        carrito = new carritosMongoDto();
+        carritos = new carritoMongoDto()
+        productos = new productoMongoDto()
         break
     case "firestore":
-        //productos = new productosFireDto();
-        carrito = new carritosFireDto();
+        carritos = new carritoFirestoreDto()
+        productos = new productoFirestoreDto()
         break
 }
 
-// const contenedor = new Contenedor('src/data/carritos.txt')
-// const productos = new Contenedor('src/data/productos.txt')
-
-router.post('/', (req, res)=>{
-    // Creo un objeto carrito que voy a guardar commo si fuera un producto (mi helper le agrega id y timestamp). Le agrego manualmente la lista de productos del body
-    const productos = req.body
-    let carrito = {
-        productos: productos
+router.get('/', async (req, res)=>{
+    let currentData
+    try{
+        currentData = await carritos.getAll()
     }
-    
-    contenedor.save(carrito)
-    const allCarritos = contenedor.getAll()
-    const id = allCarritos[allCarritos.length-1]["id"]
-    res.send(`Se guardo el carrito. El ID asignado es ${id}`)
+    catch (err){
+        console.log(err)
+    }
+
+    if(currentData){
+        res.send(currentData)
+    }
+    else{
+        res.send({error: 'No hay carritos'})
+    }
+
 })
 
-router.delete('/:id', (req, res) =>{
-    const id = parseInt(req.params.id)
-    if(contenedor.getbyId(id)){
-        contenedor.deleteById(id)
+router.get('/:id/productos', async (req, res)=>{
+    let currentData
+    const { id } = req.params
+    try {
+        currentData = await carritos.getByID(id)
+    }
+    catch (err){
+        console.log(err)
+    }
+    if(currentData){
+        res.send(currentData)
+    }
+    else{
+        res.send({error: 'Carrito no encontrado'})
+    }
+})
+
+router.post('/', async (req, res)=>{
+    let carrito = {
+        productos: []
+    } 
+    try {
+        newId = await carritos.insert(carrito)
+    }
+    catch (err){
+        console.log(err)
+        res.send(err)
+    }
+    res.send(`Se guardo el carrito. ${newId}`)
+})
+
+router.delete('/:id', async (req, res) =>{
+    const id = req.params.id
+
+    let carrito
+    try{
+        carrito = await carritos.getByID(id)
+    }
+    catch (err){
+        console.log(err)
+    }
+
+    if(carrito){
+        carritos.delete(id)
         res.send(`El carrito con ID ${id} fue eliminado`)
     }
     else{
@@ -44,25 +92,24 @@ router.delete('/:id', (req, res) =>{
     }
 })
 
-router.get('/:id/productos', (req, res)=>{
-    const carrito = contenedor.getbyId(parseInt(req.params.id))
-    if(carrito){
-        res.send(carrito.productos)
-    }
-    else{
-        res.send({error: 'Carrito no encontrado'})
-    }
-})
 
-router.post('/:id/productos/:idprod', (req, res)=>{
-    const id = parseInt(req.params.id)
-    const idprod = parseInt(req.params.idprod)
-    const carrito = contenedor.getbyId(id)
-    const producto = productos.getbyId(idprod)
-    if(carrito && producto){
-        carrito.productos.push(producto)
-        contenedor.deleteById(parseInt(id))
-        contenedor.saveWithId(carrito, id)
+router.post('/:id/productos/:idprod', async (req, res)=>{
+    const id = req.params.id
+    const idprod = req.params.idprod
+    let carrito
+    let product
+    try{
+        carrito = await carritos.getByID(id)
+        product = await productos.getByID(idprod)
+    }
+    catch (err){
+        console.log(err)
+    } 
+
+    if(carrito && product){
+        console.log(carrito)
+        carrito.productos.push(product)
+        carritos.update(carrito, id)
         res.send(`Se agrego el producto de ID ${idprod} al carrito ${id}`)
     }
     else{
@@ -70,22 +117,27 @@ router.post('/:id/productos/:idprod', (req, res)=>{
     }
 })
 
-router.delete('/:id/productos/:idprod', (req, res) =>{
-    const id = parseInt(req.params.id)
-    const idprod = parseInt(req.params.idprod)
-    const carrito = contenedor.getbyId(id)
+router.delete('/:id/productos/:idprod', async (req, res) =>{
+    const id = req.params.id
+    const idprod = req.params.idprod
 
+    let carrito
+    try{
+        carrito = await carritos.getByID(id)
+    }
+    catch (err){
+        console.log(err)
+    }
     if(carrito){
         let productos = carrito.productos
-        let productoABorrar = productos.findIndex(x => x.id === idprod)
+        let productoABorrar = productos.findIndex(x => x._id.toString() === idprod)
         if (productoABorrar == -1){
             res.send({error: 'El producto no fue encontrado'})
         }
         else{
             productos.splice(productoABorrar, 1)
             carrito.productos = productos
-            contenedor.deleteById(id)
-            contenedor.saveWithId(carrito, id)
+            carritos.update(id, carrito)
             res.send(`Se elimino un producto de ID ${idprod} del carrito ${id}`)
 
         }
