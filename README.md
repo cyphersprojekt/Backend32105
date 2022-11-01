@@ -25,7 +25,7 @@ dbType="mongo"
 ````
 dbType="firestore"
 ````
-En el caso de mongo, se debe generar un archivo firestore-config.js dentro de 20-SegundaEntrega/helpers/firestore-config.js con el formato:
+En el caso de firestore, se debe generar un archivo firestore-config.js dentro de 20-SegundaEntrega/helpers/firestore-config.js con el formato:
 ````
 const firebase =  {
     "type": 
