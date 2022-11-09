@@ -1,5 +1,14 @@
 # Coderhouse backend, comision 32105
 
+## 09/11/22
+#### Mocks y normalizacion
+* npm run mocks
+    * rutas: /, /api/productos-test
+    * el centro de productos está medio roto (se siguen guardando en la base de datos y te los carga una vez que cargas la página, pero no se actualizan una vez que agregas uno nuevo). menos mal que no cabía dentro de esta entrega :)
+    * una vez que envias un mensaje se limpia el valor del mensaje del front pero mantiene todos los demás datos, corrección recibida en la entrega de la clase #16
+    * normalizr es una librería escrita por satanás y deberíamos estar agradecidos de que fue descontinuada
+    * gracias maxifisz por tu ayuda
+
 ## 01/11/22
 #### Segunda entrega del trabajo final
 * npm run segundaentrega
