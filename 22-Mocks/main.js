@@ -70,7 +70,7 @@ app.use(bodyParser.urlencoded({
     extended: true
 }))
 
-app.use(express.static('./public'))
+app.use(express.static('22-Mocks/public'))
 app.use("/api/productos", productosRouter)
 app.use("/api/carrito", carritoRouter)
 app.use("/api/productos-test", productosTestRouter)
@@ -105,7 +105,7 @@ io.on('connection', async (socket) => {
     catch (err){
         console.log(err)
     }
-
+    // console.log(msgs)
     data = {
         id: 1,
         msgs: msgs

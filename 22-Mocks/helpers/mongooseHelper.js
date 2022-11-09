@@ -14,6 +14,7 @@ class mongooseHelper{
     async getAll(){
         const data = await this.collection.find({})
         return data
+        console.log(data)
     }
 
     async insert(obj) {

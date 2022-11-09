@@ -1,10 +1,8 @@
 const socket = io();
-const normalizr = require('normalizr');
-const assert = require('assert');
 
 const authorSchema = new normalizr.schema.Entity('authors');
 const msgSchema = new normalizr.schema.Entity('msgs');
-const dataSchema = new normalizr.schema.Entity('data', {author: authorSchema, msgs: msgSchema});
+const dataSchema = new normalizr.schema.Entity('data', {author: authorSchema, msgs: [msgSchema]});
 
 let emptyProductsTemplate = $('#lista-productos').html();
 let emptyMessagesTemplate = $('#lista-mensajes').html();
@@ -16,13 +14,13 @@ socket.on('currentProducts', (data) => {
     $('.lista-productos').html(compiledProducts({data: data}));
 });
 
-socket.on('currentMessages', (data) => {
+socket.on('currentMessages', (msgs) => {
     let data = normalizr.denormalize(msgs.result, dataSchema, msgs.entities);
     let compressTxt = document.querySelector('.compress');
     let compressLvl = (100 - (JSON.stringify(data).length * 100) / JSON.stringify(msgs).length).toPrecision(3);
     compressTxt.innerText = `Chat comprimido ${compressLvl}%`;
-
     $('.lista-mensajes').html(compiledMessages({msgs: data.msgs}))
+    console.log(msgs)
 });
 
 let productsButton = document.querySelector('.submitProducto')
@@ -31,7 +29,7 @@ productsButton.addEventListener('click', () => {
 });
 
 let messagesButton = document.querySelector('.submitMensaje');
-messagesButton.addEventListener("click", function(){
+messagesButton.addEventListener("click", () => {
     let emailValue = document.getElementById("email").value
     let nameValue = document.getElementById("name").value
     let lastNameValue = document.getElementById("lastname").value
@@ -55,5 +53,7 @@ messagesButton.addEventListener("click", function(){
             }
         }
         socket.emit('newMessage', msg);
+        let messageBox = document.getElementById("msg")
+        messageBox.value = '';
     }
 });

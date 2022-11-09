@@ -7,6 +7,7 @@
     <title>Inicio</title>
     <link rel="stylesheet" href="./style.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.7.7/handlebars.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/normalizr@3.6.1/dist/normalizr.browser.min.js"></script>
     <script type="text/javascript" src="https://code.jquery.com/jquery-1.7.1.min.js"></script>
     <script src="/socket.io/socket.io.js"></script>
     <script src="/index.js" defer></script>
@@ -18,7 +19,7 @@
         <hr>
         <h1>Ingresar un producto</h1>
         <form action="api/productos" method="post" target="dummyframe">
-            <label for="nombre">Nombre:</label><br>
+            <label for="nombre">Nombre::</label><br>
             <input type="text" id="nombre" name="nombre"><br><br>
 
             <label for="descripcion">Descripcion:</label><br>
@@ -39,15 +40,18 @@
             <input class="submitProducto" type="submit" value="Submit">
         </form>
         <br>
+        <a href="api/productos"><button type="button">Lista de productos</button></a>
         <hr>
     </section>
 
 
 
+<!-- Dummy frame al que hago redirect luego de cargar un nuevo producto -->
 <iframe name="dummyframe" id="dummyframe" style="display:none"></iframe>
     <h1>Lista de productos</h1>
     <section class="lista-productos">
         
+        <!-- Un script que me voy a traer para convertir en template e inyectar. Fetch me estaba tratando mal pero esto funciona y vi que usa -->
         <script id="lista-productos" type="text/x-handlebars-template">
             <table>
                 <tr>
@@ -118,6 +122,6 @@
             <button class="submitMensaje" type="button">Enviar</button>
         </div>
         <hr>
-    </section>
+    </section>      
 </body>
 </html>
