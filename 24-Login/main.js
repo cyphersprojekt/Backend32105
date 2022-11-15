@@ -4,11 +4,12 @@ const { Server: IOServer } = require('socket.io')
 const moment = require('moment/moment')
 const mongoose = require('mongoose')
 const normalizr = require('normalizr')
-const Schema = normalizr.schema
-const util = require("util")
-
-const SQLHelper = require('./helpers/sqlHelper')
-const MongoHelper = require('./helpers/mongooseHelper')
+const cookieParser = require('cookie-parser')
+const session = require('express-session')
+const MongoStore = require('connect-mongo')
+const MongoHelper = require('24-Login/helpers/mongooseHelper')
+const mongoCreds = require('24-Login/helpers/mongooseCreds.js')
+const SQLHelper = require('24-Login/helpers/sqlHelper')
 
 let msgsHelper = new MongoHelper("mensajes", mongoose.Schema({
     text: {type: String, required: true},
@@ -16,23 +17,20 @@ let msgsHelper = new MongoHelper("mensajes", mongoose.Schema({
     author: {type: Array, required: true},
 }))
 
-
 const mariadb = new SQLHelper({
     client: "mysql",
     connection: {
-        host: "127.0.0.1",
+        host: "localhost",
         user: "root",
         password: "root",
         database: "coderhouse"
     }
 }, "productos")
 
-
-
-
-const productosRouter = require('./routes/productos.js')
-const carritoRouter = require('./routes/carrito.js')
-const productosTestRouter = require("./routes/productosTest.js")
+const homeRouter = require('24-Login/routes/home.js')
+const productosRouter = require('24-Login/routes/productos.js')
+const carritoRouter = require('24-Login/routes/carrito.js')
+const productosTestRouter = require("24-Login/routes/productosTest.js")
 
 const handlebars = require('express-handlebars')
 
@@ -41,6 +39,8 @@ const httpServer = new HttpServer(app)
 const io = new IOServer(httpServer)
 const bodyParser = require('body-parser')
 
+app.use(cookieParser())
+app.use(session(mongoCreds))
 
 app.engine("hbs",
  handlebars.engine({
@@ -70,7 +70,8 @@ app.use(bodyParser.urlencoded({
     extended: true
 }))
 
-app.use(express.static('22-Mocks/public'))
+// app.use(express.static('24-Login/public'))
+app.use(homeRouter)
 app.use("/api/productos", productosRouter)
 app.use("/api/carrito", carritoRouter)
 app.use("/api/productos-test", productosTestRouter)
@@ -144,8 +145,6 @@ io.on('connection', async (socket) => {
         
         io.sockets.emit("currentMessages", msgs)
     })
-
-
 })
 
 httpServer.listen(8080, ()=>{
