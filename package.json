@@ -121,7 +121,8 @@
     "primeraentrega": "nodemon start 14-PrimeraEntrega/main.js",
     "wswithdb": "nodemon start 16-DecimoSexta-clase/main.js",
     "segundaentrega": "nodemon start 20-SegundaEntrega/main.js",
-    "mocks": "nodemon start 22-Mocks/main.js"
+    "mocks": "nodemon start 22-Mocks/main.js",
+    "login": "nodemon start 24-Login/main.js"
   },
   "repository": {
     "type": "git",
