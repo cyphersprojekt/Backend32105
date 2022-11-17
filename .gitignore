@@ -1,4 +1,4 @@
 node_modules/
 *.sqlite
 20-SegundaEntrega/helpers/firestore-config.js
-24-Login/helpers/mongooseCreds.js
+*Creds.js

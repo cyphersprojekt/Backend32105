@@ -7,30 +7,29 @@ const normalizr = require('normalizr')
 const cookieParser = require('cookie-parser')
 const session = require('express-session')
 const MongoStore = require('connect-mongo')
-const MongoHelper = require('24-Login/helpers/mongooseHelper')
-const mongoCreds = require('24-Login/helpers/mongooseCreds.js')
-const SQLHelper = require('24-Login/helpers/sqlHelper')
+const MongoHelper = require('./helpers/mongooseHelper.js')
+const SQLHelper = require('./helpers/sqlHelper')
 
-let msgsHelper = new MongoHelper("mensajes", mongoose.Schema({
-    text: {type: String, required: true},
-    date: {type: String, required: true},
-    author: {type: Array, required: true},
-}))
+// let msgsHelper = new MongoHelper("mensajes", mongoose.Schema({
+//     text: {type: String, required: true},
+//     date: {type: String, required: true},
+//     author: {type: Array, required: true},
+// }))
 
-const mariadb = new SQLHelper({
-    client: "mysql",
-    connection: {
-        host: "localhost",
-        user: "root",
-        password: "root",
-        database: "coderhouse"
-    }
-}, "productos")
+// const mariadb = new SQLHelper({
+//     client: "mysql",
+//     connection: {
+//         host: "localhost",
+//         user: "root",
+//         password: "root",
+//         database: "coderhouse"
+//     }
+// }, "productos")
 
-const homeRouter = require('24-Login/routes/home.js')
-const productosRouter = require('24-Login/routes/productos.js')
-const carritoRouter = require('24-Login/routes/carrito.js')
-const productosTestRouter = require("24-Login/routes/productosTest.js")
+const homeRouter = require('./routes/home.js')
+// const productosRouter = require('./routes/productos.js')
+// const carritoRouter = require('./routes/carrito.js')
+// const productosTestRouter = require("./routes/productosTest.js")
 
 const handlebars = require('express-handlebars')
 
@@ -40,13 +39,28 @@ const io = new IOServer(httpServer)
 const bodyParser = require('body-parser')
 
 app.use(cookieParser())
-app.use(session(mongoCreds))
+
+let mongoCreds = {
+    mongoUrl: "",
+    autoRemove: 'native',
+    ttl: 600,
+    mongoOptions: {
+        useNewUrlParser: true,
+        useUnifiedTopology: true,
+    }
+}
+
+app.use(session({
+    store: MongoStore.create(mongoCreds),
+    secret: 'tarara',
+    resave: true,
+    saveUninitialized: false}))
 
 app.engine("hbs",
  handlebars.engine({
     extname: ".hbs",
-    defaultLayout: 'main.hbs',
-    layoutsDir: __dirname + '/views/layouts',
+    // defaultLayout: 'main.hbs',
+    // layoutsDir: __dirname + '/views/layouts',
     partialsDir: __dirname + '/views/partials'
 }))
 
@@ -70,11 +84,11 @@ app.use(bodyParser.urlencoded({
     extended: true
 }))
 
-// app.use(express.static('24-Login/public'))
+app.use(express.static('24-Login/scripts'))
 app.use(homeRouter)
-app.use("/api/productos", productosRouter)
-app.use("/api/carrito", carritoRouter)
-app.use("/api/productos-test", productosTestRouter)
+// app.use("/api/productos", productosRouter)
+// app.use("/api/carrito", carritoRouter)
+// app.use("/api/productos-test", productosTestRouter)
 
 
 // Handleo todo lo no implementado aca
@@ -89,63 +103,63 @@ app.all("*", (req, res) => {
  
 // Comente todo lo de websockets que no creo estar usando
 /* Envio la lista inicial de productos y mensajes a quien se conecte, el resto, se encarga el router (productosRouter con su evento newProduct) y el evento newMessage */
-io.on('connection', async (socket) => {
+// io.on('connection', async (socket) => {
 
-    let products
-    try{
-        products = await mariadb.getAll()
-    }
-    catch (err){
-        console.log(err)
-    }
+//     let products
+//     try{
+//         products = await mariadb.getAll()
+//     }
+//     catch (err){
+//         console.log(err)
+//     }
 
-    let msgs
-    try{
-        msgs = await msgsHelper.getAll()
-    }
-    catch (err){
-        console.log(err)
-    }
-    // console.log(msgs)
-    data = {
-        id: 1,
-        msgs: msgs
-    }
+//     let msgs
+//     try{
+//         msgs = await msgsHelper.getAll()
+//     }
+//     catch (err){
+//         console.log(err)
+//     }
+//     // console.log(msgs)
+//     data = {
+//         id: 1,
+//         msgs: msgs
+//     }
 
-    const authorSchema = new normalizr.schema.Entity("authors")
-    const msgSchema = new normalizr.schema.Entity("msgs") 
-    const dataSchema = new normalizr.schema.Entity("data", {
-        author: authorSchema,
-        msgs: [msgSchema]
-    })
+//     const authorSchema = new normalizr.schema.Entity("authors")
+//     const msgSchema = new normalizr.schema.Entity("msgs") 
+//     const dataSchema = new normalizr.schema.Entity("data", {
+//         author: authorSchema,
+//         msgs: [msgSchema]
+//     })
 
-    const normalized = normalizr.normalize(data, dataSchema)
+//     const normalized = normalizr.normalize(data, dataSchema)
 
-    socket.emit("currentProducts", products)
-    socket.emit("currentMessages", normalized)
+//     socket.emit("currentProducts", products)
+//     socket.emit("currentMessages", normalized)
 
     /* Guardo un nuevo mensaje y actualizo a todos los usuarios */
-    socket.on("newMessage", async msg =>{
-        msg.date = "[" + moment().format('MMMM Do YYYY, h:mm:ss a') + "]"
+//     socket.on("newMessage", async msg =>{
+//         msg.date = "[" + moment().format('MMMM Do YYYY, h:mm:ss a') + "]"
 
-        try{
-            await msgsHelper.insert(msg)
-        }
-        catch (err) {
-            console.log(err)
-        }
+//         try{
+//             await msgsHelper.insert(msg)
+//         }
+//         catch (err) {
+//             console.log(err)
+//         }
 
-        let msgs
-        try{
-            msgs = await msgsHelper.getAll()
-        }
-        catch (err){
-            console.log(err)
-        }
+//         let msgs
+//         try{
+//             msgs = await msgsHelper.getAll()
+//         }
+//         catch (err){
+//             console.log(err)
+//         }
         
-        io.sockets.emit("currentMessages", msgs)
-    })
-})
+//         io.sockets.emit("currentMessages", msgs)
+//     })
+// })
 
 httpServer.listen(8080, ()=>{
     console.log("App started and listening on port 8080 :)")

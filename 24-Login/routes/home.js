@@ -1,8 +1,10 @@
 const express = require('express')
 const router = express.Router()
 
-const SQLHelper = require('24-Login/helpers/sqlHelper.js')
+const SQLHelper = require('../helpers/sqlHelper.js')
 const { reset } = require('nodemon')
+
+const path = require('path')
 
 const mariadb = new SQLHelper({
     client: "mysql",
@@ -19,14 +21,18 @@ router.get('/', async (req, res) => {
         res.render('login');
     } else {
         let products = await mariadb.getAll();
+        let name = req.session.name
         let data = {
             login: req.session.login,
-            name: req.session.name,
             products: products
         }
-        res.render("home", {
-            data: data
-        });
+        let io = req.app.get('socketio');
+        io.on('connection', async (socket) => {            
+            socket.emit("currentData", name)
+            socket.emit("currentProducts", products)
+        })
+        res.sendFile(path.join(__dirname, '..', '..', '24-Login/views/home.html'))
+        console.log(__dirname)
     }
 });
 
@@ -48,7 +54,7 @@ router.post('/login', async (req, res) => {
 router.get('/logout', async (req, res) => {
     if (req.session.login) {
         let name = req.session.name;
-        res.session.destroy();
+        req.session.destroy();
         res.render('logout', {data: name})
     } else {
         res.redirect('/');
