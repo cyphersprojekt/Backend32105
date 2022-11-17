@@ -1,5 +1,12 @@
 # Coderhouse backend, comision 32105
 
+
+## 17/11/22
+#### Login
+* rpm run login
+  * requiere cargar mongoUrl: '' dentro de mongoCreds en main.js
+  * los campos no se limpian cuando cargas un producto porque el js se ejecuta antes que el POST y te arruina todo. se soluciona sacando por completo el form y haciéndolo como inputs de html comunes y corrientes que manejen todo a través del socket, pero no tuve tiempo de ajustarlo
+
 ## 09/11/22
 #### Mocks y normalizacion
 * npm run mocks
