@@ -4,6 +4,7 @@
 ## 17/11/22
 #### Login
 * rpm run login
+  * requiere tener la base 'coderhouse' en mysql con la tabla productos, en caso de que no esté se puede generar con node 24-Login/db/* tal como se hizo en entregas anteriores. TODO para la proxima entrega reworkear esta porqueria para que use *SÓLO ATLAS* porque me estoy muriendo manejando tantas db desde la misma app
   * requiere cargar mongoUrl: '' dentro de mongoCreds en main.js
   * los campos no se limpian cuando cargas un producto porque el js se ejecuta antes que el POST y te arruina todo. se soluciona sacando por completo el form y haciéndolo como inputs de html comunes y corrientes que manejen todo a través del socket, pero no tuve tiempo de ajustarlo
 
