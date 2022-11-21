@@ -1,6 +1,12 @@
 # Coderhouse backend, comision 32105
 
 
+## 20/11/22
+#### Inicio de sesion
+* npm run auth
+  requiere agregar en el .env un mongoUrl=""
+
+
 ## 17/11/22
 #### Login
 * rpm run login
