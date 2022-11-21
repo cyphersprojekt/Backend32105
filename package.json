@@ -11,6 +11,7 @@
     "array-flatten": "^1.1.1",
     "assert": "^2.0.0",
     "balanced-match": "^1.0.2",
+    "bcrypt": "^5.1.0",
     "better-sqlite3": "^7.6.2",
     "binary-extensions": "^2.2.0",
     "body-parser": "^1.20.0",
@@ -82,6 +83,8 @@
     "object-inspect": "^1.12.2",
     "on-finished": "^2.4.1",
     "parseurl": "^1.3.3",
+    "passport": "^0.6.0",
+    "passport-local": "^1.0.0",
     "path": "^0.12.7",
     "path-to-regexp": "^0.1.7",
     "picomatch": "^2.3.1",
@@ -124,7 +127,8 @@
     "wswithdb": "nodemon start 16-DecimoSexta-clase/main.js",
     "segundaentrega": "nodemon start 20-SegundaEntrega/main.js",
     "mocks": "nodemon start 22-Mocks/main.js",
-    "login": "nodemon start 24-Login/main.js"
+    "login": "nodemon start 24-Login/main.js",
+    "auth": "nodemon start 26-Auth/main.js"
   },
   "repository": {
     "type": "git",
