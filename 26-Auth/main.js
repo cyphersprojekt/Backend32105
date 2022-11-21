@@ -10,6 +10,9 @@ const MongoStore = require('connect-mongo')
 const passport = require('passport')
 
 
+const dotenv = require('dotenv')
+dotenv.config()
+
 const homeRouter = require('./routes/home.js')
 const accountsRouter = require('./routes/accounts.js')
 
@@ -21,9 +24,9 @@ const io = new IOServer(httpServer)
 const bodyParser = require('body-parser')
 
 app.use(cookieParser())
-
+console.log(`\r\n\r\n${dotenv.mongoUrl}\r\n\r\n`)
 let mongoCreds = {
-    mongoUrl: "",
+    mongoUrl: process.env.mongoUrl,
     autoRemove: 'native',
     ttl: 600,
     mongoOptions: {
