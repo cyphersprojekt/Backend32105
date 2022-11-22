@@ -87,12 +87,9 @@ app.use(homeRouter)
 app.use('/accounts', accountsRouter)
 
 // Handleo todo lo no implementado aca
-app.all("*", (req, res) => {
+app.all("*", (req, res) => {    
     res.status(404)
-    res.end(JSON.stringify({
-        error: -2,
-        descripcion: `ruta ${req.method} ${req.originalUrl} no implementada`
-    }))
+    res.redirect('/error')
 });
 
  

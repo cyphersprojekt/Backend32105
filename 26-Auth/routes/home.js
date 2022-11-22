@@ -74,4 +74,17 @@ router.post('/', isAuth, async (req, res)=>{
     res.send(`Se guardo el objeto.`)
 })
 
+router.get('/error', async (req, res) => {
+    if (!req.headers.referer) {
+    res.render('error', {data: 'Hubo un error con tu solicitud'})
+    } else {
+        if (req.headers.referer.endsWith('login')) {
+            res.render('error', {data: 'Hubo un error al iniciar sesion'})
+        }
+        if (req.headers.referer.endsWith('register')) {
+            res.render('error', {data: 'No se pudo registrar tu cuenta'})
+        }
+    }
+})
+
 module.exports = router;

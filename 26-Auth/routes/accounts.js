@@ -92,7 +92,7 @@ router.get('/register', async (req, res) => {
 });
 
 router.post('/register', passport.authenticate('register', 
-            {failureMessage: 'caca'}),
+            {failureRedirect: '/error'}),
             async (req, res) => {
                 req.session.save()
                 res.redirect('/')
@@ -107,7 +107,8 @@ router.get('/login', async (req, res) => {
     }
 });
 
-router.post('/login', passport.authenticate('login', {failureMessage: 'pis'}),
+router.post('/login', passport.authenticate('login', 
+{failureRedirect: '/error'}),
             async (req, res) => {
                 req.session.save();
                 console.log('TE JURO QUE ESTOY POSTEANDO AL /login')
