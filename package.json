@@ -129,7 +129,7 @@
     "mocks": "nodemon start 22-Mocks/main.js",
     "login": "nodemon start 24-Login/main.js",
     "auth": "nodemon start 26-Auth/main.js",
-    "process": "nodemon start 28-Process/main.js"
+    "process": "node 28-Process/main.js"
   },
   "repository": {
     "type": "git",

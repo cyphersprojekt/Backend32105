@@ -8,6 +8,7 @@ const cookieParser = require('cookie-parser')
 const session = require('express-session')
 const MongoStore = require('connect-mongo')
 const passport = require('passport')
+const process = require('process')
 
 
 const dotenv = require('dotenv')
@@ -24,7 +25,6 @@ const io = new IOServer(httpServer)
 const bodyParser = require('body-parser')
 
 app.use(cookieParser())
-console.log(`\r\n\r\n${dotenv.mongoUrl}\r\n\r\n`)
 let mongoCreds = {
     mongoUrl: process.env.mongoUrl,
     autoRemove: 'native',
@@ -152,7 +152,29 @@ app.all("*", (req, res) => {
 //         io.sockets.emit("currentMessages", msgs)
 //     })
 // })
+// console.log(process.argv)
 
-httpServer.listen(8080, ()=>{
-    console.log("App started and listening on port 8080 :)")
-})
+function startServer(port, info) {
+    if (info) console.log(info);
+    httpServer.listen(port, ()=>{
+        console.log(`App started and listening on port ${port} :)`)
+    })
+}
+
+if (process.argv.length > 2) {
+    let port
+    try {
+        port = Number(process.argv[2]) 
+    } catch {
+        port = process.argv[2]
+    }    
+    if (port && port != 'NaN' && typeof port === "number") {
+        startServer(port, null)
+    } else {
+        startServer(8080,`Second argument (port) must be a number, received ${port}\r\n\r\n
+        Falling back to port 8080`)
+    }
+} else {
+    startServer(8080,`No port number was specified, defaulting to 8080`)
+}
+
