@@ -1,5 +1,6 @@
 const express = require('express')
 const router = express.Router()
+const process = require('process')
 
 const SQLHelper = require('../helpers/sqlHelper.js')
 const { reset } = require('nodemon')
@@ -85,6 +86,20 @@ router.get('/error', async (req, res) => {
             res.render('error', {data: 'No se pudo registrar tu cuenta'})
         }
     }
+})
+
+router.get('/info', async (req, res) => {
+    data = {
+        'arguments': process.argv,
+        'platform': process.platform,
+        'node-version': process.version,
+        'memory': process.memoryUsage.rss(),
+        'execpath': process.execPath,
+        'pid': process.pid,
+        'folder': process.execPath
+    }
+
+    res.render('info', {data: data})
 })
 
 module.exports = router;
