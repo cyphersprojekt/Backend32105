@@ -82,7 +82,7 @@ app.use(bodyParser.urlencoded({
     extended: true
 }))
 
-app.use(express.static('26-Auth/scripts'))
+app.use(express.static('28-Process/scripts'))
 app.use(homeRouter)
 app.use('/accounts', accountsRouter)
 
