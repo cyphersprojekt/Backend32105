@@ -1,6 +1,15 @@
 # Coderhouse backend, comision 32105
 
 
+## 04/12/2022
+#### Process
+* num run process \<port, default: 8080><br>
+ó
+* node ./28-Process/main.js \<port, default: 8080>
+  * requiere mongoUrl="" en .env
+  * rutas: GET /info, GET /api/random, GET /api/random?qty=\<Cantidad>
+
+
 ## 20/11/22
 #### Inicio de sesion
 * npm run auth
