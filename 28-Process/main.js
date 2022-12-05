@@ -16,6 +16,7 @@ dotenv.config()
 
 const homeRouter = require('./routes/home.js')
 const accountsRouter = require('./routes/accounts.js')
+const numsRouter = require('./routes/numeros.js')
 
 const handlebars = require('express-handlebars')
 
@@ -85,6 +86,7 @@ app.use(bodyParser.urlencoded({
 app.use(express.static('28-Process/scripts'))
 app.use(homeRouter)
 app.use('/accounts', accountsRouter)
+app.use('/api/random', numsRouter)
 
 // Handleo todo lo no implementado aca
 app.all("*", (req, res) => {    
