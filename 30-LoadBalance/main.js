@@ -10,6 +10,9 @@ const MongoStore = require('connect-mongo')
 const passport = require('passport')
 const process = require('process')
 
+const cluster = require('cluster')
+const cpus = require('os').cpus().length;
+
 
 const dotenv = require('dotenv')
 dotenv.config()
@@ -163,20 +166,31 @@ function startServer(port, info) {
     })
 }
 
-if (process.argv.length > 2) {
-    let port
-    try {
-        port = Number(process.argv[2]) 
-    } catch {
-        port = process.argv[2]
-    }    
-    if (port && port != 'NaN' && typeof port === "number") {
-        startServer(port, null)
-    } else {
-        startServer(8080,`Second argument (port) must be a number, received ${port}\r\n\r\n
-        Falling back to port 8080`)
-    }
-} else {
-    startServer(8080,`No port number was specified, defaulting to 8080`)
-}
+if (cluster.isPrimary) {
+    console.log(`Master ${process.pid} is running`);
 
+    for (let i = 0; i < cpus; i++) {
+        cluster.fork();
+    }
+    cluster.on('exit', (worker, code, signal) => {
+        console.log(`worker ${worker.process.pid} died`)
+    })
+} else {
+    console.log(`worker ${process.pid} started`);
+    if (process.argv.length > 2) {
+        let port
+        try {
+            port = Number(process.argv[2]) 
+        } catch {
+            port = process.argv[2]
+        }    
+        if (port && port != 'NaN' && typeof port === "number") {
+            startServer(port, null)
+        } else {
+            startServer(8080,`Second argument (port) must be a number, received ${port}\r\n\r\n
+            Falling back to port 8080`)
+        }
+    } else {
+        startServer(8080,`No port number was specified, defaulting to 8080`)
+    }
+}
