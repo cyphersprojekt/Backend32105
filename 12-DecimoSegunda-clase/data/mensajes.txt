@@ -1,8 +1,0 @@
-[
-  {
-    "correo": "dsdsds",
-    "mensaje": "dsdssd",
-    "fecha": "[ September 22nd 2022, 11:44 ]",
-    "id": 1
-  }
-]

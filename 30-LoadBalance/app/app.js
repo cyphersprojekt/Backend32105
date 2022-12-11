@@ -12,9 +12,9 @@ const process = require('process')
 const handlebars = require('express-handlebars')
 const bodyParser = require('body-parser')
 
-const homeRouter = require('./routes/home.js')
-const accountsRouter = require('./routes/accounts.js')
-const numsRouter = require('./routes/numeros.js')
+const homeRouter = require('../routes/home.js')
+const accountsRouter = require('../routes/accounts.js')
+const numsRouter = require('../routes/numeros.js')
 
 const dotenv = require('dotenv')
 dotenv.config()
