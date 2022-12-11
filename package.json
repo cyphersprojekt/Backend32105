@@ -129,7 +129,8 @@
     "mocks": "nodemon start 22-Mocks/main.js",
     "login": "nodemon start 24-Login/main.js",
     "auth": "nodemon start 26-Auth/main.js",
-    "process": "node 28-Process/main.js"
+    "process": "node 28-Process/main.js",
+    "loadbalance": "node 30-LoadBalance/main.js"
   },
   "repository": {
     "type": "git",

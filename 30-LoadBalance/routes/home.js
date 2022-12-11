@@ -50,7 +50,7 @@ router.get('/', isAuth, async (req, res)=>{
         console.log(err)
     }
     let name = req.user.username
-    res.sendFile(path.join(__dirname, '..', '..', '26-Auth/views/home.html'))
+    res.sendFile(path.join(__dirname, '..', '..', '30-LoadBalance/views/home.html'))
     try {
         io.on('connection', async (socket) => {         
             socket.emit("currentData", name)
