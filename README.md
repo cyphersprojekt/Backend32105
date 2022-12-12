@@ -4,17 +4,19 @@
 ## 11/12/2022
 #### Proxy & Nginx
 ````
-> npm run loadbalance <port || 8080>
+> npm run loadbalance <port, default: 8080>
 ````
 * El servidor va a iniciar por default en modo standalone, con un solo nodo en el puerto especificado (u 8080 en caso de no pasarle nada/pasarle fruta)
 ````
-> npm run loadbalance <port> cluster
+> npm run loadbalance <port || default (8080)> cluster
 ````
-* El servidor va a iniciar en modo cluster, abriendo en el puerto especificado un worker por cada nucleo de cpu disponible. No posee un puerto por default, ergo, explota si no le mandas nada
+* El servidor va a iniciar en modo cluster, abriendo en el puerto especificado un worker por cada nucleo de cpu disponible. Requiere que le pases **algo** como segundo argumento, si es un numero lo usa como puerto y si le pasas default/fruta/falopa hace la conversion al 8080. 
+* Hacer npm run loadbalance *modo* sin especificar puerto va a salir por el primer if y arrancar en standalone, 8080.
 ````
-> npm run loadbalance <port> fork
+> npm run loadbalance <port || default (8080)> fork
 ````
-* El servidor va a iniciar en modo fork, spawneando un proceso de la aplicacion por cada nucleo de cpu disponible en puertos contiguos al especificado. No posee un puerto por default, ergo, explota si no le mandas nada
+* El servidor va a iniciar en modo fork, spawneando un proceso de la aplicacion por cada nucleo de cpu disponible en puertos contiguos al especificado. Requiere que le pases **algo** como segundo argumento, si es un numero lo usa como puerto y si le pasas default/fruta/falopa hace la conversion al 8080. 
+* Hacer npm run loadbalance *modo* sin especificar puerto va a salir por el primer if y arrancar en standalone, 8080.
   * ej: puerto 8080, tenemos 4 nucleos de cpu: se nos van a abrir 4 servidores en los puertos 8080, 8081, 8082 y 8083
 ## 04/12/2022
 #### Process
