@@ -1,30 +1,14 @@
-const cluster = require('cluster')
-const cpus = require('os').cpus().length;
+const launch = require('./app/launch')
 
-const server = require('./app/server.js');
-const app = require('./app/app.js').app;
-const httpServer = require('./app/app.js').httpServer;
+Number(process.argv[2]) != NaN ? port = Number(process.argv[2]) : port = 8080
 
-if (cluster.isPrimary) {
-    console.log(`Master ${process.pid} is running`);
-
-    for (let i = 0; i < cpus; i++) {
-        cluster.fork();
-    }
-    cluster.on('exit', (worker, code, signal) => {
-        console.log(`worker ${worker.process.pid} died`)
-    })
+if (process.argv.length <= 3) {
+    launch.launchStandalone(port)
 } else {
-    console.log(`worker ${process.pid} started`);
-    if (process.argv.length > 2) {
-        let port = Number(process.argv[2])
-        if (port != 'NaN') {
-            server.startServer(httpServer, port, null)
-        } else {
-            server.startServer(httpServer, 8080,`Second argument (port) must be a number, received ${port}\r\n\r\n
-            Falling back to port 8080`)
-        }
-    } else {
-        server.startServer(httpServer, 8080,`No port number was specified, defaulting to 8080`)
+    if (process.argv[3] == 'cluster') {
+        launch.launchCluster(port)
+    }
+    if (process.argv[3] == 'fork') {
+        launch.launchForks(port)
     }
 }

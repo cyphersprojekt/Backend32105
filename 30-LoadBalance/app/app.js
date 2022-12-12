@@ -11,6 +11,7 @@ const passport = require('passport')
 const process = require('process')
 const handlebars = require('express-handlebars')
 const bodyParser = require('body-parser')
+const path = require('path')
 
 const homeRouter = require('../routes/home.js')
 const accountsRouter = require('../routes/accounts.js')
@@ -58,12 +59,12 @@ app.use(passport.session());
 app.engine("hbs",
  handlebars.engine({
     extname: ".hbs",
-    partialsDir: __dirname + '/views/partials'
+    partialsDir: path.join(__dirname, '..', '/views/partials')
 }))
 
 app.set("view engine", "hbs")
 
-app.set("views", __dirname + "/views")
+app.set("views", path.join(__dirname, '..',"/views"))
 
 /* Necesito esto para poder usar sockers en mi Router */
 app.set('socketio', io)
@@ -79,7 +80,7 @@ app.use(bodyParser.urlencoded({
     extended: true
 }))
 
-app.use(express.static('30-LoadBalance/scripts'))
+app.use(express.static(path.join(__dirname,'..', 'scripts')))
 app.use(homeRouter)
 app.use('/accounts', accountsRouter)
 app.use('/api/random', numsRouter)

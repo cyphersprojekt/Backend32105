@@ -6,7 +6,7 @@ const child_process = require('child_process')
 router.get('/', async (req, res) => {
     console.log(req.query)
     let amount = Number(req.query.qty);
-    let forked = child_process.fork('./28-Process/forks/randomNumCalculator.js');
+    let forked = child_process.fork('./30-LoadBalance/forks/randomNumCalculator.js');
     let data
     if (amount && amount != 'NaN') {
         forked.send(`Qty: ${amount}`);
