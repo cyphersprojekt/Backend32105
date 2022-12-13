@@ -1,6 +1,13 @@
 const launch = require('./app/launch')
 
-Number(process.argv[2]) != NaN ? port = Number(process.argv[2]) : port = 8080
+let port;
+if (Number(process.argv[2]).toString() === 'NaN') {
+    console.error('Second argument must be a number, got ' + process.argv[2])
+    console.log('Defaulting to 8080')
+    port = 8080;
+} else {
+    port = Number(process.argv[2])
+}
 
 if (process.argv.length <= 3) {
     launch.launchStandalone(port)
