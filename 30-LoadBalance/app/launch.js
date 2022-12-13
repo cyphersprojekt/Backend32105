@@ -51,7 +51,6 @@ function launchCluster(aport) {
 function launchForks(aport) {
     if (aport) {
         if (aport != 'NaN') {
-            console.log('concha')
             for (let i = aport; i < aport+cpus; i++) {
                 console.log(`Forking process on port ${i}`);
                 child_process.fork('./30-LoadBalance/main.js', [i], {cwd:process.cwd()} )
