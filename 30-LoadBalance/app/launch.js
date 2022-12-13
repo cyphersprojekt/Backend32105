@@ -55,6 +55,10 @@ function launchForks(aport) {
                 console.log(`Forking process on port ${i}`);
                 child_process.fork('./30-LoadBalance/main.js', [i], {cwd:process.cwd()} )
             }
+        } else {
+            console.error(`No deberias haber llegado hasta aca, hay veinte chequeos que lograste romper`)
+            console.log(`Defaulting to port 8080`)
+            launchForks(8080);
         }
     }
 }
