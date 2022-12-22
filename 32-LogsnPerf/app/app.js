@@ -12,6 +12,7 @@ const process = require('process')
 const handlebars = require('express-handlebars')
 const bodyParser = require('body-parser')
 const path = require('path')
+const compress = require('compression');
 
 const homeRouter = require('../routes/home.js')
 const accountsRouter = require('../routes/accounts.js')
@@ -23,6 +24,8 @@ dotenv.config()
 const app = express()
 const httpServer = new HttpServer(app)
 const io = new IOServer(httpServer)
+
+app.use(compression());
 
 app.use(cookieParser())
 let mongoCreds = {
