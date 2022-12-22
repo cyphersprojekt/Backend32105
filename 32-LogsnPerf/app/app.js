@@ -12,7 +12,8 @@ const process = require('process')
 const handlebars = require('express-handlebars')
 const bodyParser = require('body-parser')
 const path = require('path')
-const compress = require('compression');
+const compression = require('compression');
+const { createLogger, format, transports } = require("winston");
 
 const homeRouter = require('../routes/home.js')
 const accountsRouter = require('../routes/accounts.js')
@@ -24,6 +25,28 @@ dotenv.config()
 const app = express()
 const httpServer = new HttpServer(app)
 const io = new IOServer(httpServer)
+const logLevels = {
+    fatal: 0,
+    error: 1,
+    warn: 2,
+    info: 3,
+    debug: 4,
+    trace: 5,
+    };
+
+const log2c = createLogger({
+    format: format.combine(format.timestamp(), format.json()),
+    levels: logLevels,
+    transports: [new transports.Console()],
+});
+
+const log2f = createLogger({
+    format: format.combine(format.timestamp(), format.json()),
+    levels: logLevels,
+    transports: [new transports.File({
+        filename: '../logs/sarasa.log'
+    })]
+})
 
 app.use(compression());
 
@@ -96,3 +119,5 @@ app.all("*", (req, res) => {
 
 exports.app = app
 exports.httpServer = httpServer
+exports.log2c = log2c
+exports.log2f = log2f
