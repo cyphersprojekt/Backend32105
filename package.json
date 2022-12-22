@@ -130,7 +130,8 @@
     "login": "nodemon start 24-Login/main.js",
     "auth": "nodemon start 26-Auth/main.js",
     "process": "node 28-Process/main.js",
-    "loadbalance": "node 30-LoadBalance/main.js"
+    "loadbalance": "node 30-LoadBalance/main.js",
+    "logsnperf": "node 32-LogsnPerf/main.js"
   },
   "repository": {
     "type": "git",
