@@ -10,6 +10,8 @@ const passport = require('passport')
 const mongoHelper = require('../helpers/mongooseHelper');
 const Schema = require('mongoose').Schema
 const path = require('path')
+const logger = require('../app/logger');
+
 
 const productSchema = new Schema({
     name: {type: String, required: true},
@@ -30,13 +32,12 @@ const productsHelper = new mongoHelper("products", productSchema)
 // }, "productos")
 
 function isAuth(req, res, next) {
-    console.log('isauth en funcionamiento')
+    logger.info('isauth en funcionamiento')
     if (req.isAuthenticated()) {
-        console.log('todo piola maestro')
         req.session.save()
         next();
     } else {
-        console.log('ni a gancho')
+        logger.error(`isAuth bloqueo una solicitud para ${req.originalUrl}`)
         res.redirect('/accounts/login');
     }
 }
@@ -48,7 +49,7 @@ router.get('/', isAuth, async (req, res)=>{
         products = await productsHelper.getAll()
     }
     catch (err){
-        console.log(err)
+        logger.error(err)
     }
     let name = req.user.username
     res.sendFile(path.join(__dirname, '..', '..', '32-LogsnPerf/views/home.html'))
@@ -59,16 +60,14 @@ router.get('/', isAuth, async (req, res)=>{
         })
     }
     catch (err) {
-        console.log("Failed to connect socket" + err)
+        logger.error("Failed to connect socket" + err)
     }
 })
 
 router.post('/', isAuth, async (req, res)=>{
-    console.log('POSTEANDO EN ROOT')
     const product = {name: req.body.name,
                     price: req.body.price,
                     thumbnail: req.body.thumbnail}
-    console.log(product)
     await productsHelper.insert(product)
     const io = req.app.get('socketio')
     const allProducts = await productsHelper.getAll()

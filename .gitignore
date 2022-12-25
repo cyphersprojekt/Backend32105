@@ -3,3 +3,4 @@ node_modules/
 20-SegundaEntrega/helpers/firestore-config.js
 *Creds.js
 .env
+*.log

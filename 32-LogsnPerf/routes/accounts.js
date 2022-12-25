@@ -9,6 +9,7 @@ const mongoHelper = require('../helpers/mongooseHelper');
 const mongoose = require('mongoose');
 
 const Schema = require('mongoose').Schema
+const logger = require('../app/logger');
 
 
 function checkPassword(passwordHash, passwordString) {
@@ -35,7 +36,7 @@ passport.use('login', new LocalStrategy(
             }
 
             if (!user) {
-                console.log("user not found")
+                logger.error(`user ${user} not found`)
                 return done(null, false)
                 
             }
@@ -52,11 +53,11 @@ passport.use('register', new LocalStrategy({passReqToCallback: true},
     (req, username, password, done) => {
         Users.findOne({$or: [{username: username}, {email: req.body.email}]}, (err, user) => {
             if (err) {
-                console.log("Error while registering" + err)
+                logger.error(`Error while registering ${err}`)
                 return done(err)
             }
             if (user) {
-                console.log("User or email already exists")
+                logger.error(`Username ${user} already registered`)
                 return done(null, false)                
             }
             else{
@@ -70,7 +71,7 @@ passport.use('register', new LocalStrategy({passReqToCallback: true},
                         return done(err)
                     }
                     else{
-                        console.log(user)
+                        logger.info(`Created ${user}`)
                         return done(null, user)
                     }
                 })
@@ -79,7 +80,7 @@ passport.use('register', new LocalStrategy({passReqToCallback: true},
 }))
 
 passport.serializeUser( async (user,done) => {
-    console.log(user)
+    logger.info(`Serializing user ${user.username}`)
     done(null, user._id)
 })
 
@@ -111,7 +112,6 @@ router.post('/login', passport.authenticate('login',
 {failureRedirect: '/error'}),
             async (req, res) => {
                 req.session.save();
-                console.log('TE JURO QUE ESTOY POSTEANDO AL /login')
                 res.redirect('/')                
 });
 

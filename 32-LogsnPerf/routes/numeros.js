@@ -1,10 +1,10 @@
 const express = require('express')
 const router = express.Router()
 const child_process = require('child_process')
+const logger = require('../app/logger');
 
 
 router.get('/', async (req, res) => {
-    console.log(req.query)
     let amount = Number(req.query.qty);
     let forked = child_process.fork('./32-LogsnPerf/forks/randomNumCalculator.js');
     let data
@@ -15,7 +15,7 @@ router.get('/', async (req, res) => {
     }
     forked.on('message', (msg) => {
         if (typeof msg === 'string') {
-            console.log(msg);
+            logger.info(msg);
         }
         else {
             data = JSON.stringify(msg)

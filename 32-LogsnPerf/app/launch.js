@@ -2,6 +2,7 @@ const cluster = require('cluster')
 const cpus = require('os').cpus().length;
 const child_process = require('child_process')
 
+const logger = require('./logger.js').logger
 const server = require('./server.js');
 const httpServer = require('./app.js').httpServer;
 
@@ -23,19 +24,19 @@ function launchStandalone(aport) {
 
 function launchCluster(aport) {
     if (cluster.isPrimary) {
-        console.log(`Master ${process.pid} is running`);
+        logger.info(`Master ${process.pid} is running`);
 
         for (let i = 0; i < cpus; i++) {
             cluster.fork();
         }
         cluster.on('exit', (worker, code, signal) => {
-            console.log(`worker ${worker.process.pid} died`)
+            logger.info(`worker ${worker.process.pid} died`)
         })
     } else {
-        console.log(`worker ${process.pid} started`);
+        logger.info(`worker ${process.pid} started`);
         if (aport) {
             let port = Number(aport)
-            console.log(port)
+            logger.info(port)
             if (port != 'NaN') {
                 server.startServer(httpServer, port, null)
             } else {
@@ -52,12 +53,12 @@ function launchForks(aport) {
     if (aport) {
         if (aport != 'NaN') {
             for (let i = aport; i < aport+cpus; i++) {
-                console.log(`Forking process on port ${i}`);
+                logger.info(`Forking process on port ${i}`);
                 child_process.fork('./30-LoadBalance/main.js', [i], {cwd:process.cwd()} )
             }
         } else {
-            console.error(`No deberias haber llegado hasta aca, hay veinte chequeos que lograste romper`)
-            console.log(`Defaulting to port 8080`)
+            logger.error(`No deberias haber llegado hasta aca, hay veinte chequeos que lograste romper`)
+            logger.info(`Defaulting to port 8080`)
             launchForks(8080);
         }
     }

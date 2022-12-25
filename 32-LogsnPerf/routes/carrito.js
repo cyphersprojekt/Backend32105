@@ -2,6 +2,7 @@ const express = require('express')
 const router = express.Router()
 const MongoHelper = require('../helpers/mongooseHelper')
 
+const logger = require('../app/logger');
 
 
 /* let carritos = new MongoHelper()
@@ -14,7 +15,7 @@ router.get('/', async (req, res)=>{
         currentData = await carritos.getAll()
     }
     catch (err){
-        console.log(err)
+        logger.error(err)
     }
 
     if(currentData){
@@ -33,7 +34,7 @@ router.get('/:id/productos', async (req, res)=>{
         currentData = await carritos.getByID(id)
     }
     catch (err){
-        console.log(err)
+        logger.error(err)
     }
     if(currentData){
         res.send(currentData)
@@ -52,7 +53,7 @@ router.post('/', async (req, res)=>{
         await carritos.insert(carrito)
     }
     catch (err){
-        console.log(err)
+        logger.error(err)
         res.send(err)
     }
     res.send(`Se guardo el carrito.`)
@@ -66,7 +67,7 @@ router.delete('/:id', async (req, res) =>{
         carrito = await carritos.getByID(id)
     }
     catch (err){
-        console.log(err)
+        logger.error(err)
     }
 
     if(carrito){
@@ -89,7 +90,7 @@ router.post('/:id/productos/:idprod', async (req, res)=>{
         product = await productos.getByID(idprod)
     }
     catch (err){
-        console.log(err)
+        logger.error(err)
     } 
 
     if(carrito && product){
@@ -111,7 +112,7 @@ router.delete('/:id/productos/:idprod', async (req, res) =>{
         carrito = await carritos.getByID(id)
     }
     catch (err){
-        console.log(err)
+        logger.error(err)
     }
     if(carrito){
         let productos = carrito.productos

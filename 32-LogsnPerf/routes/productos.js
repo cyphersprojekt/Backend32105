@@ -1,8 +1,11 @@
 const express = require('express')
 const router = express.Router()
+const logger = require('../app/logger');
 
 const SQLHelper = require('../helpers/sqlHelper.js')
 
+/* si no soy estupido migre todo esto a home.js 
+pero como eso es una gran asuncion mejor prevenir q lamentar */
 const mariadb = new SQLHelper({
     client: "mysql",
     connection: {
@@ -12,8 +15,6 @@ const mariadb = new SQLHelper({
         database: "coderhouse"
     }
 }, "productos")
-if (mariadb) {console.log('la base anda')}
-
 
 const isAdmin = ((req, res, next) => {
     const isAdmin = req.headers["isadmin"]
@@ -43,7 +44,7 @@ router.get('/', isAdmin, async (req, res)=>{
         currentData = await mariadb.getAll()
     }
     catch (err){
-        console.log(err)
+        logger.error(err)
     }
 
     if(currentData){

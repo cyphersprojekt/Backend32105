@@ -1,9 +1,10 @@
 const launch = require('./app/launch')
+const logger = require('./app/logger');
 
 let port;
 if (Number(process.argv[2]).toString() === 'NaN') {
-    console.error('Second argument must be a number, got ' + process.argv[2])
-    console.log('Defaulting to 8080')
+    logger.error('Second argument must be a number, got ' + process.argv[2])
+    logger.info('Defaulting to 8080')
     port = 8080;
 } else {
     port = Number(process.argv[2])

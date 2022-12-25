@@ -13,11 +13,11 @@ const handlebars = require('express-handlebars')
 const bodyParser = require('body-parser')
 const path = require('path')
 const compression = require('compression');
-const { createLogger, format, transports } = require("winston");
 
 const homeRouter = require('../routes/home.js')
 const accountsRouter = require('../routes/accounts.js')
 const numsRouter = require('../routes/numeros.js')
+const logger = require('./logger.js')
 
 const dotenv = require('dotenv')
 dotenv.config()
@@ -25,29 +25,6 @@ dotenv.config()
 const app = express()
 const httpServer = new HttpServer(app)
 const io = new IOServer(httpServer)
-const logLevels = {
-    fatal: 0,
-    error: 1,
-    warn: 2,
-    info: 3,
-    debug: 4,
-    trace: 5,
-    };
-
-const log2c = createLogger({
-    format: format.combine(format.timestamp(), format.json()),
-    levels: logLevels,
-    transports: [new transports.Console()],
-});
-
-const log2f = createLogger({
-    format: format.combine(format.timestamp(), format.json()),
-    levels: logLevels,
-    transports: [new transports.File({
-        filename: '../logs/sarasa.log'
-    })]
-})
-
 app.use(compression());
 
 app.use(cookieParser())
@@ -97,7 +74,7 @@ app.set('socketio', io)
 
 //Log time and request
 app.use((req, res, next) => {
-    console.log(new Date().toLocaleDateString(), new Date().toLocaleTimeString(), req.method, req.originalUrl)
+    logger.info(req.method, req.originalUrl)
     next()
 })
 
@@ -115,9 +92,8 @@ app.use('/api/random', numsRouter)
 app.all("*", (req, res) => {    
     res.status(404)
     res.redirect('/error')
+    logger.warn(`Acceso a ruta inexistente ${req.originalUrl}`)
 });
 
 exports.app = app
 exports.httpServer = httpServer
-exports.log2c = log2c
-exports.log2f = log2f
