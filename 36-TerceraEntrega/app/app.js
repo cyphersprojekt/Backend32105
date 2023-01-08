@@ -74,7 +74,7 @@ app.set('socketio', io)
 
 //Log time and request
 app.use((req, res, next) => {
-    logger.info(req.method, req.originalUrl)
+    logger.info(`${req.method} ${req.originalUrl}`)
     next()
 })
 

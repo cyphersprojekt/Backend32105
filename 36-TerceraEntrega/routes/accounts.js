@@ -23,22 +23,27 @@ function hashPassword(password) {
 const schema = new Schema({
     username: {type: String, required: true},
     email: {type: String, required: true},
-    password: {type: String, required: true}
+    password: {type: String, required: true},
+    name: {type: String, required: true},
+    address: {type: String, required: true},
+    age: {type: Number, required: true},
+    phone_number: {type: String, required: true},
+    photo_url: {type: String, required: false}
 })
+
 const usersHelper = new mongoHelper('users', schema)
 const Users = mongoose.model('users', schema)
 
 passport.use('login', new LocalStrategy(
     (username, password, done) => {
-        Users.findOne({username: username}, (err, user) => {
+        Users.findOne({$or: [{username: username}, {email: username}]}, (err, user) => {
             if (err) {
                 return done(err)
             }
 
             if (!user) {
                 logger.error(`user ${user} not found`)
-                return done(null, false)
-                
+                return done(null, false)                
             }
 
             if (!checkPassword(user.password, password)){
@@ -51,20 +56,25 @@ passport.use('login', new LocalStrategy(
 
 passport.use('register', new LocalStrategy({passReqToCallback: true},
     (req, username, password, done) => {
-        Users.findOne({$or: [{username: username}, {email: req.body.email}]}, (err, user) => {
+        Users.findOne({username: username}, (err, user) => {
             if (err) {
                 logger.error(`Error while registering ${err}`)
                 return done(err)
             }
             if (user) {
-                logger.error(`Username ${user} already registered`)
+                logger.error(`Username ${username} already registered`)
                 return done(null, false)                
             }
             else{
                 const newUser = {
                     username: username,
+                    email: req.body.email,
                     password: hashPassword(password),
-                    email: req.body.email                    
+                    name: req.body.name,
+                    address: req.body.address,
+                    age: req.body.age,
+                    phone_number: req.body.phone_number
+                    // photo_url: req.body.photo_url
                 }
                 Users.create(newUser, (err, user) => {
                     if (err) {
@@ -80,7 +90,7 @@ passport.use('register', new LocalStrategy({passReqToCallback: true},
 }))
 
 passport.serializeUser( async (user,done) => {
-    logger.info(`Serializing user ${user.username}`)
+    logger.info(`Serializing user ${user.email}`)
     done(null, user._id)
 })
 
