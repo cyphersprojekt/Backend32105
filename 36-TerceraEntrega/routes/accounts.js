@@ -7,6 +7,9 @@ const passport = require('passport')
 const LocalStrategy = require('passport-local').Strategy
 const mongoHelper = require('../helpers/mongooseHelper');
 const mongoose = require('mongoose');
+const multer = require('multer');
+const path = require("path");
+const fs = require("fs");
 
 const Schema = require('mongoose').Schema
 const logger = require('../app/logger');
@@ -18,6 +21,11 @@ function checkPassword(passwordHash, passwordString) {
 function hashPassword(password) {
     return bcrypt.hashSync(password, saltRounds, null)
 }
+
+const upload = multer({
+    dest: "../public/uploads/temp/"
+});
+
 
 
 const schema = new Schema({
@@ -56,7 +64,7 @@ passport.use('login', new LocalStrategy(
 
 passport.use('register', new LocalStrategy({passReqToCallback: true},
     (req, username, password, done) => {
-        Users.findOne({username: username}, (err, user) => {
+        Users.findOne({$or: [{username: username}, {email: req.body.email}]}, (err, user) => {
             if (err) {
                 logger.error(`Error while registering ${err}`)
                 return done(err)
@@ -73,8 +81,8 @@ passport.use('register', new LocalStrategy({passReqToCallback: true},
                     name: req.body.name,
                     address: req.body.address,
                     age: req.body.age,
-                    phone_number: req.body.phone_number
-                    // photo_url: req.body.photo_url
+                    phone_number: req.body.phone_number,
+                    photo_url: req.body.photo_url
                 }
                 Users.create(newUser, (err, user) => {
                     if (err) {
@@ -102,10 +110,26 @@ router.get('/register', async (req, res) => {
     res.render('register', {layout: false})
 });
 
-router.post('/register', passport.authenticate('register', 
+router.post('/register', upload.single("photo_url"), passport.authenticate('register', 
             {failureRedirect: '/error'}),
             async (req, res) => {
                 req.session.save()
+
+                const tempPath = req.file.path;
+                const targetPath = path.join(__dirname, `.public/uploads/${tempPath}`);
+                const allowedExtensions = ['.png','.jpg','.jpeg']
+
+                if (allowedExtensions.includes(path.extname(req.file.originalname).toLowerCase())) {
+                    fs.rename(tempPath, targetPath, err => {
+                        if (err) {
+                            logger.error(err)
+                            res.redirect('/error')
+                        }
+                    })
+                } else {
+                    logger.info(`increible que se haya subido la imagen ${targetPath}`)
+                }
+
                 res.redirect('/')
             });
 
