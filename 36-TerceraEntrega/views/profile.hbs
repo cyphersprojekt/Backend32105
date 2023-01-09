@@ -1,0 +1,24 @@
+<section>
+<div>
+    <button type="button" class="btnLogout">Log out</button>
+    <h1> Welcome, {{ data.name }}</h1>
+</div>
+</section>
+
+<section>
+    <h2>My profile</h2>
+    <p><b>My username: </b>{{ data.username }}</p><br><br>
+    <p><b>My email: </b>{{ data.email }}</p><br><br>
+    <p><b>My address: </b>{{ data.address }}</p><br><br>
+    <p><b>My phone number: </b>{{ data.phone_number }}</p><br><br>
+    <p>I was {{ data.age }} at the time of registering</p><br><br>
+    <img src="{{ data.photo_url }}" width="25%" height="25%">
+</section> <br><br>
+
+<section>
+    <form action="/accounts/profile" method="post" enctype="multipart/form-data">
+    <label for="photo_url">Change my profile picture</label><br><br>
+    <input type="file" name="photo_url" accept=".png,.jpg,.jpeg"><br>
+    <button type="submit">Subir imagen</button>
+    </form>
+</section>

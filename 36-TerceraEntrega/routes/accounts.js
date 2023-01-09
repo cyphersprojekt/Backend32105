@@ -22,12 +22,6 @@ function hashPassword(password) {
     return bcrypt.hashSync(password, saltRounds, null)
 }
 
-const upload = multer({
-    dest: "../public/uploads/temp/"
-});
-
-
-
 const schema = new Schema({
     username: {type: String, required: true},
     email: {type: String, required: true},
@@ -82,10 +76,11 @@ passport.use('register', new LocalStrategy({passReqToCallback: true},
                     address: req.body.address,
                     age: req.body.age,
                     phone_number: req.body.phone_number,
-                    photo_url: req.body.photo_url
+                    photo_url: 'https://freerangestock.com/sample/120140/business-man-profile-vector.jpg'
                 }
                 Users.create(newUser, (err, user) => {
                     if (err) {
+                        logger.error(`LA CONCHA DE DIOS`)
                         return done(err)
                     }
                     else{
@@ -110,26 +105,11 @@ router.get('/register', async (req, res) => {
     res.render('register', {layout: false})
 });
 
-router.post('/register', upload.single("photo_url"), passport.authenticate('register', 
+router.post('/register', passport.authenticate('register', 
             {failureRedirect: '/error'}),
             async (req, res) => {
+                logger.info(`Registering ${req.body}`)
                 req.session.save()
-
-                const tempPath = req.file.path;
-                const targetPath = path.join(__dirname, `.public/uploads/${tempPath}`);
-                const allowedExtensions = ['.png','.jpg','.jpeg']
-
-                if (allowedExtensions.includes(path.extname(req.file.originalname).toLowerCase())) {
-                    fs.rename(tempPath, targetPath, err => {
-                        if (err) {
-                            logger.error(err)
-                            res.redirect('/error')
-                        }
-                    })
-                } else {
-                    logger.info(`increible que se haya subido la imagen ${targetPath}`)
-                }
-
                 res.redirect('/')
             });
 
@@ -155,5 +135,52 @@ router.get('/logout', async (req, res) => {
         res.redirect('/accounts/login')
     });
 });
+
+const upload = multer({
+    dest: "../public/uploads/temp/"
+});
+
+router.get('/profile', async (req, res) => { 
+    if (!req.isAuthenticated()) {
+        res.render('login');
+    } else {
+        data = {
+            'username': req.user.username,
+            'email': req.user.email,
+            'name': req.user.name,
+            'address': req.user.address,
+            'age': req.user.age,
+            'phone_number': req.user.phone_number,
+            'photo_url': req.user.photo_url
+        }
+        res.render('profile', {data: data});
+    }})
+
+router.post('/profile', upload.single('photo_url'), async (req, res) => { 
+    const tempPath = req.file.path;
+    const allowedExtensions = ['.jpg', '.png', '.jpeg']
+    const targetPath = path.join(__dirname, `../public/uploads/${req.user.username}${path.extname(req.file.originalname).toLowerCase()}`);
+
+    if (allowedExtensions.includes(path.extname(req.file.originalname).toLowerCase())) {
+        fs.rename(tempPath, targetPath, err => { 
+            if (err) { 
+                logger.error(err)
+                res.redirect('/error') 
+            } else {
+            let filter = { username: req.user.username }
+            let options = { upsert: true }
+            let updateDoc = { $set: {
+                photo_url: targetPath
+            } }
+            Users.updateOne(filter, updateDoc, options)
+            console.log(`${req.user.username}:${targetPath} updated`)
+            res.redirect('/accounts/profile') }
+        })
+    } else {
+        logger.error(`se intento subir una imagen con extension ${path.extname(req.file.originalname).toLowerCase()} no soportada`)
+        fs.unlink(tempPath)
+        res.redirect('/error')
+    }
+    })
 
 module.exports = router;
