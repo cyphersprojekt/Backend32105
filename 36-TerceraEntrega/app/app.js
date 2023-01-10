@@ -84,7 +84,7 @@ app.use(bodyParser.urlencoded({
 }))
 
 app.use(express.static(path.join(__dirname,'..', 'scripts')))
-app.use('/accounts/profile/', express.static(path.join(__dirname,'..', 'public','uploads')))
+app.use('/imgs',express.static(path.join(__dirname,'..', 'public', 'uploads')))
 
 app.use(homeRouter)
 app.use('/accounts', accountsRouter)

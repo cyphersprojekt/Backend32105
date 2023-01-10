@@ -150,7 +150,7 @@ router.get('/profile', async (req, res) => {
             'address': req.user.address,
             'age': req.user.age,
             'phone_number': req.user.phone_number,
-            'photo_url': `/accounts/profile/${req.user.username}`
+            'photo_url': `/imgs/${req.user.username}`
         }
         res.render('profile', {data: data});
     }})
