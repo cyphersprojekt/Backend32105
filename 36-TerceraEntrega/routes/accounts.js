@@ -33,8 +33,13 @@ const schema = new Schema({
     photo_url: {type: String, required: false}
 })
 
+const cSchema = require('./carrito').cSchema
+
 const usersHelper = new mongoHelper('users', schema)
 const Users = mongoose.model('users', schema)
+
+const carritosHelper = new mongoHelper('carritos', cSchema)
+const Carritos = mongoose.model('carritos', cSchema)
 
 passport.use('login', new LocalStrategy(
     (username, password, done) => {
@@ -109,7 +114,7 @@ router.post('/register', passport.authenticate('register',
             async (req, res) => {
                 logger.info(`Registering ${req.body}`)
                 req.session.save()
-                res.redirect('/')
+                res.redirect('/carritos/')
             });
 
 

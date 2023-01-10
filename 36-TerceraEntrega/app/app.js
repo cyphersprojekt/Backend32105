@@ -14,9 +14,10 @@ const bodyParser = require('body-parser')
 const path = require('path')
 const compression = require('compression');
 
-const homeRouter = require('../routes/home.js')
+const homeRouter = require('../routes/home.js').router
 const accountsRouter = require('../routes/accounts.js')
 const numsRouter = require('../routes/numeros.js')
+const carritosRouter = require('../routes/carrito.js').router
 const logger = require('./logger.js')
 
 const dotenv = require('dotenv')
@@ -88,6 +89,7 @@ app.use('/imgs',express.static(path.join(__dirname,'..', 'public', 'uploads')))
 
 app.use(homeRouter)
 app.use('/accounts', accountsRouter)
+app.use('/carritos', carritosRouter)
 app.use('/api/random', numsRouter)
 
 // Handleo todo lo no implementado aca

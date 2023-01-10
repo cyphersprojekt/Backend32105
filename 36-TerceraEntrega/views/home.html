@@ -24,7 +24,7 @@
         <section>
         <div>
             <button type="button" onclick=window.location='/'>Home</button>
-            <button type="button" class="btnLogout">Log out</button>
+            <button type="button" onclick=window.location='/accounts/logout'>Log out</button>
             <button type="button" onclick=window.location='/accounts/profile'>Profile</button>
             <div class="username"></div>
             <script id="username" type="text/x-handlebars-template">
@@ -63,12 +63,14 @@
                         <th>Product</th>
                         <th>Price</th>
                         <th>Thumbnail</th>
+                        <th>Acciones</th>
                     </tr>
                     {{#each data}}
                         <tr>
                             <td>{{this.name}}</td>
                             <td>${{this.price}}</td>
                             <td><img src={{this.thumbnail}}></td>
+                            <td><button>Agregar al carrito</button></td>
                         </tr>
                     {{/each}}    
                 </table>

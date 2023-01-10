@@ -103,4 +103,6 @@ router.get('/info', async (req, res) => {
     res.render('info', {data: data})
 })
 
-module.exports = router;
+exports.router = router;
+exports.productSchema = productSchema;
+exports.isAuth = isAuth;

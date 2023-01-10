@@ -1,31 +1,45 @@
 const express = require('express')
 const router = express.Router()
 const MongoHelper = require('../helpers/mongooseHelper')
+const Schema = require('mongoose').Schema
+const mongoose = require('mongoose');
+
+
+const isAuth = require('./home').isAuth
 
 const logger = require('../app/logger');
+const { query } = require('express');
+
+const cSchema = new Schema({ 
+    username: {type: String, required: true},
+    items: {type: Array, required: true}
+ })
+
+const pSchema = require('../routes/home').productSchema
+
+let carritos = new MongoHelper('carritos', cSchema)
+let Carritos = mongoose.model('Carritos', cSchema)
+
+let productos = new MongoHelper('productos', pSchema)
 
 
-/* let carritos = new MongoHelper()
-let productos = new MongoHelper() */
+// router.get('/', async (req, res)=>{
+//     let currentData
+//     try{
+//         currentData = await carritos.getAll()
+//     }
+//     catch (err){
+//         logger.error(err)
+//     }
 
+//     if(currentData){
+//         res.send(currentData)
+//     }
+//     else{
+//         res.send({error: 'No hay carritos'})
+//     }
 
-router.get('/', async (req, res)=>{
-    let currentData
-    try{
-        currentData = await carritos.getAll()
-    }
-    catch (err){
-        logger.error(err)
-    }
-
-    if(currentData){
-        res.send(currentData)
-    }
-    else{
-        res.send({error: 'No hay carritos'})
-    }
-
-})
+// })
 
 router.get('/:id/productos', async (req, res)=>{
     let currentData
@@ -44,19 +58,30 @@ router.get('/:id/productos', async (req, res)=>{
     }
 })
 
-router.post('/', async (req, res)=>{
-    let carrito = {
-        productos: []
+// quizas si fuera un buen programador buscaria la forma de 
+// manejar los updates y los inserts a traves de esta misma ruta
+
+router.get('/', isAuth, async (req, res)=>{
+    let reqUser = req.user.username
+    let query = Carritos.findOne({username: reqUser})
+    if (query.count() > 0) {
+        console.log(Carritos.find({username: reqUser}).count())
+        logger.error('falla de logica, se intento generar un carrito para un usuario que ya tiene uno')
+        logger.error('Corresponde hacer un update o eliminarlo y crear uno nuevo')
+        res.redirect(req.headers.referer)
+    } else {
+        let newCarrito = {
+            'username': reqUser,
+            'productos': []
+        }
+        try {
+        carritos.insert(newCarrito)
+        logger.info(`se creo un carrito vacio para ${reqUser}`)
+        res.redirect('/')
+        } catch(e) {
+            logger.error(e)
+        }
     }
-    
-    try {
-        await carritos.insert(carrito)
-    }
-    catch (err){
-        logger.error(err)
-        res.send(err)
-    }
-    res.send(`Se guardo el carrito.`)
 })
 
 router.delete('/:id', async (req, res) =>{
@@ -134,4 +159,5 @@ router.delete('/:id/productos/:idprod', async (req, res) =>{
 })
 
 
-module.exports = router
+exports.router = router;
+exports.cSchema = cSchema;

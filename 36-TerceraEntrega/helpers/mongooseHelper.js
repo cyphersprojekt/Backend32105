@@ -13,11 +13,20 @@ class mongooseHelper{
         return data
     }
 
-    // async find(field, value) {
-    //     const selector = {[field]: `${value}`}
-    //     const data = await this.collection.findOne(selector)
-    //     return data
-    // }
+    // no se por que esto estaba comentado pero si funciona
+    // me sirve para lo que tengo que hacer ahora asi que 
+    // gracias ignacito del pasado
+
+    async find(field, value) {
+        const selector = {[field] : value}
+        const data = await this.collection.findOne(selector)
+        if (data != null) {
+            return true
+        } else {
+            return false
+        }
+    }
+
     async getAll(){
         const data = await this.collection.find({})
         return data
