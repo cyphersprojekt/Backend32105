@@ -75,8 +75,7 @@ passport.use('register', new LocalStrategy({passReqToCallback: true},
                     name: req.body.name,
                     address: req.body.address,
                     age: req.body.age,
-                    phone_number: req.body.phone_number,
-                    photo_url: 'https://freerangestock.com/sample/120140/business-man-profile-vector.jpg'
+                    phone_number: req.body.phone_number
                 }
                 Users.create(newUser, (err, user) => {
                     if (err) {
@@ -151,35 +150,40 @@ router.get('/profile', async (req, res) => {
             'address': req.user.address,
             'age': req.user.age,
             'phone_number': req.user.phone_number,
-            'photo_url': req.user.photo_url
+            'photo_url': `/accounts/profile/${req.user.username}`
         }
         res.render('profile', {data: data});
     }})
 
 router.post('/profile', upload.single('photo_url'), async (req, res) => { 
+    try {
     const tempPath = req.file.path;
     const allowedExtensions = ['.jpg', '.png', '.jpeg']
-    const targetPath = path.join(__dirname, `../public/uploads/${req.user.username}${path.extname(req.file.originalname).toLowerCase()}`);
-
-    if (allowedExtensions.includes(path.extname(req.file.originalname).toLowerCase())) {
-        fs.rename(tempPath, targetPath, err => { 
-            if (err) { 
-                logger.error(err)
-                res.redirect('/error') 
-            } else {
-            let filter = { username: req.user.username }
-            let options = { upsert: true }
-            let updateDoc = { $set: {
-                photo_url: targetPath
-            } }
-            Users.updateOne(filter, updateDoc, options)
-            console.log(`${req.user.username}:${targetPath} updated`)
-            res.redirect('/accounts/profile') }
-        })
-    } else {
-        logger.error(`se intento subir una imagen con extension ${path.extname(req.file.originalname).toLowerCase()} no soportada`)
-        fs.unlink(tempPath)
-        res.redirect('/error')
+    const targetPath = path.join(__dirname, '..',`/public/uploads/${req.user.username}`);
+    
+        if (allowedExtensions.includes(path.extname(req.file.originalname).toLowerCase())) {
+            fs.rename(tempPath, targetPath, err => { 
+                if (err) { 
+                    logger.error(err)
+                    res.redirect('/error') 
+                } else {
+                let filter = { username: req.user.username }
+                let options = { upsert: true }
+                let updateDoc = { $set: {
+                    photo_url: targetPath
+                } }
+                Users.updateOne(filter, updateDoc, options)
+                logger.info(`${req.user.username}:${targetPath} updated`)
+                res.redirect('/accounts/profile') }
+            })
+        } else {
+            logger.error(`se intento subir una imagen con extension ${path.extname(req.file.originalname).toLowerCase()} no soportada`)
+            fs.unlink(tempPath)
+            res.redirect('/error')
+        }
+    } catch(e) {
+        logger.error(e)
+        res.redirect('/accounts/profile')
     }
     })
 
