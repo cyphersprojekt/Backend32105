@@ -27,10 +27,9 @@ async function crearCarritoVacio(req, res, redirect) {
     let reqUser = req.user.username
     let query = Carritos.findOne({username: reqUser})
     if (query.count() > 0) {
-        console.log(Carritos.find({username: reqUser}).count())
         logger.error('falla de logica, se intento generar un carrito para un usuario que ya tiene uno')
         logger.error('Corresponde hacer un update o eliminarlo y crear uno nuevo')
-        if (redirect) { res.redirect(req.headers.referer) }
+        if (redirect) { res.redirect(redirect) }
     } else {
         let newCarrito = {
             'username': reqUser,
@@ -46,23 +45,24 @@ async function crearCarritoVacio(req, res, redirect) {
     }
 }
 
-// router.get('/', async (req, res)=>{
-//     let currentData
-//     try{
-//         currentData = await carritos.getAll()
-//     }
-//     catch (err){
-//         logger.error(err)
-//     }
+async function agregarProductoACarrito(req, res, productId, redirect) {
+    let reqUser = req.user.username
+    let query = Carritos.findOne({username: reqUser})
+    if (query.count() < 0) {
+        logger.error('se intento agregar un producto a un carrito que no existe')
+        crearCarritoVacio(req, res, false)
+    }
+    await Carritos.findOneAndUpdate({username: reqUser}, {"$push":{items:productId}}, {new:true})
+    logger.info(`se agrego el producto ${productId} al carrito de ${reqUser}`)
+    if (redirect) res.redirect(redirect)
+}
 
-//     if(currentData){
-//         res.send(currentData)
-//     }
-//     else{
-//         res.send({error: 'No hay carritos'})
-//     }
 
-// })
+router.get('/:idProducto', isAuth, async (req, res) => {
+    idprod = req.params.idProducto
+    agregarProductoACarrito(req, res, idprod, '/')
+})
+
 
 router.get('/:id/productos', async (req, res)=>{
     let currentData
@@ -81,11 +81,8 @@ router.get('/:id/productos', async (req, res)=>{
     }
 })
 
-// quizas si fuera un buen programador buscaria la forma de 
-// manejar los updates y los inserts a traves de esta misma ruta
-
+// esto lo voy a usar para mostrar todos los productos en el carrito del usuario logueado
 router.get('/', isAuth, async (req, res)=>{
-    crearCarritoVacio(req, res);
 })
 
 router.delete('/:id', async (req, res) =>{
