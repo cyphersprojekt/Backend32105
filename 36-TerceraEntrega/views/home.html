@@ -60,6 +60,7 @@
             <script id="list-products" type="text/x-handlebars-template">
                 <table>
                     <tr>
+                        <th>id</th>
                         <th>Product</th>
                         <th>Price</th>
                         <th>Thumbnail</th>
@@ -67,6 +68,7 @@
                     </tr>
                     {{#each data}}
                         <tr>
+                            <td>{{this._id}}</td>
                             <td>{{this.name}}</td>
                             <td>${{this.price}}</td>
                             <td><img src={{this.thumbnail}}></td>

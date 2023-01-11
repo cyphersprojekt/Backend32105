@@ -20,8 +20,31 @@ const pSchema = require('../routes/home').productSchema
 let carritos = new MongoHelper('carritos', cSchema)
 let Carritos = mongoose.model('Carritos', cSchema)
 
-let productos = new MongoHelper('productos', pSchema)
+let productos = new MongoHelper('products', pSchema)
 
+
+async function crearCarritoVacio(req, res, redirect) {
+    let reqUser = req.user.username
+    let query = Carritos.findOne({username: reqUser})
+    if (query.count() > 0) {
+        console.log(Carritos.find({username: reqUser}).count())
+        logger.error('falla de logica, se intento generar un carrito para un usuario que ya tiene uno')
+        logger.error('Corresponde hacer un update o eliminarlo y crear uno nuevo')
+        if (redirect) { res.redirect(req.headers.referer) }
+    } else {
+        let newCarrito = {
+            'username': reqUser,
+            'productos': []
+        }
+        try {
+        carritos.insert(newCarrito)
+        logger.info(`se creo un carrito vacio para ${reqUser}`)
+        res.redirect('/')
+        } catch(e) {
+            logger.error(e)
+        }
+    }
+}
 
 // router.get('/', async (req, res)=>{
 //     let currentData
@@ -62,26 +85,7 @@ router.get('/:id/productos', async (req, res)=>{
 // manejar los updates y los inserts a traves de esta misma ruta
 
 router.get('/', isAuth, async (req, res)=>{
-    let reqUser = req.user.username
-    let query = Carritos.findOne({username: reqUser})
-    if (query.count() > 0) {
-        console.log(Carritos.find({username: reqUser}).count())
-        logger.error('falla de logica, se intento generar un carrito para un usuario que ya tiene uno')
-        logger.error('Corresponde hacer un update o eliminarlo y crear uno nuevo')
-        res.redirect(req.headers.referer)
-    } else {
-        let newCarrito = {
-            'username': reqUser,
-            'productos': []
-        }
-        try {
-        carritos.insert(newCarrito)
-        logger.info(`se creo un carrito vacio para ${reqUser}`)
-        res.redirect('/')
-        } catch(e) {
-            logger.error(e)
-        }
-    }
+    crearCarritoVacio(req, res);
 })
 
 router.delete('/:id', async (req, res) =>{
@@ -161,3 +165,4 @@ router.delete('/:id/productos/:idprod', async (req, res) =>{
 
 exports.router = router;
 exports.cSchema = cSchema;
+exports.crearCarritoVacio = crearCarritoVacio;

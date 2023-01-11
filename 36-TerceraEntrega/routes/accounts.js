@@ -14,6 +14,7 @@ const fs = require("fs");
 const Schema = require('mongoose').Schema
 const logger = require('../app/logger');
 
+const crearCarritoVacio = require('./carrito').crearCarritoVacio
 
 function checkPassword(passwordHash, passwordString) {
     return bcrypt.compareSync(passwordString, passwordHash)
@@ -114,7 +115,7 @@ router.post('/register', passport.authenticate('register',
             async (req, res) => {
                 logger.info(`Registering ${req.body}`)
                 req.session.save()
-                res.redirect('/carritos/')
+                crearCarritoVacio(req, res, false)
             });
 
 
