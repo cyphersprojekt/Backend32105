@@ -8,20 +8,17 @@ const mongoose = require('mongoose');
 const isAuth = require('./home').isAuth
 
 const logger = require('../app/logger');
-const { query } = require('express');
 
 const cSchema = new Schema({ 
     username: {type: String, required: true},
     items: {type: Array, required: true}
  })
 
-const pSchema = require('../routes/home').productSchema
-
 let carritos = new MongoHelper('carritos', cSchema)
-let Carritos = mongoose.model('Carritos', cSchema)
+let Carritos = mongoose.model('carritos', cSchema)
 
-let productos = new MongoHelper('products', pSchema)
-
+const pSchema = require('./home').pSchema
+let Productos = mongoose.model('products', pSchema)
 
 async function crearCarritoVacio(req, res, redirect) {
     let reqUser = req.user.username
@@ -33,7 +30,7 @@ async function crearCarritoVacio(req, res, redirect) {
     } else {
         let newCarrito = {
             'username': reqUser,
-            'productos': []
+            'items': []
         }
         try {
         carritos.insert(newCarrito)
@@ -64,99 +61,32 @@ router.get('/:idProducto', isAuth, async (req, res) => {
 })
 
 
-router.get('/:id/productos', async (req, res)=>{
-    let currentData
-    const { id } = req.params
-    try {
-        currentData = await carritos.getByID(id)
-    }
-    catch (err){
-        logger.error(err)
-    }
-    if(currentData){
-        res.send(currentData)
-    }
-    else{
-        res.send({error: 'Carrito no encontrado'})
-    }
-})
+// mi carrito tiene almacenados unicamente los id de los productos que va a comprar el usuario.
+// si hicieras esto con sql seria hermoso, una fk, un pequeño join por aquí, un pequeño join por acá, ahí tenes toda tu info.
+// como estamos mal de la cabeza, usamos mongo, que no tiene ninguna de esas funcionalidades, motivo por el cual me veo en la
+// obligacion de buscar otra vez uno por uno el resto de los datos de cada uno de los productos, y no se me podria ocurrir algo
+// menos performante que eso.
 
-// esto lo voy a usar para mostrar todos los productos en el carrito del usuario logueado
-router.get('/', isAuth, async (req, res)=>{
-})
+async function loopOverProducts(user, carrito) {
+    let data = {
+        'username': user,
+        'items': []
+    }
+    carrito.items.forEach(async item => {
+        logger.info(`estoy iterando sobre el item ${item}`)
+        let query = Productos.findOne({_id: item})
+        let completeProduct = await query.exec()
+        data.items.push(completeProduct)
+        logger.info(`agregue el producto ${completeProduct}`)
+    })
+    return data
+}
 
-router.delete('/:id', async (req, res) =>{
-    const id = req.params.id
-
-    let carrito
-    try{
-        carrito = await carritos.getByID(id)
-    }
-    catch (err){
-        logger.error(err)
-    }
-
-    if(carrito){
-        carritos.delete(id)
-        res.send(`El carrito con ID ${id} fue eliminado`)
-    }
-    else{
-        res.send({error: 'Carrito no encontrado'})
-    }
-})
-
-
-router.post('/:id/productos/:idprod', async (req, res)=>{
-    const id = req.params.id
-    const idprod = req.params.idprod
-    let carrito
-    let product
-    try{
-        carrito = await carritos.getByID(id)
-        product = await productos.getByID(idprod)
-    }
-    catch (err){
-        logger.error(err)
-    } 
-
-    if(carrito && product){
-        carrito.productos.push(product)
-        carritos.update(id, carrito)
-        res.send(`Se agrego el producto de ID ${idprod} al carrito ${id}`)
-    }
-    else{
-        res.send({error: 'Carrito o producto a agregar no encontrado'})
-    }
-})
-
-router.delete('/:id/productos/:idprod', async (req, res) =>{
-    const id = req.params.id
-    const idprod = req.params.idprod
-
-    let carrito
-    try{
-        carrito = await carritos.getByID(id)
-    }
-    catch (err){
-        logger.error(err)
-    }
-    if(carrito){
-        let productos = carrito.productos
-        let productoABorrar = productos.findIndex(x => x._id.toString() === idprod)
-        if (productoABorrar == -1){
-            res.send({error: 'El producto no fue encontrado'})
-        }
-        else{
-            productos.splice(productoABorrar, 1)
-            carrito.productos = productos
-            carritos.update(id, carrito)
-            res.send(`Se elimino un producto de ID ${idprod} del carrito ${id}`)
-
-        }
-    }
-    else{
-        res.send({error: 'El carrito no fue encontrado'})
-    }
+router.get('/', isAuth, async(req, res)=>{
+    let reqUser = req.user.username
+    let carritoUser = await Carritos.findOne({username: reqUser})
+    let data = await loopOverProducts(reqUser, carritoUser)
+    return res.send(data)
 })
 
 
