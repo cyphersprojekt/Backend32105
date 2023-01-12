@@ -49,7 +49,8 @@ async function agregarProductoACarrito(req, res, productId, redirect) {
         logger.error('se intento agregar un producto a un carrito que no existe')
         crearCarritoVacio(req, res, false)
     }
-    await Carritos.findOneAndUpdate({username: reqUser}, {"$push":{items:productId}}, {new:true})
+    let product = await Productos.findOne({id: productId})
+    await Carritos.findOneAndUpdate({username: reqUser}, {"$push":{items:product}})
     logger.info(`se agrego el producto ${productId} al carrito de ${reqUser}`)
     if (redirect) res.redirect(redirect)
 }
@@ -61,31 +62,9 @@ router.get('/:idProducto', isAuth, async (req, res) => {
 })
 
 
-// mi carrito tiene almacenados unicamente los id de los productos que va a comprar el usuario.
-// si hicieras esto con sql seria hermoso, una fk, un pequeño join por aquí, un pequeño join por acá, ahí tenes toda tu info.
-// como estamos mal de la cabeza, usamos mongo, que no tiene ninguna de esas funcionalidades, motivo por el cual me veo en la
-// obligacion de buscar otra vez uno por uno el resto de los datos de cada uno de los productos, y no se me podria ocurrir algo
-// menos performante que eso.
-
-async function loopOverProducts(user, carrito) {
-    let data = {
-        'username': user,
-        'items': []
-    }
-    carrito.items.forEach(async item => {
-        logger.info(`estoy iterando sobre el item ${item}`)
-        let query = Productos.findOne({_id: item})
-        let completeProduct = await query.exec()
-        data.items.push(completeProduct)
-        logger.info(`agregue el producto ${completeProduct}`)
-    })
-    return data
-}
-
 router.get('/', isAuth, async(req, res)=>{
     let reqUser = req.user.username
-    let carritoUser = await Carritos.findOne({username: reqUser})
-    let data = await loopOverProducts(reqUser, carritoUser)
+    let data = await Carritos.findOne({username: reqUser})
     return res.send(data)
 })
 
