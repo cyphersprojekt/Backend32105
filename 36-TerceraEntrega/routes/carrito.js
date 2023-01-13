@@ -49,23 +49,23 @@ async function agregarProductoACarrito(req, res, productId, redirect) {
         logger.error('se intento agregar un producto a un carrito que no existe')
         crearCarritoVacio(req, res, false)
     }
-    let product = await Productos.findOne({id: productId})
+    let product = await Productos.findOne({_id: productId})
     await Carritos.findOneAndUpdate({username: reqUser}, {"$push":{items:product}})
     logger.info(`se agrego el producto ${productId} al carrito de ${reqUser}`)
     if (redirect) res.redirect(redirect)
 }
 
 
-router.get('/:idProducto', isAuth, async (req, res) => {
+router.get('/add/:idProducto', isAuth, async (req, res) => {
     idprod = req.params.idProducto
     agregarProductoACarrito(req, res, idprod, '/')
 })
 
-
-router.get('/', isAuth, async(req, res)=>{
+router.get('/micarrito', isAuth, async(req, res)=>{
     let reqUser = req.user.username
-    let data = await Carritos.findOne({username: reqUser})
-    return res.send(data)
+    let data = await Carritos.findOne({username: reqUser}).lean()
+    console.log(data)
+    res.render('carrito', {data: data, username: reqUser})
 })
 
 
