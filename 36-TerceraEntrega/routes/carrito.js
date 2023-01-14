@@ -44,7 +44,7 @@ async function crearCarritoVacio(req, res, redirect) {
 
 async function agregarProductoACarrito(req, res, productId, redirect) {
     let reqUser = req.user.username
-    let query = Carritos.findOne({username: reqUser})
+    let query = await Carritos.find({username: reqUser})
     if (query.count() < 0) {
         logger.error('se intento agregar un producto a un carrito que no existe')
         crearCarritoVacio(req, res, false)
@@ -55,6 +55,32 @@ async function agregarProductoACarrito(req, res, productId, redirect) {
     if (redirect) res.redirect(redirect)
 }
 
+async function borrarProductoDeCarrito(req, res, productId, redirect) { 
+    let reqUser = req.user.username
+    let carritoQuery = await Carritos.findOne({username: reqUser}).lean()
+    if (carritoQuery == [] || carritoQuery == null) { 
+        logger.error('se intento eliminar un producto de un carrito que no existe')
+    } else {
+        let productoQuery = await Productos.findOne({_id: productId}).lean()
+        if (productoQuery== [] || productoQuery == null) { 
+            logger.error('se intento eliminar un producto inexistente de un carrito existente')
+            return res.redirect('/')
+        } else {
+            let productIdx = carritoQuery.items.findIndex(
+                (product) => {return product._id.toString() == productId.toString() }
+            )
+            carritoQuery.items.splice(productIdx, 1)
+            await Carritos.findOneAndUpdate({username: reqUser}, {items: carritoQuery.items})
+            logger.info(`se elimino el producto ${productId} del carrito de ${reqUser}`)
+            if (redirect) { res.redirect(redirect) } else { res.redirect('/') }
+        }
+    }
+}
+
+router.get('/del/:idProducto', isAuth, async (req, res) => {
+    idprod = req.params.idProducto
+    borrarProductoDeCarrito(req, res, idprod, '/carritos/micarrito')
+})
 
 router.get('/add/:idProducto', isAuth, async (req, res) => {
     idprod = req.params.idProducto
@@ -64,7 +90,6 @@ router.get('/add/:idProducto', isAuth, async (req, res) => {
 router.get('/micarrito', isAuth, async(req, res)=>{
     let reqUser = req.user.username
     let data = await Carritos.findOne({username: reqUser}).lean()
-    console.log(data)
     res.render('carrito', {data: data, username: reqUser})
 })
 
