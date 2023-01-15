@@ -17,7 +17,7 @@ const cSchema = new Schema({
 let carritos = new MongoHelper('carritos', cSchema)
 let Carritos = mongoose.model('carritos', cSchema)
 
-const pSchema = require('./home').pSchema
+const pSchema = require('./home').productSchema
 let Productos = mongoose.model('products', pSchema)
 
 async function crearCarritoVacio(req, res, redirect) {
@@ -45,7 +45,7 @@ async function crearCarritoVacio(req, res, redirect) {
 async function agregarProductoACarrito(req, res, productId, redirect) {
     let reqUser = req.user.username
     let query = await Carritos.find({username: reqUser})
-    if (query.count() < 0) {
+    if (query.count < 0) {
         logger.error('se intento agregar un producto a un carrito que no existe')
         crearCarritoVacio(req, res, false)
     }
@@ -76,6 +76,27 @@ async function borrarProductoDeCarrito(req, res, productId, redirect) {
         }
     }
 }
+
+async function vaciarCarrito(req, res, redirect, bought) {
+    let reqUser = req.user.username
+    let carritoQuery = await Carritos.findOne({username: reqUser}).lean()
+    if (carritoQuery == [] || carritoQuery ==null) {
+        logger.error(`se intento vaciar un carrito que no existe, como llegaste hasta aca?`)
+    } else {
+        await Carritos.findOneAndUpdate({username: reqUser}, {items: []})
+    }
+    if (bought) {
+        logger.info(`se vacio el carrito de ${reqUser} dada su compra`)
+    } else {
+        logger.info(`${reqUser} vacio su carrito porque probablemente no queria nada (o no le da la guita!)`)
+    }
+    if (redirect) {res.redirect(redirect)}
+    else {res.redirect('/')}
+}
+
+router.get('/micarrito/vaciar', isAuth, async (req, res) => {
+    vaciarCarrito(req, res, '/', false)
+})
 
 router.get('/del/:idProducto', isAuth, async (req, res) => {
     idprod = req.params.idProducto
