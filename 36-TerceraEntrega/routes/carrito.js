@@ -3,6 +3,7 @@ const router = express.Router()
 const MongoHelper = require('../helpers/mongooseHelper')
 const Schema = require('mongoose').Schema
 const mongoose = require('mongoose');
+const sendMail = require('../helpers/nodemailerHelper').sendMail
 
 
 const isAuth = require('./home').isAuth

@@ -3,7 +3,9 @@ const router = express.Router()
 const MongoHelper = require('../helpers/mongooseHelper')
 const Schema = require('mongoose').Schema
 const mongoose = require('mongoose');
-
+const sendMail = require('../helpers/nodemailerHelper').sendMail
+const sendTwilioMessage = require('../helpers/twilioHelper').sendTwilioMessage
+const sendWhatsappMessage = require('../helpers/twilioHelper').sendWhatsappMessage
 
 const isAuth = require('./home').isAuth
 
@@ -37,8 +39,24 @@ async function comprarCarrito(req, res) {
             dateBought: new Date(),
             itemsBought: carritoQuery.items
         }
+        let boughtString = '';
+        carritoQuery.items.forEach(item => {
+            boughtString = boughtString + `<li><b>Item:</b> ${item.name}<br> <li><b>Price:</b> ${item.price}<br><br>`
+        })
         await compras.insert(nuevaCompra)
         logger.info(`${reqUser} compro un carrito con ${carritoQuery.items.length} productos`)
+        sendMail(
+            null,
+            `Nuevo pedido de compra por parte de ${reqUser}, ${req.user.email}`,
+            boughtString,
+            `${boughtString}`
+        )
+        sendTwilioMessage(
+            `Orden de compra confirmada ${boughtString}`, req.user.phone_number
+        )
+        sendWhatsappMessage(
+            `Orden de compra confirmada para ${reqUser} con ${boughtString}`, process.env.ADMIN_PHONE_NUMBER
+        )
         vaciarCarrito(req, res, '/', true)
     }
 }

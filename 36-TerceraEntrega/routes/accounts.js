@@ -6,6 +6,7 @@ const session = require('express-session')
 const passport = require('passport')
 const LocalStrategy = require('passport-local').Strategy
 const mongoHelper = require('../helpers/mongooseHelper');
+const sendMail = require('../helpers/nodemailerHelper').sendMail
 const mongoose = require('mongoose');
 const multer = require('multer');
 const path = require("path");
@@ -90,6 +91,23 @@ passport.use('register', new LocalStrategy({passReqToCallback: true},
                     }
                     else{
                         logger.info(`Created ${user}`)
+                        sendMail(
+                            null,
+                            "Nuevo registro en Coderhouse 32105",
+                            `Username: ${username},
+                            Email: ${req.body.email},
+                            Name: ${req.body.name},
+                            Address: ${req.body.address},
+                            Age: ${req.body.age},
+                            Phone Number: ${req.body.phone_number}`,
+
+                            `<li><b>Username:</b> ${username},
+                            <li><b>Email:</b> ${req.body.email},
+                            <li><b>Name:</b> ${req.body.name},
+                            <li><b>Address:</b> ${req.body.address},
+                            <li><b>Age:</b> ${req.body.age},
+                            <li><b>Phone Number:</b> ${req.body.phone_number}`
+                        )
                         return done(null, user)
                     }
                 })
