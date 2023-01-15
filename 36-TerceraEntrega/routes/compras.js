@@ -11,15 +11,40 @@ const logger = require('../app/logger');
 
 const pSchema = require('./home').productSchema
 const cSchema = require('./carrito').cSchema
+const vaciarCarrito = require('./carrito').vaciarCarrito
 
 const bSchema = new Schema({
     username: {type: 'string', required: true},
     dateBought: {type: 'date', required: true},
-    itemsBought: {type: 'array', required: true},
-    paidMedia: {type: 'string', required: true}
+    itemsBought: {type: 'array', required: true}
 })
 
 let Carritos = mongoose.model('carritos', cSchema)
 let Productos = mongoose.model('products', pSchema)
 let Compras = mongoose.model('compras', bSchema)
+let compras = new MongoHelper('compras', bSchema)
 
+async function comprarCarrito(req, res) {
+    let reqUser = req.user.username
+    let carritoQuery = await Carritos.findOne({username: reqUser}).lean()
+    if (carritoQuery.count <= 0) {
+        logger.error(`se intento comprar un carrito que no existe`)
+    } else if (carritoQuery.items.length == 0) {
+        logger.error(`${reqUser} intento comprar un carrito vacio`)
+    } else {
+        let nuevaCompra = {
+            username: reqUser,
+            dateBought: new Date(),
+            itemsBought: carritoQuery.items
+        }
+        await compras.insert(nuevaCompra)
+        logger.info(`${reqUser} compro un carrito con ${carritoQuery.items.length} productos`)
+        vaciarCarrito(req, res, '/', true)
+    }
+}
+
+router.get('/nuevacompra', isAuth, async (req, res) => {
+    comprarCarrito(req, res)
+})
+
+exports.router = router;

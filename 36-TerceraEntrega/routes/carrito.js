@@ -45,7 +45,7 @@ async function crearCarritoVacio(req, res, redirect) {
 async function agregarProductoACarrito(req, res, productId, redirect) {
     let reqUser = req.user.username
     let query = await Carritos.find({username: reqUser})
-    if (query.count < 0) {
+    if (query.count <= 0) {
         logger.error('se intento agregar un producto a un carrito que no existe')
         crearCarritoVacio(req, res, false)
     }
@@ -62,7 +62,7 @@ async function borrarProductoDeCarrito(req, res, productId, redirect) {
         logger.error('se intento eliminar un producto de un carrito que no existe')
     } else {
         let productoQuery = await Productos.findOne({_id: productId}).lean()
-        if (productoQuery== [] || productoQuery == null) { 
+        if (productoQuery.count <= 0) { 
             logger.error('se intento eliminar un producto inexistente de un carrito existente')
             return res.redirect('/')
         } else {
@@ -80,7 +80,7 @@ async function borrarProductoDeCarrito(req, res, productId, redirect) {
 async function vaciarCarrito(req, res, redirect, bought) {
     let reqUser = req.user.username
     let carritoQuery = await Carritos.findOne({username: reqUser}).lean()
-    if (carritoQuery == [] || carritoQuery ==null) {
+    if (carritoQuery.count <= 0) {
         logger.error(`se intento vaciar un carrito que no existe, como llegaste hasta aca?`)
     } else {
         await Carritos.findOneAndUpdate({username: reqUser}, {items: []})
@@ -117,4 +117,5 @@ router.get('/micarrito', isAuth, async(req, res)=>{
 
 exports.router = router;
 exports.cSchema = cSchema;
+exports.vaciarCarrito = vaciarCarrito;
 exports.crearCarritoVacio = crearCarritoVacio;

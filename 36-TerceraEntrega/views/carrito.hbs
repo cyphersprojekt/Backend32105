@@ -7,7 +7,7 @@
     <h1> Welcome, {{ data.username }}</h1>
 </div>
 </section>
-
+{{#if data.items.[0]}}
 <table>
                     <tr>
                         <th>Product</th>
@@ -24,5 +24,8 @@
                             <button onclick="window.location='/carritos/del/{{ this._id }}'">-</button>
                             </td>
                         </tr>
-                    {{/each}}    
+                    {{/each}}
                 </table>
+{{else}}
+<h2>Tu carrito esta vacio!</h2>
+{{/if}}
