@@ -1,6 +1,13 @@
 # Coderhouse backend, comision 32105
 
 
+## 15/01/2023
+#### Tercera entrega del proyecto final
+````
+> npm run terceraentrega (mismo CLI que las entregas anteriores pero dudo que haya beneficio en abrirlo en modo cluster/fork)
+````
+* Agrega rutas de carrito y de compras, mails y mensajes de whatsapp y sms. 
+
 ## 27/12/2022
 #### Logs & Performance
 ````
