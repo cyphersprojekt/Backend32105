@@ -1,13 +1,16 @@
 <section>
 <div>
-                <button type="button" onclick=window.location='/'>Home</button>
+            <button type="button" onclick=window.location='/'>Home</button>
             <button type="button" onclick=window.location='/accounts/logout'>Log out</button>
             <button type="button" onclick=window.location='/accounts/profile'>Profile</button>            
             <button type="button" onclick=window.location='/carritos/micarrito'>Cart</button>
+            <button type="button" onclick=window.location='/compras'>Buy History</button>
+
     <h1> Welcome, {{ data.username }}</h1>
 </div>
 </section>
 {{#if data.items.[0]}}
+<button type="button" onclick=window.location='/compras/nuevacompra'>Comprar carrito</button>
 <table>
                     <tr>
                         <th>Product</th>
@@ -26,6 +29,7 @@
                         </tr>
                     {{/each}}
                 </table>
+                
 {{else}}
 <h2>Tu carrito esta vacio!</h2>
 {{/if}}

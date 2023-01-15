@@ -43,8 +43,15 @@ async function comprarCarrito(req, res) {
     }
 }
 
+// esto va a haber que pasarlo a POST una vez que empecemos a manejar info de pago
 router.get('/nuevacompra', isAuth, async (req, res) => {
     comprarCarrito(req, res)
 })
+
+router.get('/', isAuth, async (req, res) => {
+    let reqUser = req.user.username
+    let data = await Compras.find({username: reqUser}).sort({dateBought: -1}).lean()
+    res.render('compras', {data: data, username: reqUser})
+ })
 
 exports.router = router;
