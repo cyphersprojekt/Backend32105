@@ -1,42 +1,26 @@
 const express = require('express')
 const router = express.Router()
-const bcrypt = require('bcrypt')
-const saltRounds = bcrypt.genSaltSync(10);
 const passport = require('passport')
 const LocalStrategy = require('passport-local').Strategy
-const mongoHelper = require('../helpers/mongooseHelper');
 const sendMail = require('../helpers/nodemailerHelper').sendMail
-const mongoose = require('mongoose');
 const multer = require('multer');
-const path = require("path");
-const fs = require("fs");
 
-const logger = require('../app/logger');
-
-const crearCarritoVacio = require('./carrito').crearCarritoVacio
-
-function checkPassword(passwordHash, passwordString) {
-    return bcrypt.compareSync(passwordString, passwordHash)
-}
-function hashPassword(password) {
-    return bcrypt.hashSync(password, saltRounds, null)
-}
+const logger = require('../controllers/logControl');
 
 passport.use('login', new LocalStrategy(
     (username, password, done) => {
-        Users.findOne({$or: [{username: username}, {email: username}]}, (err, user) => {
+        Users.findOne({$or: [{username: username}, {email: username}]}, (err, user) => { // users se tiene q cambiar por un usersmodel
             if (err) {
                 return done(err)
             }
-
             if (!user) {
                 logger.error(`user ${user} not found`)
                 return done(null, false)                
             }
-
             if (!checkPassword(user.password, password)){
                 return done(null, false)
             }
+
             return done(null, user)
         })
     }
@@ -110,9 +94,7 @@ router.get('/register', async (req, res) => {
 router.post('/register', passport.authenticate('register', 
             {failureRedirect: '/error'}),
             async (req, res) => {
-                logger.info(`Registering ${req.body}`)
-                req.session.save()
-                crearCarritoVacio(req, res, false)
+                //registrarusuario
             });
 
 
@@ -142,52 +124,12 @@ const upload = multer({
     dest: "../public/uploads/temp/"
 });
 
-router.get('/profile', async (req, res) => { 
-    if (!req.isAuthenticated()) {
-        res.render('login');
-    } else {
-        data = {
-            'username': req.user.username,
-            'email': req.user.email,
-            'name': req.user.name,
-            'address': req.user.address,
-            'age': req.user.age,
-            'phone_number': req.user.phone_number,
-            'photo_url': `/imgs/${req.user.username}`
-        }
-        res.render('profile', {data: data});
-    }})
+router.get('/profile', async (req, res) => {
+    //renderprofile
+    })
 
 router.post('/profile', upload.single('photo_url'), async (req, res) => { 
-    try {
-    const tempPath = req.file.path;
-    const allowedExtensions = ['.jpg', '.png', '.jpeg']
-    const targetPath = path.join(__dirname, '..',`/public/uploads/${req.user.username}`);
-    
-        if (allowedExtensions.includes(path.extname(req.file.originalname).toLowerCase())) {
-            fs.rename(tempPath, targetPath, err => { 
-                if (err) { 
-                    logger.error(err)
-                    res.redirect('/error') 
-                } else {
-                let filter = { username: req.user.username }
-                let options = { upsert: true }
-                let updateDoc = { $set: {
-                    photo_url: targetPath
-                } }
-                Users.updateOne(filter, updateDoc, options)
-                logger.info(`${req.user.username}:${targetPath} updated`)
-                res.redirect('/accounts/profile') }
-            })
-        } else {
-            logger.error(`se intento subir una imagen con extension ${path.extname(req.file.originalname).toLowerCase()} no soportada`)
-            fs.unlink(tempPath)
-            res.redirect('/error')
-        }
-    } catch(e) {
-        logger.error(e)
-        res.redirect('/accounts/profile')
-    }
+    //updateprofile
     })
 
 module.exports = router;

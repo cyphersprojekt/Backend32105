@@ -1,6 +1,6 @@
 const dotenv = require('dotenv')
 const twilio = require('twilio')
-const logger = require('../app/logger');
+const logger = require('../controllers/logControl');
 dotenv.config()
 
 const accountSid = process.env.TWILIO_SID
