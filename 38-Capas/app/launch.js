@@ -2,7 +2,7 @@ const cluster = require('cluster')
 const cpus = require('os').cpus().length;
 const child_process = require('child_process')
 
-const logger = require('./logger.js').logger
+const logger = require('../controllers/logControl').logger
 const server = require('./server.js');
 const httpServer = require('./app.js').httpServer;
 

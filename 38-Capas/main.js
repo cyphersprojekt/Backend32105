@@ -1,5 +1,5 @@
 const launch = require('./app/launch')
-const logger = require('./app/logger');
+const logger = require('./controllers/logControl').logger
 
 let port;
 if (Number(process.argv[2]).toString() === 'NaN') {

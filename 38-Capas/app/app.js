@@ -1,9 +1,6 @@
 const express = require('express')
 const { Server: HttpServer } = require('http')
 const { Server: IOServer } = require('socket.io')
-const moment = require('moment/moment')
-const mongoose = require('mongoose')
-const normalizr = require('normalizr')
 const cookieParser = require('cookie-parser')
 const session = require('express-session')
 const MongoStore = require('connect-mongo')
@@ -13,15 +10,15 @@ const handlebars = require('express-handlebars')
 const bodyParser = require('body-parser')
 const path = require('path')
 const compression = require('compression');
+const dotenv = require('dotenv')
 
 const homeRouter = require('../routes/home.js').router
-const accountsRouter = require('../routes/accounts.js')
-const numsRouter = require('../routes/numeros.js')
+const accountsRouter = require('../routes/accounts.js').router
 const carritosRouter = require('../routes/carrito.js').router
 const comprasRouter = require('../routes/compras.js').router
-const logger = require('./logger.js')
+const logger = require('../controllers/logControl').logger
 
-const dotenv = require('dotenv')
+
 dotenv.config()
 
 const app = express()
@@ -92,7 +89,6 @@ app.use(homeRouter)
 app.use('/accounts', accountsRouter)
 app.use('/carritos', carritosRouter)
 app.use('/compras', comprasRouter)
-app.use('/api/random', numsRouter)
 
 // Handleo todo lo no implementado aca
 app.all("*", (req, res) => {    

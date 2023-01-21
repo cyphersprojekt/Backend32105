@@ -1,8 +1,12 @@
 const express = require('express')
 const router = express.Router()
 
+const isAuth = require('../controllers/authControl').isAuth
+const vaciarCarrito = require('../controllers/carritosControl').vaciarCarrito
+const borrarProductoDeCarrito = require('../controllers/carritosControl').borrarProductoDeCarrito
+const agregarProductoACarrito = require('../controllers/carritosControl').agregarProductoACarrito
+const Carritos = require('../db/models/carritosModel').carritosModel
 
-//carritoshelper, carritosmodel, productoshelper, productosmodel, isauth
 
 router.get('/micarrito/vaciar', isAuth, async (req, res) => {
     vaciarCarrito(req, res, '/', false)

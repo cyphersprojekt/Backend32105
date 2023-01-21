@@ -18,4 +18,4 @@ const logger = createLogger({
                 new transports.File({filename: './logs/fatal.log', level: 'fatal'})]
 })
 
-module.exports = logger;
+exports.logger = logger;

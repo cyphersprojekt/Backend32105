@@ -1,4 +1,4 @@
-const logger = require('./logger.js')
+const logger = require('../controllers/logControl').logger
 
 function startServer(server, port, info) {
     if (info) logger.info(info);

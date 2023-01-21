@@ -1,20 +1,26 @@
 const express = require('express')
 const router = express.Router()
 
+const renderHomePage = require('../controllers/homeControl').renderHomePage
+const createNewProduct = require('../controllers/homeControl').createNewProduct
+const renderErrorPage = require('../controllers/homeControl').renderErrorPage
+const renderInfoPage = require('../controllers/homeControl').renderInfoPage
+const isAuth = require('../controllers/authControl').isAuth
+
 router.get('/', isAuth, async (req, res)=>{
-    //renderHomePage
+    renderHomePage(req, res)
 })
 
 router.post('/', isAuth, async (req, res)=>{
-    //createNewProduct
+    createNewProduct(req, res)
 })
 
 router.get('/error', async (req, res) => {
-    //renderErrorPage
+    renderErrorPage(req, res)
 })
 
 router.get('/info', async (req, res) => {
-    //renderinfopage
+    renderInfoPage(req, res)
 })
 
 exports.router = router;

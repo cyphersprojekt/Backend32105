@@ -4,7 +4,8 @@ const multer = require('multer');
 const router = express.Router()
 const LocalStrategy = require('passport-local').Strategy
 
-const logger = require('../controllers/logControl');
+const logger = require('../controllers/logControl').logger;
+const Users = require('../db/models/accountsModel').accountsModel;
 const passportLogin = require('../controllers/accountsControl').passportLogin
 const passportRegister = require('../controllers/accountsControl').passportRegister
 const registrarUsuario = require('../controllers/accountsControl').registrarUsuario
@@ -76,4 +77,4 @@ router.post('/profile', upload.single('photo_url'), async (req, res) => {
     updateProfile(req, res);
     })
 
-module.exports = router;
+exports.router = router;
