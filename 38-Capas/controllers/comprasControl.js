@@ -1,5 +1,11 @@
-// importar carritosmodel, comprasmodel, comprashelper
-// vaciarcarrito, sendmail, sendtwilio, sendwhatsapp
+const Carritos = require('../db/models/carritosModel').carritosModel;
+const Compras = require('../db/models/comprasModel').comprasModel;
+const compras = require('../db/models/comprasModel').comprasHelper;
+const vaciarCarrito = require('./carritosControl').vaciarCarrito;
+const sendMail = require('../helpers/nodemailerHelper').sendMail;
+const sendTwilioMessage = require('../helpers/twilioHelper').sendTwilioMessage
+const sendWhatsappMessage = require('../helpers/twilioHelper').sendWhatsappMessage
+const logger = require('./logControl').logger;
 
 async function comprarCarrito(req, res) {
     let reqUser = req.user.username
@@ -41,3 +47,6 @@ async function renderBuyHistory(req, res) {
     let data = await Compras.find({username: reqUser}).sort({dateBought: -1}).lean()
     res.render('compras', {data: data, username: reqUser})
 }
+
+exports.comprarCarrito = comprarCarrito
+exports.renderBuyHistory = renderBuyHistory

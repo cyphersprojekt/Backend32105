@@ -1,3 +1,6 @@
+const logger = require('./logControl').logger;
+const productsHelper = require('../db/models/productosModel').productosHelper
+
 async function renderHomePage(req, res) {
     const io = req.app.get('socketio')
     let products
@@ -59,3 +62,7 @@ async function renderInfoPage(req, res) {
     }
     res.render('info', {data: data})
 }
+
+exports.renderHomePage = renderHomePage
+exports.createNewProduct = createNewProduct
+exports.renderInfoPage = renderInfoPage
