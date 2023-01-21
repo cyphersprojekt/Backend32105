@@ -1,3 +1,77 @@
+const checkPassword = require('./authControl').checkPassword
+const hashPassword = require('./authControl').hashPassword
+const crearCarritoVacio = require('./carritosControl').crearCarritoVacio
+const Users = require('../db/models/accountsModel').accountsModel
+
+
+async function passportLogin(username, password, done) {
+    Users.findOne({$or: [{username: username}, {email: username}]}, (err, user) => { // users se tiene q cambiar por un usersmodel
+        if (err) {
+            return done(err)
+        }
+        if (!user) {
+            logger.error(`user ${user} not found`)
+            return done(null, false)                
+        }
+        if (!checkPassword(user.password, password)){
+            return done(null, false)
+        }
+
+        return done(null, user)
+    })
+}
+
+async function passportRegister(req, username, password, done) {
+    Users.findOne({$or: [{username: username}, {email: req.body.email}]}, (err, user) => {
+        if (err) {
+            logger.error(`Error while registering ${err}`)
+            return done(err)
+        }
+        if (user) {
+            logger.error(`Username ${username} already registered`)
+            return done(null, false)                
+        }
+        else{
+            const newUser = {
+                username: username,
+                email: req.body.email,
+                password: hashPassword(password),
+                name: req.body.name,
+                address: req.body.address,
+                age: req.body.age,
+                phone_number: req.body.phone_number
+            }
+            Users.create(newUser, (err, user) => {
+                if (err) {
+                    logger.error(`LA CONCHA DE DIOS`)
+                    return done(err)
+                }
+                else{
+                    logger.info(`Created ${user}`)
+                    sendMail(
+                        null,
+                        "Nuevo registro en Coderhouse 32105",
+                        `Username: ${username},
+                        Email: ${req.body.email},
+                        Name: ${req.body.name},
+                        Address: ${req.body.address},
+                        Age: ${req.body.age},
+                        Phone Number: ${req.body.phone_number}`,
+
+                        `<li><b>Username:</b> ${username},
+                        <li><b>Email:</b> ${req.body.email},
+                        <li><b>Name:</b> ${req.body.name},
+                        <li><b>Address:</b> ${req.body.address},
+                        <li><b>Age:</b> ${req.body.age},
+                        <li><b>Phone Number:</b> ${req.body.phone_number}`
+                    )
+                    return done(null, user)
+                }
+            })
+        }
+    })
+}
+
 async function registrarUsuario(req, res) {
     logger.info(`Registering ${req.body}`)
     req.session.save()
@@ -52,3 +126,9 @@ async function updateProfile(req, res) { //importar fs
             res.redirect('/accounts/profile')
         }
 }
+
+exports.passportLogin = passportLogin
+exports.passportRegister = passportRegister
+exports.registrarUsuario = registrarUsuario
+exports.renderProfile = renderProfile
+exports.updateProfile = updateProfile

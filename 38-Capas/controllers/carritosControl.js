@@ -1,4 +1,7 @@
-//importar logger, carritosmodel, carritoshelper
+const logger = require('./logControl').logger;
+const Carritos = require('../db/models/carritosModel').carritosModel;
+const Productos = require('../db/models/productosModel').productosModel;
+const carritos = require('../db/models/carritosModel').carritosHelper;
 
 async function crearCarritoVacio(req, res, redirect) {
     let reqUser = req.user.username
@@ -73,3 +76,8 @@ async function vaciarCarrito(req, res, redirect, bought) {
     if (redirect) {res.redirect(redirect)}
     else {res.redirect('/')}
 }
+
+exports.crearCarritoVacio = crearCarritoVacio
+exports.agregarProductoACarrito = agregarProductoACarrito
+exports.borrarProductoDeCarrito = borrarProductoDeCarrito
+exports.vaciarCarrito = vaciarCarrito

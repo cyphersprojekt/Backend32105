@@ -1,5 +1,6 @@
 const bcrypt = require('bcrypt')
 const saltRounds = bcrypt.genSaltSync(10);
+const logger = require('./logControl').logger;
 
 function checkPassword(passwordHash, passwordString) {
     return bcrypt.compareSync(passwordString, passwordHash)
