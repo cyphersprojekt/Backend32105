@@ -1,6 +1,20 @@
 # Coderhouse backend, comision 32105
 
 
+## 21/01/2023
+#### Arquitectura de capas
+````
+> npm run capas
+````
+* Separa la estructura de la aplicación entre:
+  * Runtime(./app)
+  * Funciones lógicas para las rutas (./controllers)
+  * Esquemas de objetos de la db (./db/schemas)
+  * Objetos de uso de dichos esquemas (./db/models) -- modelos propios de mongoose y helpers ya instanciados
+  * Funciones de uso común entre las rutas (./helpers)
+  * Endpoints de nuestro front-end que hacen uso de las funciones exportadas por los controladores (./routes)
+  * Vistas en hbs y html (./views)
+
 ## 15/01/2023
 #### Tercera entrega del proyecto final
 ````
