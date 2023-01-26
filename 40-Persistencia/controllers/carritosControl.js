@@ -1,7 +1,8 @@
 const logger = require('./logControl').logger;
-const Carritos = require('../db/models/carritosModel').carritosModel;
-const Productos = require('../db/models/productosModel').productosModel;
-const carritos = require('../db/models/carritosModel').carritosHelper;
+const ObjectInterface = require('../db/mongooseObjIface')
+const Carritos = ObjectInterface.getCarritosModel()
+const carritos = ObjectInterface.getCarritosHelper()
+const Productos = ObjectInterface.getProductosModel();
 
 async function crearCarritoVacio(req, res, redirect) {
     let reqUser = req.user.username

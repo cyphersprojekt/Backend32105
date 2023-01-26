@@ -1,5 +1,6 @@
+const ObjectInterface = require('../db/mongooseObjIface')
 const logger = require('./logControl').logger;
-const productsHelper = require('../db/models/productosModel').productosHelper
+const productsHelper = ObjectInterface.getProductosHelper()
 const path = require('path')
 
 async function renderHomePage(req, res) {

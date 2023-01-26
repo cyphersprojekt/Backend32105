@@ -2,7 +2,8 @@ const checkPassword = require('./authControl').checkPassword
 const hashPassword = require('./authControl').hashPassword
 const crearCarritoVacio = require('./carritosControl').crearCarritoVacio
 const sendMail = require('../helpers/nodemailerHelper').sendMail
-const Users = require('../db/models/accountsModel').accountsModel
+const ObjectInterface = require('../db/mongooseObjIface')
+const Users = ObjectInterface.getAccountsModel()
 const logger = require('./logControl').logger
 
 

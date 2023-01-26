@@ -1,5 +1,5 @@
 const Model = require('mongoose').model;
-const Helper = require('../../helpers/mongooseHelper')
+const Helper = require('../mongooseDbM')
 const productSchema = require('../schemas/productosSchema').productSchema;
 
 const productosModel = new Model('productos', productSchema);

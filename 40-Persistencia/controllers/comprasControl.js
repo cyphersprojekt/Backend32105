@@ -1,6 +1,7 @@
-const Carritos = require('../db/models/carritosModel').carritosModel;
-const Compras = require('../db/models/comprasModel').comprasModel;
-const compras = require('../db/models/comprasModel').comprasHelper;
+const ObjectInterface = require('../db/mongooseObjIface')
+const Carritos = ObjectInterface.getCarritosModel();
+const Compras = ObjectInterface.getComprasModel();
+const compras = ObjectInterface.getComprasHelper();
 const vaciarCarrito = require('./carritosControl').vaciarCarrito;
 const sendMail = require('../helpers/nodemailerHelper').sendMail;
 const sendTwilioMessage = require('../helpers/twilioHelper').sendTwilioMessage
@@ -38,7 +39,7 @@ async function comprarCarrito(req, res) {
         sendWhatsappMessage(
             `Orden de compra confirmada para ${reqUser} con ${boughtString}`, process.env.ADMIN_PHONE_NUMBER
         )
-        vaciarCarrito(req, res, '/', true)
+        vaciarCarrito(req, res, '/compras/success', true)
     }
 }
 
@@ -48,5 +49,10 @@ async function renderBuyHistory(req, res) {
     res.render('compras', {data: data, username: reqUser})
 }
 
+async function renderSuccessPage(req, res) {
+    res.render('success', {data: 'Se realizo tu compra'})
+}
+
 exports.comprarCarrito = comprarCarrito
 exports.renderBuyHistory = renderBuyHistory
+exports.renderSuccessPage = renderSuccessPage
