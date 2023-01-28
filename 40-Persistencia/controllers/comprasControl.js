@@ -2,6 +2,7 @@ const ObjectInterface = require('../db/mongooseObjIface')
 const Carritos = ObjectInterface.getCarritosModel();
 const Compras = ObjectInterface.getComprasModel();
 const compras = ObjectInterface.getComprasHelper();
+const ComprasDto = require('../db/dtos/comprasDto');
 const vaciarCarrito = require('./carritosControl').vaciarCarrito;
 const sendMail = require('../helpers/nodemailerHelper').sendMail;
 const sendTwilioMessage = require('../helpers/twilioHelper').sendTwilioMessage
@@ -16,11 +17,11 @@ async function comprarCarrito(req, res) {
     } else if (carritoQuery.items.length == 0) {
         logger.error(`${reqUser} intento comprar un carrito vacio`)
     } else {
-        let nuevaCompra = {
-            username: reqUser,
-            dateBought: new Date(),
-            itemsBought: carritoQuery.items
-        }
+        let nuevaCompra =  new ComprasDto(
+            reqUser,
+            new Date(),
+            carritoQuery.items
+        )
         let boughtString = '';
         carritoQuery.items.forEach(item => {
             boughtString = boughtString + `<li><b>Item:</b> ${item.name}<br> <li><b>Price:</b> ${item.price}<br><br>`

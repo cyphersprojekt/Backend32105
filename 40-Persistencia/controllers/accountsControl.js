@@ -4,8 +4,9 @@ const crearCarritoVacio = require('./carritosControl').crearCarritoVacio
 const sendMail = require('../helpers/nodemailerHelper').sendMail
 const ObjectInterface = require('../db/mongooseObjIface')
 const Users = ObjectInterface.getAccountsModel()
+const UserDto = require('../db/dtos/accountsDto')
 const logger = require('./logControl').logger
-
+const fs = require('fs')
 
 async function passportLogin(username, password, done) {
     Users.findOne({$or: [{username: username}, {email: username}]}, (err, user) => { // users se tiene q cambiar por un usersmodel
@@ -35,15 +36,15 @@ async function passportRegister(req, username, password, done) {
             return done(null, false)                
         }
         else{
-            const newUser = {
-                username: username,
-                email: req.body.email,
-                password: hashPassword(password),
-                name: req.body.name,
-                address: req.body.address,
-                age: req.body.age,
-                phone_number: req.body.phone_number
-            }
+            let newUser = new UserDto(
+                username,
+                req.body.email,
+                hashPassword(password),
+                req.body.name,
+                req.body.address,
+                req.body.age,
+                req.body.phone_number
+            )
             Users.create(newUser, (err, user) => {
                 if (err) {
                     logger.error(`LA CONCHA DE DIOS`)

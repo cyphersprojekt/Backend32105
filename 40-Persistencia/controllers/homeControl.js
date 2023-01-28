@@ -1,7 +1,8 @@
 const ObjectInterface = require('../db/mongooseObjIface')
+const ProductDto = require('../db/dtos/productosDto')
 const logger = require('./logControl').logger;
 const productsHelper = ObjectInterface.getProductosHelper()
-const path = require('path')
+const path = require('path');
 
 async function renderHomePage(req, res) {
     const io = req.app.get('socketio')
@@ -26,11 +27,11 @@ async function renderHomePage(req, res) {
 }
 
 async function createNewProduct(req, res) {
-    const product = {
-                    name: req.body.name,
-                    price: req.body.price,
-                    thumbnail: req.body.thumbnail
-                    }
+    let product = new ProductDto(
+                    req.body.name,
+                    req.body.price,
+                    req.body.thumbnail
+                )
     await productsHelper.insert(product)
     const io = req.app.get('socketio')
     const allProducts = await productsHelper.getAll()

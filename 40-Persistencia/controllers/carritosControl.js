@@ -1,5 +1,6 @@
 const logger = require('./logControl').logger;
 const ObjectInterface = require('../db/mongooseObjIface')
+const CarritoDto = require('../db/dtos/carritosDto')
 const Carritos = ObjectInterface.getCarritosModel()
 const carritos = ObjectInterface.getCarritosHelper()
 const Productos = ObjectInterface.getProductosModel();
@@ -12,10 +13,7 @@ async function crearCarritoVacio(req, res, redirect) {
         logger.error('Corresponde hacer un update o eliminarlo y crear uno nuevo')
         if (redirect) { res.redirect(redirect) }
     } else {
-        let newCarrito = {
-            'username': reqUser,
-            'items': []
-        }
+        let newCarrito = new CarritoDto(username, [])
         try {
         carritos.insert(newCarrito)
         logger.info(`se creo un carrito vacio para ${reqUser}`)

@@ -1,6 +1,15 @@
 # Coderhouse backend, comision 32105
 
 
+## 28/01/2023
+#### Persistencia
+````
+> npm run persistencia
+````
+* Implementa un Object Interface / Factory para todos mis models/helpers de la db (totalmente redundante porque mis db/models/* exportan una única instancia de cada objeto, pero bueno.)
+* Implementa DTOs para todos los objetos que deben ser insertados en la db (otra vez, innecesario, porque mis esquemas tienen todos los campos en required:true y uses o no un dto, te daría error intentar meter alguno vacío, pero bueno.)
+* También modifica un detalle pavo que venía arrastrando desde que esto tiene un homepage y es que el formulario de creación de un producto no limpiaba sus campos luego de hacer submit
+* Mete una vista de success una vez que realizas una compra para que sepas que todo anduvo bien
 ## 21/01/2023
 #### Arquitectura de capas
 ````
