@@ -21,7 +21,7 @@ async function createNewProduct(req, res) {
         req.body.thumbnail
     )
     let newProductId = await productsHelper.insert(product)
-    res.send(`Se creo el producto ${newProductId}`)
+    res.send(`${newProductId}`)
 }
 
 async function updateProduct(req, res) {
