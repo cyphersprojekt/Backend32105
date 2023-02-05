@@ -41,10 +41,23 @@ class mongooseHelper{
 
     async update(obj, id) {
         obj.date = new Date();
-        const model = await this.collection.findOne({_id: id})
+        const model = await this.collection.findOne({_id: id}).lean();
         model.overwrite(obj)
         model.save();
     }
+
+    //a esta altura ya no tengo idea que estoy haciendo.
+    // en algun momento my update de arriba funcionaba. ya no.
+    //esto lo encontre en geeksforgeeks
+    async overwrite(id, newObject) {
+        const doc = this.collection.findById(id)
+        const output = (await doc).overwrite(newObject)
+        output.save()
+    }
+    //update 2: estaba escribiendo 'thumbnai' en lugar de
+    // 'thumbnail' en el test. quizas el update funcionaba.
+    // esto seguro anduvo. yo lo dejo asi.
+
 
     async delete(id) {
         await this.collection.deleteOne({_id: id})

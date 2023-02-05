@@ -32,7 +32,7 @@ async function updateProduct(req, res) {
         req.body.newPrice,
         req.body.newThumbnail
     )
-    await productsHelper.update(updatedProduct, reqId)
+    await productsHelper.overwrite(reqId, updatedProduct)
     res.send(productsHelper.getByID(reqId)) }
     else {
         res.send(`No se encontro el objeto buscado`)
