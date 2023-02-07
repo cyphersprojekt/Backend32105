@@ -128,7 +128,8 @@
     "winston": "^3.8.2"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test-axios": "node 42-Axios/tests/axios.js",
+    "test-mocha": "mocha 42-Axios/tests/mocha-chai-supertest.js",
     "handlebars": "nodemon start 10-Decima-clase/handlebars/restful.js",
     "pug": "nodemon start 10-Decima-clase/pug/restful.js",
     "ejs": "nodemon start 10-Decima-clase/ejs/restful.js",
@@ -144,7 +145,8 @@
     "logsnperf": "node 32-LogsnPerf/main.js",
     "terceraentrega": "nodemon 36-TerceraEntrega/main.js",
     "capas": "nodemon 38-Capas/main.js",
-    "persistencia": "nodemon 40-Persistencia/main.js"
+    "persistencia": "nodemon 40-Persistencia/main.js",
+    "axios": "nodemon 42-Axios/main.js"
   },
   "repository": {
     "type": "git",

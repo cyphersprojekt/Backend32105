@@ -15,6 +15,7 @@ function createFakeProduct() {
         // por el estilo
         thumbnail: faker.internet.avatar()
     }
+    return newProduct;
 }
 
 //que es esto, parece cobol
@@ -49,12 +50,10 @@ describe('Test con mocha/chai/supertest', () => {
     //unicamente devuelve el id de lo insertado
     describe('POST', () => {
         it('inserta un producto generado x la funcion de arriba', async () => {
-            newProduct = createFakeProduct()
-            let obj = async () => {
-                response = await request(app).post('/productos').send(newProduct)
-                return response
-            }
-            expect(obj.body).to.equal(newProduct)
+            let newProduct = createFakeProduct()
+            console.log(newProduct)
+            let response = await request(app).post('/productos').send(newProduct)
+            expect(response.body).to.eql(newProduct)
         })
     })
 
@@ -62,16 +61,17 @@ describe('Test con mocha/chai/supertest', () => {
     describe('PUT', () => {
         it('modifica un producto', async () => {
         newProduct = createFakeProduct()
-        allProducts = await request(app).get('/productos').body
-        allProductsArr = Array.from(allProducts)
-        lastProduct = allProductsArr[allProductsArr.length -1]
-        console.log(lastProduct)
+        reqAllProducts = await request(app).get('/productos')
+        allProducts = reqAllProducts.body
+        console.log(allProducts)
+        lastProduct = allProducts[allProducts.length - 1]
         await request(app).put(`/productos/${lastProduct._id}`).send({
             newName: lastProduct.name,
             newPrice: Number(lastProduct.price)*10, //just because
             newThumbnail: lastProduct.thumbnail
         })
-        updatedProduct = await (await request(app).get(`/productos/${lastProduct._id}`)).body
+        reqUpdatedProduct = await request(app).get(`/productos/${lastProduct._id}`)
+        updatedProduct = reqUpdatedProduct.body
         expect(updatedProduct.name).to.equal(lastProduct.name)
         expect(Number(updatedProduct.price)).to.equal(Number(lastProduct.price)*10)
         expect(updatedProduct.thumbnail).to.equal(lastProduct.thumbnail)
@@ -81,8 +81,8 @@ describe('Test con mocha/chai/supertest', () => {
     describe('DELETE', () => {
         it('elimina el anteultimo producto', async () => { //por que el anteultimo? porque meti un monton de 'productos test' con axios
                                                             // y no le hace mal a nadie ir limpiando un poquito
-            allProducts = await request(app).get('/productos').body
-            allProductsArr = Array.from(allProducts)
+            reqAllProducts = await request(app).get('/productos')
+            allProductsArr = reqAllProducts.body
             secondToLastProduct = allProductsArr[allProductsArr.length - 1] // lenguaje de juguete como no vas a poder acceder a la posicion '-1' de un array
             deleteRequest = await request(app).delete(`/productos/${secondToLastProduct._id}`)
             console.log(deleteRequest.body)

@@ -52,25 +52,30 @@ async function testDeleteProduct(id) {
     }
 }
 
-// console.log('TODOS LOS PRODUCTOS: \r\n')
-// testGetAllProducts()
 
-// console.log('CREO UN PRODUCTO NUEVO: \r\n')
-// testCreateNewProduct()
+async function main() {
+    console.log('TODOS LOS PRODUCTOS: \r\n')
+    await testGetAllProducts()
 
-// console.log('BUSCO EL PRODUCTO INSERTADO \r\n')
-// testGetProductById('63defdb05ffda324aa47248b')
+    console.log('CREO UN PRODUCTO NUEVO: \r\n')
+    await testCreateNewProduct()
 
-/* evidentemente a pesar de la cantidad de horas que llevo
-metidas en este curso todavia no se escribir este lenguaje
-porque me fue IMPOSIBLE awaitear el resultado de
-el insert anterior */
+    console.log('BUSCO EL PRODUCTO INSERTADO \r\n')
+    await testGetProductById('63defdb05ffda324aa47248b')
 
-// console.log('ACTUALIZO EL PRODUCTO INSERTADO \r\n')
-// testUpdateProduct('63deff9a63659c1ffaf15a14')
+    /* evidentemente a pesar de la cantidad de horas que llevo
+    metidas en este curso todavia no se escribir este lenguaje
+    porque me fue IMPOSIBLE awaitear el resultado de
+    el insert anterior */
 
-// console.log('LO BUSCO DE VUELTA PA VER QUE SE HAYA CAMBIADO TODO \r\n')
-// testGetProductById('63deff9a63659c1ffaf15a14')
+    console.log('ACTUALIZO EL PRODUCTO INSERTADO \r\n')
+    await testUpdateProduct('63deff9a63659c1ffaf15a14')
 
-// console.log('LO ELIMINO PARA NO METER MUGRE EN LA DB')
-// testDeleteProduct('63deff9a63659c1ffaf15a14')
+    console.log('LO BUSCO DE VUELTA PA VER QUE SE HAYA CAMBIADO TODO \r\n')
+    await testGetProductById('63deff9a63659c1ffaf15a14')
+
+    console.log('LO ELIMINO PARA NO METER MUGRE EN LA DB')
+    await testDeleteProduct('63deff9a63659c1ffaf15a14')
+}
+
+main()
