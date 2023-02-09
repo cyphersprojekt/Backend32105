@@ -1,6 +1,18 @@
 # Coderhouse backend, comision 32105
 
 
+## 09/02/2023
+````
+> npm run graphql
+````
+* Queries disponibles:
+  * getAllProducts
+  * getProductById
+* Mutations disponibles:
+  * createNewProduct
+  * updateProduct
+  * deleteProduct
+
 ## 06/02/2023
 #### Testing
 ````

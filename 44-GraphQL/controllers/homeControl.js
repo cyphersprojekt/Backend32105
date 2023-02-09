@@ -14,7 +14,7 @@ async function renderHomePage(req, res) {
         logger.error(err)
     }
     let name = req.user.username
-    res.sendFile(path.join(__dirname, '..', '..', '42-Axios/views/home.html'))
+    res.sendFile(path.join(__dirname, '..', '..', '44-Graphql/views/home.html'))
     try {
         io.on('connection', async (socket) => {         
             socket.emit("currentData", name)
