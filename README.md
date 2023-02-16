@@ -1,6 +1,19 @@
 # Coderhouse backend, comision 32105
 
 
+## 15/02/2023
+#### Reformar para usar otro framework (chosen: Koa)
+````
+> npm run koaproducts
+````
+* Rutas disponibles:
+  * GET /
+  * GET /productos
+  * POST /productos
+  * PUT /productos/:id
+  * DELETE /productos/:id
+* Se comporta de igual manera que los mismos endpoints hechos en express en la entrega de la clase 42
+
 ## 09/02/2023
 ````
 > npm run graphql

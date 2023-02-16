@@ -72,6 +72,8 @@
     "is-number": "^7.0.0",
     "knex": "^2.3.0",
     "koa": "^2.14.1",
+    "koa-body": "^6.0.1",
+    "koa-router": "^12.0.0",
     "media-typer": "^0.3.0",
     "merge-descriptors": "^1.0.1",
     "methods": "^1.1.2",
@@ -151,7 +153,8 @@
     "capas": "nodemon 38-Capas/main.js",
     "persistencia": "nodemon 40-Persistencia/main.js",
     "axios": "nodemon 42-Axios/main.js",
-    "graphql": "nodemon 44-Graphql/main.js"
+    "graphql": "nodemon 44-Graphql/main.js",
+    "koaproducts": "nodemon 46-KoaProducts/app/app.js"
   },
   "repository": {
     "type": "git",
