@@ -1,6 +1,30 @@
 # Coderhouse backend, comision 32105
 
 
+## 20/02/2023
+#### Deno
+
+###### PARA INSTALAR CHOCOLATEY
+````
+PS> Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
+````
+
+###### PARA INSTALAR DENO
+````
+PS> choco install deno
+````
+
+###### PARA INSTALAR DENON
+````
+PS> deno install -qAf --unstable https://deno.land/x/denon/denon.ts
+````
+
+#### Para ejecutar el desafio
+
+````
+PS> deno run --allow-net .\48-Deno\app.tsx
+````
+
 ## 15/02/2023
 #### Reformar para usar otro framework (chosen: Koa)
 ````
