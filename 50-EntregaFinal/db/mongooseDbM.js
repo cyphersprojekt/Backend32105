@@ -1,9 +1,7 @@
 const mongoose = require('mongoose');
-const dotenv = require('dotenv') // hace falta tener el dotenv en todos lados?
-                                 // no me lo hace global? 🤔
-dotenv.config()
-mongoose.connect(process.env.MONGO_URL);
+const config = require('../app/config')
 
+mongoose.connect(config.MONGO_URL)
 class mongooseHelper{
     constructor(collection, schema){
         this.collection = mongoose.model(collection, schema)

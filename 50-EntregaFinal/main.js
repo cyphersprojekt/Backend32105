@@ -1,25 +1,16 @@
 const launch = require('./app/launch')
-const port = Number(process.env.PORT) || 8080
-const dotenv = require('dotenv')
-
-// configType determina que archivo ./config/*.env vamos a cargar,
-// necesitamos pasarlo por argv. si no le pasamos nada, o le pasamos un
-// ambiente que no exista dentro de la configuracion, defaulteamos a modo dev
-let configType = process.argv[2]
-if (!['dev','prod'].includes(configType)) {
-    configType = 'dev'
-}
-
-const config = dotenv.config({path: `./config/${configType}.env`})
-global.config = config
+const logger = require('./controllers/logControl').logger
+const config = require('./app/config')
 
 // si no se definio nada, o se definio cualquier cosa que no
 // sean los modos que yo tengo disponibles, lo piso y arranco
 // en standalone
-let launchMode = process.env.LAUNCH_MODE
+let launchMode = config.LAUNCH_MODE
 if (!['standalone','cluster','fork'].includes(launchMode)) {
     launchMode = 'standalone' 
 }
+
+let port = config.PORT || 8080
 
 if (launchMode == 'standalone') {
     launch.launchStandalone(port)

@@ -154,7 +154,8 @@
     "persistencia": "nodemon 40-Persistencia/main.js",
     "axios": "nodemon 42-Axios/main.js",
     "graphql": "nodemon 44-Graphql/main.js",
-    "koaproducts": "nodemon 46-KoaProducts/app/app.js"
+    "koaproducts": "nodemon 46-KoaProducts/app/app.js",
+    "final": "nodemon 50-EntregaFinal/main.js"
   },
   "repository": {
     "type": "git",
