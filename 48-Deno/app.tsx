@@ -5,11 +5,11 @@ import { serve } from "https://deno.land/std@0.159.0/http/server.ts";
 const port = 8080;
 const tasks: string[] = [];
 
-function getRandomColor(max: number) {
+function getRandomColor(max: number): string {
     return `#${Math.floor(Math.random() * max)}`
 }
 
-function renderTasks() {
+function renderTasks(): string {
     let output = '';
     tasks.forEach((task) => {
         output = output + `<li style="color: ${getRandomColor(999999)}"> ${task}</li>`
