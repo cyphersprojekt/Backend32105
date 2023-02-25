@@ -49,21 +49,5 @@ function launchCluster(aport) {
     }
 }
 
-function launchForks(aport) {
-    if (aport) {
-        if (aport != 'NaN') {
-            for (let i = aport; i < aport+cpus; i++) {
-                logger.info(`Forking process on port ${i}`);
-                child_process.fork('./40-Persistencia/main.js', [i], {cwd:process.cwd()} )
-            }
-        } else {
-            logger.error(`No deberias haber llegado hasta aca, hay veinte chequeos que lograste romper`)
-            logger.info(`Defaulting to port 8080`)
-            launchForks(8080);
-        }
-    }
-}
-
 exports.launchStandalone = launchStandalone
 exports.launchCluster = launchCluster
-exports.launchForks = launchForks

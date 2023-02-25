@@ -6,7 +6,7 @@ const config = require('./app/config')
 // sean los modos que yo tengo disponibles, lo piso y arranco
 // en standalone
 let launchMode = config.LAUNCH_MODE
-if (!['standalone','cluster','fork'].includes(launchMode)) {
+if (!['standalone','cluster'].includes(launchMode)) {
     launchMode = 'standalone' 
 }
 
@@ -18,10 +18,6 @@ if (launchMode == 'standalone') {
 else if (launchMode == 'cluster') {
     launch.launchCluster(port)
 }
-else if (launchMode == 'fork') {
-    launch.launchForks(port)
-}
-
 else {
     logger.error('No se pudo determinar el modo de inicio de la aplicacion, defaulteando a standalone(8080)')
     launch.launchStandalone(8080)
