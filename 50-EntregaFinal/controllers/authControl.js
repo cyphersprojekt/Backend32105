@@ -1,4 +1,5 @@
-const bcrypt = require('bcrypt')
+const bcrypt = require('bcrypt');
+const { config } = require('dotenv');
 const saltRounds = bcrypt.genSaltSync(10);
 const logger = require('./logControl').logger;
 
@@ -21,6 +22,16 @@ function isAuth(req, res, next) {
     }
 }
 
+function isAdmin(userObj) {
+    logger.info(`chequeando si ${userObj.username} es admin`)
+    if ((userObj.username || userObj.email) == config.ADMIN_EMAIL || userObj.admin == true) {
+        return true
+    } else {
+        return false
+    }
+}
+
 exports.checkPassword = checkPassword;
 exports.hashPassword = hashPassword;
 exports.isAuth = isAuth;
+exports.isAdmin = isAdmin;
