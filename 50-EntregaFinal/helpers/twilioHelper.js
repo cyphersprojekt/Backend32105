@@ -1,27 +1,33 @@
-const dotenv = require('dotenv')
 const twilio = require('twilio')
-const logger = require('../controllers/logControl');
-dotenv.config()
+const logger = require('../controllers/logControl').logger;
+const config = require('../app/config')
 
-const accountSid = process.env.TWILIO_SID
-const authToken = process.env.TWILIO_AUTH_TOKEN
+
+const accountSid = config.TWILIO_SID
+const authToken = config.TWILIO_AUTH_TOKEN
 
 const client = new twilio(accountSid, authToken)
 
 async function sendTwilioMessage(body, to) {
+    try {
     client.messages.create({
         body: body,
         to: to,
-        from: process.env.TWILIO_NUMBER
+        from: config.TWILIO_NUMBER
     }).then((msg) => logger.info(`sent sms ${msg.sid}`))
-}
+    } catch(e) {
+        logger.error('No se pudo enviar el SMS!!!!')
+    }}
 async function sendWhatsappMessage(body, to) {
+    try {
     client.messages.create({
         body: body,
         to: `whatsapp:${to}`,
-        from: `whatsapp:${process.env.TWILIO_WHATSAPP_NUMBER}`
+        from: `whatsapp:${config.TWILIO_WHATSAPP_NUMBER}`
     }).then(wpp => logger.info(`sent whatsapp msg ${wpp.sid}`))
-}
+    } catch(e){
+        logger.error('No se pudo enviar el WhatsApp!!!')
+    } }
 
 
 

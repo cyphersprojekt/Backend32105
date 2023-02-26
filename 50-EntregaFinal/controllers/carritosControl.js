@@ -13,7 +13,7 @@ async function crearCarritoVacio(req, res, redirect) {
         logger.error('Corresponde hacer un update o eliminarlo y crear uno nuevo')
         if (redirect) { res.redirect(redirect) }
     } else {
-        let newCarrito = new CarritoDto(username, [])
+        let newCarrito = new CarritoDto(reqUser, [])
         try {
         carritos.insert(newCarrito)
         logger.info(`se creo un carrito vacio para ${reqUser}`)

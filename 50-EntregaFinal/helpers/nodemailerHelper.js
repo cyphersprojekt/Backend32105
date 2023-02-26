@@ -1,26 +1,30 @@
 const nodemailer = require("nodemailer");
-const dotenv = require('dotenv')
-dotenv.config()
+const config = require('../app/config')
+const logger = require('../controllers/logControl').logger
 
 const transporter = nodemailer.createTransport({
-    host: process.env.SMTP_HOST,
-    port: process.env.SMTP_PORT,
-    secure: (process.env.SMTP_SECURE === 'true') ? true : false,
+    host: config.SMTP_HOST,
+    port: config.SMTP_PORT,
+    secure: (config.SMTP_SECURE === 'true') ? true : false,
     auth: {
-        user: process.env.SMTP_USER,
-        pass: process.env.SMTP_PASS
+        user: config.SMTP_USER,
+        pass: config.SMTP_PASS
     }
 })
 
 async function sendMail(to, subject, text, html) {
+    try {
     let info = await transporter.sendMail({
         from: '"Coderhouse 32105" <worst@ecommerce.ever>',
-        to: [to, process.env.ADMIN_ADDRESS],
+        to: [to, config.ADMIN_ADDRESS],
         subject: subject,
         text: text,
         html: html
     })
     return info
+    } catch(e) {
+        logger.error('No se pudo enviar el mail!!!')
+    }
 }
 
 exports.sendMail = sendMail
