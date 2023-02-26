@@ -1,38 +1,58 @@
 const socket = io()
 
-let emptyTemplateProducts = $("#list-products").html()
-let emptyTemplateName = $("#username").html()
+socket.connect()
 
-let compiledProducts = Handlebars.compile(emptyTemplateProducts)
-let compiledName = Handlebars.compile(emptyTemplateName)
+/* Me traigo los templates y los compilo, listos para pasarles valores y render */
 
-socket.on('currentData', (data) =>{
-    $(".username").html(compiledName({name: data}))
-})
-
-socket.on('currentProducts', (data) =>{
-    $(".list-products").html(compiledProducts({data: data}))
-})
-
-let buttonProductos = document.querySelector(".createProductBtn")
-buttonProductos.addEventListener("click", function(){
-    socket.emit('newProduct');
-    // let nameBox = document.getElementById('nombre');
-    // let priceBox = document.getElementById('precio');
-    // let thumbnailBox = document.getElementById('thumbnail');
-
-    // nameBox.value = '';
-    // priceBox.value = '';
-    // thumbnailBox.value = '';
-
-    /* todo esto esta comentado porque el js se ejecuta antes de que 
-    pase por el 'POST /', entonces te rompe la request forzando que envie datos vacios.
-    pasando todo a websockets se soluciona el problema pero la vida es una mierda y no
-    tuve tiempo para hacerlo para esta entrega */
-})
-
-function logOut(){
-    window.location = "/accounts/logout"
+async function fetchAndRender(data){
+    const response = await fetch("./home_products.hbs")
+    const template = await response.text()
+    const dataCompile = Handlebars.compile(template)
+    const result = dataCompile(data)
+    return result
 }
-let logOutBtn = document.querySelector('.btnLogout')
-logOutBtn.addEventListener('click', logOut)
+
+socket.on('currentProducts', async (data) =>{
+    const productList = document.querySelector("#list-products")
+    const newContent = await fetchAndRender(data)
+    productList.innerHTML = newContent 
+
+})
+
+socket.on("filteredProducts", async (data) => {
+    const productList = document.querySelector("#list-products")
+    const newContent = await fetchAndRender(data)
+    productList.innerHTML = newContent 
+})
+
+
+let categoryFinder  = document.getElementById("categoryFinder");
+function onChange() {
+    let value = categoryFinder.value;
+    socket.emit("filterProducts", value)
+}
+categoryFinder.onchange = onChange;
+
+let submitProduct = document.querySelector(".createProductBtn")
+submitProduct.addEventListener("click", function(){
+    let name = document.getElementById("name").value
+    let price = document.getElementById("price").value
+    let desc = document.getElementById("description").value
+    let photo = document.getElementById("photo").value
+    let category = document.getElementById("category").value
+
+    if (name == "" || price == "" || desc == "" || photo == "" || category == ""){
+        alert("Please complete information about new product")
+    }
+    else {
+        let product = {
+            name: name,
+            price: price,
+            description: desc,
+            photo: photo,
+            category: category
+            }
+        socket.emit("newProduct", product)
+        }
+    }
+)

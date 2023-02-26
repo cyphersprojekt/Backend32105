@@ -1,0 +1,22 @@
+<table>
+    <tr>
+        <th>id</th>
+        <th>Product</th>
+        <th>Price</th>
+        <th>Category</th>
+        <th>Thumbnail</th>
+        <th>Acciones</th>
+    </tr>
+    {{#each this}}
+        <tr>
+            <tr>
+                <td>{{ _id }}</td>
+                <td>{{name}}</td>
+                <td>${{price}}</td>
+                <td>{{category}}</td>
+                <td><img src={{thumbnail}}></td>
+                <td><button onclick="window.location='/carritos/add/{{ _id }}'">Agregar al carrito</button></td>
+            </tr>
+        </tr>
+    {{/each}}    
+</table>

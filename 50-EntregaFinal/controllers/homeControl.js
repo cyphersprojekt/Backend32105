@@ -14,7 +14,7 @@ async function renderHomePage(req, res) {
         logger.error(err)
     }
     let name = req.user.username
-    res.sendFile(path.join(__dirname, '..', '..', '40-Persistencia/views/home.html'))
+    res.render('home')
     try {
         io.on('connection', async (socket) => {         
             socket.emit("currentData", name)
@@ -30,7 +30,8 @@ async function createNewProduct(req, res) {
     let product = new ProductDto(
                     req.body.name,
                     req.body.price,
-                    req.body.thumbnail
+                    req.body.thumbnail,
+                    req.body.category
                 )
     await productsHelper.insert(product)
     const io = req.app.get('socketio')
