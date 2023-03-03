@@ -10,6 +10,9 @@ const comprasHelper = require('./models/comprasModel').comprasHelper;
 const productosModel = require('./models/productosModel').productosModel;
 const productosHelper = require('./models/productosModel').productosHelper;
 
+const categoriesModel = require('./models/categoriesModel').categoriesModel;
+const categoriesHelper = require('./models/categoriesModel').categoriesHelper;
+
 
 class DbObjectInterface {
     static getAccountsModel() {
@@ -35,6 +38,12 @@ class DbObjectInterface {
     }
     static getProductosHelper() {
         return productosHelper
+    }
+    static getCategoriasModel() {
+        return categoriesModel
+    }
+    static getCategoriasHelper() {
+        return categoriesHelper
     }
 }
 
