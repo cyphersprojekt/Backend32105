@@ -2,6 +2,7 @@ const ObjectInterface = require('../db/mongooseObjIface')
 const ProductDto = require('../db/dtos/productosDto')
 const logger = require('./logControl').logger;
 const productsHelper = ObjectInterface.getProductosHelper()
+const isAdmin = require('./authControl').isAdmin
 
 // esto queda aca simplemente xq muestro la lista de todos mis productos
 // en el home, pero lo correcto seria probablemente moverlo al controlador de productos 
@@ -15,7 +16,9 @@ async function renderHomePage(req, res) {
         logger.error(err)
     }
     let name = req.user.username
-    res.render('home')
+    let userIsAdmin = isAdmin(req.user)
+    let data = {name, userIsAdmin}
+    res.render('home', {data: data})
     try {
         io.on('connection', async (socket) => {         
             socket.emit("currentData", name)
@@ -58,6 +61,14 @@ async function renderErrorPage(req, res, message=null){
     res.render('error', {data: 'Hubo un error con tu solicitud'})
 }
 
+async function renderSuccessPage(req, res, message=null) {
+    if (message) {
+        res.render('success', {data: message})
+    } else {
+        res.render('success', {data: 'Alles gute!'})
+    }
+}
+
 async function renderInfoPage(req, res) {
     data = {
         'arguments': process.argv,
@@ -75,4 +86,5 @@ async function renderInfoPage(req, res) {
 exports.renderHomePage = renderHomePage
 exports.createNewProduct = createNewProduct
 exports.renderErrorPage = renderErrorPage
+exports.renderSuccessPage = renderSuccessPage
 exports.renderInfoPage = renderInfoPage

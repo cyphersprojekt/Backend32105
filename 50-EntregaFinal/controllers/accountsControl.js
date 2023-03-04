@@ -79,7 +79,7 @@ async function passportRegister(req, username, password, done) {
 async function registrarUsuario(req, res) {
     logger.info(`Registering ${req.body}`)
     req.session.save()
-    crearCarritoVacio(req, res, false) //importar crearcarritovacio
+    crearCarritoVacio(req, res, '/') //importar crearcarritovacio
 }
 
 async function renderProfile(req, res) {
