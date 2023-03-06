@@ -28,19 +28,21 @@
             <button type="button" onclick=window.location='/accounts/profile'>Profile</button>            
             <button type="button" onclick=window.location='/carritos/micarrito'>Cart</button>
             <button type="button" onclick=window.location='/compras'>Buy History</button>
-
-
-            <h1> Welcome, {{data.name}}</h1>
+            {{#if data.userIsAdmin}}
+            <button type="button" onclick=window.location='/categorias'>Categories</button>
+            {{/if}}
+            
 
 
         </div>
+        <h1> Welcome, {{data.name}}</h1>
         </section>
 {{#if data.userIsAdmin}}
 <iframe name="dummyframe" id="dummyframe" style="display:none"></iframe>
         <section class="input-products">
             <hr>
             <h1>Create a product</h1>
-            <form id='newProductForm' action="/" method="post" target="dummyframe" enctype="application/x-www-form-urlencoded">
+            <form id='newProductForm' method="POST" action='/' target="dummyframe" enctype="application/x-www-form-urlencoded">
                 <label for="nombre">Name:</label><br>
                 <input type="text" id="name" name="name" required><br><br>
 
@@ -61,11 +63,12 @@
 
 <label for="categoryFinder">Filter by category:</label>
             <select name="categoryFinder" id="categoryFinder">
-                <option value="all">All</option>
-                <option value="products">Products</option>
-                <option value="services">Services</option>
-                <option value="other">Other</option>
+                <option value="">All</option>
+                {{#each data.allCategories}}
+                    <option value="{{this.name}}">{{this.name}}</option>
+                {{/each}}
             </select>
+            <button name="searchButton" id="searchButton" onclick="searchSelect()">Search</button>
         <section id="list-products">
             
         </section>

@@ -1,5 +1,7 @@
 const ObjectInterface = require('../db/mongooseObjIface')
-const ProductDto = require('../db/dtos/productosDto')
+const ProductDto = require('../db/dtos/productosDto');
+const { productosModel } = require('../db/models/productosModel');
+const categoriesHelper = require('../db/models/categoriesModel').categoriesHelper;
 const logger = require('./logControl').logger;
 const productsHelper = ObjectInterface.getProductosHelper()
 const isAdmin = require('./authControl').isAdmin
@@ -17,13 +19,21 @@ async function renderHomePage(req, res) {
     }
     let name = req.user.username
     let userIsAdmin = isAdmin(req.user)
-    let data = {name, userIsAdmin}
+    let allCategories = await categoriesHelper.getAll()
+    console.log(allCategories)
+    let data = {name, userIsAdmin, allCategories}
     res.render('home', {data: data})
     try {
         io.on('connection', async (socket) => {         
             socket.emit("currentData", name)
             socket.emit("currentProducts", products)
         })
+
+        // io.on("filterProducts", async (filter) => {
+        //     let products = await productsHelper.getByCategory(filter)
+        //     socket.emit("filteredProducts", products)
+        //     logger.info('se emitio filteredProducts')
+        // })
     }
     catch (err) {
         logger.error("Failed to connect socket" + err)
@@ -31,6 +41,7 @@ async function renderHomePage(req, res) {
 }
 
 async function createNewProduct(req, res) {
+    try {
     let product = new ProductDto(
                     req.body.name,
                     req.body.price,
@@ -41,7 +52,11 @@ async function createNewProduct(req, res) {
     const io = req.app.get('socketio')
     const allProducts = await productsHelper.getAll()
     io.sockets.emit("currentProducts", allProducts)
-    res.send(`Se guardo el objeto.`)
+    res.send(`Se guardo el objeto.`) }
+    catch {
+        logger.error('fallo la validacion de producto')
+        res.send('error')
+    }
 }
 
 async function renderErrorPage(req, res, message=null){
@@ -49,16 +64,21 @@ async function renderErrorPage(req, res, message=null){
     // no quiero sacarlo para no tener que meterme con los routers
     // de accounts pero agrego el message para que usos futuros
     // puedan tener un mensaje custom
-    if (req.headers.referer.endsWith('login')) {
-        res.render('error', {data: 'Hubo un error al iniciar sesion'})
+    if (req.headers.referer) {
+        if (req.headers.referer.endsWith('login')) {
+            res.render('error', {data: 'Hubo un error al iniciar sesion'})
+        }
+        if (req.headers.referer.endsWith('register')) {
+            res.render('error', {data: 'No se pudo registrar tu cuenta'})
+        }
     }
-    if (req.headers.referer.endsWith('register')) {
-        res.render('error', {data: 'No se pudo registrar tu cuenta'})
-    }
-    if (message) {
+    else if (message) {
         res.render('error', {data: message})
     }
-    res.render('error', {data: 'Hubo un error con tu solicitud'})
+    else {
+        res.render('error', {data: 'Hubo un error con tu solicitud'})
+    }
+
 }
 
 async function renderSuccessPage(req, res, message=null) {
@@ -66,6 +86,20 @@ async function renderSuccessPage(req, res, message=null) {
         res.render('success', {data: message})
     } else {
         res.render('success', {data: 'Alles gute!'})
+    }
+}
+
+async function renderDetailedProduct(req, res) {
+    try {
+        let requestedProductId = req.params.productId
+        let detailedProduct = await productsHelper.getByID(requestedProductId)
+        if (detailedProduct && detailedProduct != []) {
+            res.send(detailedProduct)
+        } else {
+            res.send('no se encontro el producto')
+        }
+    } catch {
+        renderErrorPage(req, res, 'oops! Hubo un error al buscar tu producto')
     }
 }
 
@@ -87,4 +121,5 @@ exports.renderHomePage = renderHomePage
 exports.createNewProduct = createNewProduct
 exports.renderErrorPage = renderErrorPage
 exports.renderSuccessPage = renderSuccessPage
+exports.renderDetailedProduct = renderDetailedProduct
 exports.renderInfoPage = renderInfoPage

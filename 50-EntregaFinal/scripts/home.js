@@ -1,5 +1,4 @@
 const socket = io()
-
 socket.connect()
 
 /* Me traigo los templates y los compilo, listos para pasarles valores y render */
@@ -16,43 +15,8 @@ socket.on('currentProducts', async (data) =>{
     const productList = document.querySelector("#list-products")
     const newContent = await fetchAndRender(data)
     productList.innerHTML = newContent 
-
 })
 
-socket.on("filteredProducts", async (data) => {
-    const productList = document.querySelector("#list-products")
-    const newContent = await fetchAndRender(data)
-    productList.innerHTML = newContent 
-})
-
-
-let categoryFinder  = document.getElementById("categoryFinder");
-function onChange() {
-    let value = categoryFinder.value;
-    socket.emit("filterProducts", value)
+function searchSelect() {
+    window.location=`/category/${document.querySelector('#categoryFinder').value}`
 }
-categoryFinder.onchange = onChange;
-
-let submitProduct = document.querySelector(".createProductBtn")
-submitProduct.addEventListener("click", function(){
-    let name = document.getElementById("name").value
-    let price = document.getElementById("price").value
-    let desc = document.getElementById("description").value
-    let photo = document.getElementById("photo").value
-    let category = document.getElementById("category").value
-
-    if (name == "" || price == "" || desc == "" || photo == "" || category == ""){
-        alert("Please complete information about new product")
-    }
-    else {
-        let product = {
-            name: name,
-            price: price,
-            description: desc,
-            photo: photo,
-            category: category
-            }
-        socket.emit("newProduct", product)
-        }
-    }
-)

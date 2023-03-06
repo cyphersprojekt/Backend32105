@@ -11,9 +11,16 @@ class mongooseHelper{
         const data = await this.collection.findOne({_id: id}).lean()
         return data
     }
+    // esto esta conceptualmente MAL. el unico objeto que tiene el atributo
+    // 'category' en mi app son los productos, pero le estoy dando la funcion
+    // getByCategory a TODOS mis helpers indistintamente de cual sea su schema
+    async getByCategory(categoryName) {
+        const data = await this.collection.find({category: categoryName})
+        return data
+    }
 
     async getAll(){
-        const data = await this.collection.find({})
+        const data = await this.collection.find({}).lean()
         return data
     }
 
