@@ -30,6 +30,7 @@
             <button type="button" onclick=window.location='/compras'>Buy History</button>
             {{#if data.userIsAdmin}}
             <button type="button" onclick=window.location='/categorias'>Categories</button>
+            <button type="button" onclick=window.location='/info'>Server info</button>
             {{/if}}
             
 
@@ -53,7 +54,11 @@
                 <input type="text" id="thumbnail" name="thumbnail" required><br><br>
 
                 <label for="category">Category</label><br>
-                <input type="text" id="category" name="category" required><br><br>
+                <select name="category" id="category">
+                    {{#each data.allCategories}}
+                        <option value="{{this.name}}">{{this.name}}</option>
+                    {{/each}}
+                </select><br><br>
 
                 <input class="createProductBtn" type="submit" value="Submit" onclick='this.form.submit();document.forms["newProductForm"].reset();'>
             </form>

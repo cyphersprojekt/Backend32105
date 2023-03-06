@@ -2,6 +2,7 @@ const express = require('express')
 const router = express.Router()
 
 const isAuth = require('../controllers/authControl').isAuth
+const isAdmin = require('../controllers/authControl').isAdmin
 const vaciarCarrito = require('../controllers/carritosControl').vaciarCarrito
 const borrarProductoDeCarrito = require('../controllers/carritosControl').borrarProductoDeCarrito
 const agregarProductoACarrito = require('../controllers/carritosControl').agregarProductoACarrito
@@ -23,9 +24,11 @@ router.get('/add/:idProducto', isAuth, async (req, res) => {
 })
 
 router.get('/micarrito', isAuth, async(req, res)=>{
-    let reqUser = req.user.username
-    let data = await Carritos.findOne({username: reqUser}).lean()
-    res.render('carrito', {data: data, username: reqUser})
+    let reqUser = req.user
+    let userIsAdmin = isAdmin(reqUser)
+    let productosEnCarrito = await Carritos.findOne({username: reqUser.username}).lean()
+    let data = {reqUser, userIsAdmin, productosEnCarrito}
+    res.render('carrito', {data: data})
 })
 
 

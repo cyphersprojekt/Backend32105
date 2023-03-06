@@ -6,6 +6,22 @@ const renderErrorPage = require('./homeControl').renderErrorPage
 const renderSuccessPage = require('./homeControl').renderSuccessPage
 const isAdmin = require('./authControl').isAdmin
 
+
+// hay un millon de chequeos de si el usuario es admin o no en cada parte del controlador
+// porque si bien yo puedo inhibir a un cliente de acceder a /categorias a traves del navegador
+// la verdad es que no tengo idea de como se va a comportar esa misma restriccion cuando en lugar
+// de GET hagas un POST a traves de postman o insomnia. mejor prevenir que lamentar
+async function renderCategoriasPage(req, res) {
+    let reqUser = req.user
+    if(!isAdmin(reqUser)) {
+        renderErrorPage(req, res, 'Solo los administradores tienen acceso a esta pagina')
+    } else {
+        let allCategories = await categoriesHelper.getAll()
+        data = {reqUser, allCategories}
+        res.render('categorias')
+    }
+}
+
 async function crearCategoria(req, res) {
     let reqUser = req.user
     let newCategory = req.body.newCategory
@@ -16,7 +32,7 @@ async function crearCategoria(req, res) {
             renderErrorPage(req, res, 'Ya existe una categoria con ese nombre')
         } else {
             try {
-                let new_category = await categoriesHelper.insert(newCategory)
+                await categoriesHelper.insert(newCategory)
                 renderSuccessPage(req, res, `Se creo la categoria ${newCategory}`)
             } catch {
                 renderErrorPage(req, res, 'Ups! no se pudo crear la categoria')

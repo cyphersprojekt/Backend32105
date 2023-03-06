@@ -15,37 +15,3 @@
         </div>
         <h1> Welcome, {{data.name}}</h1>
         </section>
-<style>
-table, th, td {
-  border: 1px solid black;
-  border-collapse: collapse;
-}
-img{
-    width:100%;
-    max-width:200px;
-}
-</style>
-<div>
-
-    {{#if data}}
-    <h2>Historial de compras</h2>
-    {{#each data}}
-    <h3>Compra del {{this.dateBought}}</h3>
-    <table>
-        <tr>
-            <th>Product</th>
-            <th>Price</th>
-            <th>Thumbnail</th>
-        </tr>
-        {{#each this.itemsBought}}
-        <tr>
-            <td>{{this.name}}</td>
-            <td>${{this.price}}</td>
-            <td><img src={{this.thumbnail}}></td>
-        </tr>
-        {{/each}}
-    </table>
-    {{/each}}
-    {{/if}}
-
-</div>

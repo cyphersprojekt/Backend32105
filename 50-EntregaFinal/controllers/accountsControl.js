@@ -6,6 +6,7 @@ const ObjectInterface = require('../db/mongooseObjIface')
 const Users = ObjectInterface.getAccountsModel()
 const UserDto = require('../db/dtos/accountsDto')
 const logger = require('./logControl').logger
+const isAdmin = require('./authControl').isAdmin
 const fs = require('fs')
 
 async function passportLogin(username, password, done) {
@@ -87,6 +88,7 @@ async function renderProfile(req, res) {
         res.render('login');
     } else {
         data = {
+            'userIsAdmin': isAdmin(req.user),
             'username': req.user.username,
             'email': req.user.email,
             'name': req.user.name,

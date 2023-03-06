@@ -5,6 +5,8 @@ const categoriesHelper = require('../db/models/categoriesModel').categoriesHelpe
 const logger = require('./logControl').logger;
 const productsHelper = ObjectInterface.getProductosHelper()
 const isAdmin = require('./authControl').isAdmin
+const cpus = require('os').cpus().length;
+
 
 // esto queda aca simplemente xq muestro la lista de todos mis productos
 // en el home, pero lo correcto seria probablemente moverlo al controlador de productos 
@@ -104,7 +106,9 @@ async function renderDetailedProduct(req, res) {
 }
 
 async function renderInfoPage(req, res) {
+    let userIsAdmin = isAdmin(req.user)
     data = {
+        'userIsAdmin': userIsAdmin,
         'arguments': process.argv,
         'platform': process.platform,
         'node-version': process.version,

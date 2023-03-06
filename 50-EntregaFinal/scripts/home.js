@@ -18,5 +18,10 @@ socket.on('currentProducts', async (data) =>{
 })
 
 function searchSelect() {
-    window.location=`/category/${document.querySelector('#categoryFinder').value}`
+    // por default el selector esta en 'All' con value vacio,
+    // no tiene sentido redireccionarlo al buscador de categorias
+    // dado que por naturaleza el home ya contiene todos los productos
+    if (document.querySelector('#categoryFinder').value != '') {
+        window.location=`/category/${document.querySelector('#categoryFinder').value}`
+    }
 }
