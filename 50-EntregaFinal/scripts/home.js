@@ -18,10 +18,18 @@ socket.on('currentProducts', async (data) =>{
 })
 
 function searchSelect() {
-    // por default el selector esta en 'All' con value vacio,
-    // no tiene sentido redireccionarlo al buscador de categorias
-    // dado que por naturaleza el home ya contiene todos los productos
-    if (document.querySelector('#categoryFinder').value != '') {
-        window.location=`/categorias/${document.querySelector('#categoryFinder').value}`
-    }
+    // si estoy en el root, no tiene sentido ir a una vista detallada para
+    // 'All', pero si ya estoy en la vista detallada de una categoria,
+    // tiene sentido que quizas quiera volver para atras o cambiar hacia otra
+    if (window.location.pathname == '/') {
+        if (document.querySelector('#categoryFinder').value != '') {
+            window.location=`/categorias/${document.querySelector('#categoryFinder').value}`
+        }
+    } else {
+        if (document.querySelector('#categoryFinder').value != '') {
+            window.location=`/categorias/${document.querySelector('#categoryFinder').value}`
+        } else {
+            window.location='/'
+        }
+    }    
 }

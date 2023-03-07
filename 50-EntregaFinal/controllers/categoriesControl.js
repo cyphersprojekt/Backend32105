@@ -28,9 +28,10 @@ async function renderFiltroByCategoria(req, res) {
     let reqUser = req.user
     let name = req.user.username
     let userIsAdmin = isAdmin(reqUser)
+    let allCategories = await categoriesHelper.getAll()
     let requestedCategory = req.params.searchCategory;
     let foundProducts = await productosHelper.getByCategory(requestedCategory)
-    let data = {reqUser, userIsAdmin, requestedCategory, foundProducts, name}
+    let data = {reqUser, userIsAdmin, requestedCategory, foundProducts, name, allCategories}
     res.render('detailedCategory', {data: data})
 }
 
