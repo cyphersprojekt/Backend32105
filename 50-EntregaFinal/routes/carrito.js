@@ -25,9 +25,10 @@ router.get('/add/:idProducto', isAuth, async (req, res) => {
 
 router.get('/micarrito', isAuth, async(req, res)=>{
     let reqUser = req.user
+    let username = reqUser.username
     let userIsAdmin = isAdmin(reqUser)
     let productosEnCarrito = await Carritos.findOne({username: reqUser.username}).lean()
-    let data = {reqUser, userIsAdmin, productosEnCarrito}
+    let data = {reqUser, username, userIsAdmin, productosEnCarrito}
     res.render('carrito', {data: data})
 })
 

@@ -15,7 +15,7 @@ class mongooseHelper{
     // 'category' en mi app son los productos, pero le estoy dando la funcion
     // getByCategory a TODOS mis helpers indistintamente de cual sea su schema
     async getByCategory(categoryName) {
-        const data = await this.collection.find({category: categoryName})
+        const data = await this.collection.find({category: categoryName}).lean()
         return data
     }
 

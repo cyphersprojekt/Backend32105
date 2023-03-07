@@ -16,6 +16,7 @@ const homeRouter = require('../routes/home.js').router
 const accountsRouter = require('../routes/accounts.js').router
 const carritosRouter = require('../routes/carrito.js').router
 const comprasRouter = require('../routes/compras.js').router
+const categoriasRouter = require('../routes/categories').router
 const logger = require('../controllers/logControl').logger
 
 
@@ -90,6 +91,7 @@ app.use(homeRouter)
 app.use('/accounts', accountsRouter)
 app.use('/carritos', carritosRouter)
 app.use('/compras', comprasRouter)
+app.use('/categorias', categoriasRouter)
 
 // Handleo todo lo no implementado aca
 app.all("*", (req, res) => {    

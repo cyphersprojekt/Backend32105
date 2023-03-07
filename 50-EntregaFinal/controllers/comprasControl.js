@@ -3,6 +3,7 @@ const Carritos = ObjectInterface.getCarritosModel();
 const Compras = ObjectInterface.getComprasModel();
 const compras = ObjectInterface.getComprasHelper();
 const ComprasDto = require('../db/dtos/comprasDto');
+const { isAdmin } = require('./authControl');
 const vaciarCarrito = require('./carritosControl').vaciarCarrito;
 const sendMail = require('../helpers/nodemailerHelper').sendMail;
 const sendTwilioMessage = require('../helpers/twilioHelper').sendTwilioMessage
@@ -45,9 +46,12 @@ async function comprarCarrito(req, res) {
 }
 
 async function renderBuyHistory(req, res) {
-    let reqUser = req.user.username
-    let data = await Compras.find({username: reqUser}).sort({dateBought: -1}).lean()
-    res.render('compras', {data: data, username: reqUser})
+    let reqUser = req.user
+    let username = req.user.username
+    let buyHistory = await Compras.find({username: username}).sort({dateBought: -1}).lean()
+    let userIsAdmin = isAdmin(reqUser)
+    let data = {username, buyHistory, userIsAdmin}
+    res.render('compras', {data: data})
 }
 
 async function renderSuccessPage(req, res) {

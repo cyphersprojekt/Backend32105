@@ -1,3 +1,4 @@
+const { productosHelper } = require('../db/models/productosModel');
 const ObjectInterface = require('../db/mongooseObjIface')
 const logger = require('./logControl').logger;
 const categoriesModel = ObjectInterface.getCategoriasModel()
@@ -12,31 +13,40 @@ const isAdmin = require('./authControl').isAdmin
 // la verdad es que no tengo idea de como se va a comportar esa misma restriccion cuando en lugar
 // de GET hagas un POST a traves de postman o insomnia. mejor prevenir que lamentar
 async function renderCategoriasPage(req, res) {
-    let reqUser = req.user
-    if(!isAdmin(reqUser)) {
+    let reqUser = req.user.username
+    let userIsAdmin = isAdmin(req.user)
+    if(!isAdmin(req.user)) {
         renderErrorPage(req, res, 'Solo los administradores tienen acceso a esta pagina')
     } else {
         let allCategories = await categoriesHelper.getAll()
-        data = {reqUser, allCategories}
-        res.render('categorias')
+        data = {reqUser, allCategories, userIsAdmin}
+        res.render('categorias', {data: data})
     }
 }
 
-async function crearCategoria(req, res) {
+async function renderFiltroByCategoria(req, res) {
     let reqUser = req.user
-    let newCategory = req.body.newCategory
-    if (!isAdmin(reqUser)) {
-        renderErrorPage(req, res, 'Solo los administradores pueden agregar categorias')
+    let userIsAdmin = isAdmin(reqUser)
+    let requestedCategory = req.params.searchCategory;
+    let foundProducts = await productosHelper.getByCategory(requestedCategory)
+    let data = {reqUser, userIsAdmin, requestedCategory, foundProducts}
+    res.render('detailedCategory', {data: data})
+}
+
+async function crearCategoria(req, res) {
+    let newCategoryName = req.body.name
+    let newCategoryObject = {name: newCategoryName}
+    let checkExistingQuery = await categoriesModel.find({name: newCategoryName}).lean()
+    // por que no me funciona ni el length de un json lean ni el count() de un objeto de mongo?
+    // lo tengo asi en los carritos
+    if (checkExistingQuery.length >= 1) {
+        res.render('error', {data: 'Ya existe una categoria con ese nombre'})
     } else {
-        if (categoriesModel.findOne({category_name: newCategory})) {
-            renderErrorPage(req, res, 'Ya existe una categoria con ese nombre')
-        } else {
-            try {
-                await categoriesHelper.insert(newCategory)
-                renderSuccessPage(req, res, `Se creo la categoria ${newCategory}`)
-            } catch {
-                renderErrorPage(req, res, 'Ups! no se pudo crear la categoria')
-            }
+        try {
+            await categoriesHelper.insert(newCategoryObject)
+            renderSuccessPage(req, res, `Se creo la categoria ${newCategoryName}`)
+        } catch {
+            res.render('error', {data: 'Ups! No pudimos crear la categoria'})
         }
     }
 }
@@ -64,5 +74,7 @@ async function borrarCategoria(req, res) {
     }
 }
 
+exports.renderFiltroByCategoria = renderFiltroByCategoria
+exports.renderCategoriasPage = renderCategoriasPage
 exports.crearCategoria = crearCategoria
 exports.borrarCategoria = borrarCategoria

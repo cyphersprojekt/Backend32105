@@ -13,7 +13,7 @@
 
 
         </div>
-        <h1> Welcome, {{data.name}}</h1>
+        <h1> Welcome, {{data.username}}</h1>
         </section>
 <style>
 table, th, td {
@@ -27,9 +27,9 @@ img{
 </style>
 <div>
 
-    {{#if data}}
+    {{#if data.buyHistory}}
     <h2>Historial de compras</h2>
-    {{#each data}}
+    {{#each data.buyHistory}}
     <h3>Compra del {{this.dateBought}}</h3>
     <table>
         <tr>
@@ -46,6 +46,9 @@ img{
         {{/each}}
     </table>
     {{/each}}
+    {{#else}}
+    <h2>Todavia no compraste nada!  </h2>
+    {{/else}}
     {{/if}}
 
 </div>

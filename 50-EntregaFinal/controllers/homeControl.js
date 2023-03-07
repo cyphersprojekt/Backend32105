@@ -22,7 +22,6 @@ async function renderHomePage(req, res) {
     let name = req.user.username
     let userIsAdmin = isAdmin(req.user)
     let allCategories = await categoriesHelper.getAll()
-    console.log(allCategories)
     let data = {name, userIsAdmin, allCategories}
     res.render('home', {data: data})
     try {
