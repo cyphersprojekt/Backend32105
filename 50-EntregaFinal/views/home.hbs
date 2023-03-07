@@ -52,15 +52,17 @@
 
                 <label for="thumbnail">Thumbnail:</label><br>
                 <input type="text" id="thumbnail" name="thumbnail" required><br><br>
-
+                {{#if data.allCategories}}
                 <label for="category">Category</label><br>
                 <select name="category" id="category">
                     {{#each data.allCategories}}
                         <option value="{{this.name}}">{{this.name}}</option>
                     {{/each}}
                 </select><br><br>
-
                 <input class="createProductBtn" type="submit" value="Submit" onclick='this.form.submit();document.forms["newProductForm"].reset();'>
+                    {{else}}
+                    <p style="color:crimson">Se necesita crear al menos una categoria antes de poder crear un producto!</p>
+                    {{/if}}
             </form>
             <hr>
         </section>

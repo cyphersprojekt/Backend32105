@@ -14,11 +14,11 @@ router.post('/', isAuth, async(req, res)=> {
     crearCategoria(req, res)
 })
 
-router.post('/:deleteCategory', isAuth, async(req, res)=> {
+router.get('/delete/:categoryId', isAuth, async(req, res)=> {
     borrarCategoria(req, res)
 })
 
-router.get('/:searchCategory', async(req, res) => {
+router.get('/:searchCategory', isAuth, async(req, res) => {
     renderFiltroByCategoria(req, res)
 })
 

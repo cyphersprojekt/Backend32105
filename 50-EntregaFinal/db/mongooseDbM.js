@@ -39,6 +39,7 @@ class mongooseHelper{
 
     async delete(id) {
         await this.collection.deleteOne({_id: id})
+        return true
     }
 }
 

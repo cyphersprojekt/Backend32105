@@ -26,10 +26,11 @@ async function renderCategoriasPage(req, res) {
 
 async function renderFiltroByCategoria(req, res) {
     let reqUser = req.user
+    let name = req.user.username
     let userIsAdmin = isAdmin(reqUser)
     let requestedCategory = req.params.searchCategory;
     let foundProducts = await productosHelper.getByCategory(requestedCategory)
-    let data = {reqUser, userIsAdmin, requestedCategory, foundProducts}
+    let data = {reqUser, userIsAdmin, requestedCategory, foundProducts, name}
     res.render('detailedCategory', {data: data})
 }
 
@@ -53,24 +54,15 @@ async function crearCategoria(req, res) {
 
 async function borrarCategoria(req, res) {
     let reqUser = req.user
-    let categoryToDelete = req.body.deleteCategory
+    let category = req.params.categoryId
     if (!isAdmin(reqUser)) {
-        renderErrorPage(req, res, 'Solo los administradores pueden eliminar categorias!')
-    } else {
-        try {
-            let category = await categoriesModel.findOne({name: categoryToDelete}).lean()
-            if (category) {
-                await categoriesHelper.delete(category._id)
-                // si yo fuera un buen programador pensaria alguna forma de que eliminar
-                // una categoria te elimine todos los productos dentro de ella pero a esa
-                // altura deberias pagarme porque ya le dedique mas tiempo a esta entrega
-                // que a proyectos enteros para el trabajo
-                renderSuccessPage(req, res, `Se elimino la categoria solicitada. <br>
-                No se eliminaran productos!`)
-            }
-        } catch {
-            renderErrorPage(req, res, 'Ups! No se pudo eliminar la categoria')
-        }
+        res.render('error', {data: 'Solo los administradores pueden eliminar categorias'})
+    }
+    try {
+        await categoriesHelper.delete(category)
+        renderSuccessPage(req, res, 'Se elimino la categoria solicitada')
+    } catch {
+        res.render('error', {data: 'Hubo un error al eliminar la categoria'})
     }
 }
 

@@ -23,3 +23,30 @@
         <button type="submit" value="submit">Submit</button>
     </form>
 </div>
+<hr>
+<style>
+    table, th, td {
+    border:1px solid black;
+    }
+</style>
+<div>
+    {{#if data.allCategories.[0]}}
+    <h2>All available categories</h2>
+    <table>
+        <tr>
+            <th>Category ID</th>
+            <th>Category name</th>
+            <th>Actions</th>
+        </tr>
+        {{#each data.allCategories}}
+        <tr>
+            <td>{{this._id}}</td>
+            <td>{{this.name}}</td>
+            <td><button onclick="window.location='/categorias/delete/{{this._id}}'">Eliminar categoria</button></td>
+        </tr>
+        {{/each}}
+    </table>
+    {{else}}
+    <h2>Todavia no hay categorias creadas!</h2>
+    {{/if}}
+</div>
