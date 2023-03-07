@@ -29,12 +29,6 @@ async function renderHomePage(req, res) {
             socket.emit("currentData", name)
             socket.emit("currentProducts", products)
         })
-
-        // io.on("filterProducts", async (filter) => {
-        //     let products = await productsHelper.getByCategory(filter)
-        //     socket.emit("filteredProducts", products)
-        //     logger.info('se emitio filteredProducts')
-        // })
     }
     catch (err) {
         logger.error("Failed to connect socket" + err)
@@ -92,8 +86,23 @@ async function renderSuccessPage(req, res, message=null) {
 
 async function renderDetailedProduct(req, res) {
     try {
+        let reqUser = req.user;
+        let name = reqUser.name;
+        let userIsAdmin = isAdmin(reqUser)
         let requestedProductId = req.params.productId
-        let detailedProduct = await productsHelper.getByID(requestedProductId)
+        // uno esperaria que si vos buscas un id que no existe, el resultado simplemente
+        // sea nulo. por desgracia, estas cayendo en la trampa conocida como
+        // 'pensar como un ser humano racional' dado que nuestro querido mongo, si el id
+        // que vos le pasas esta mal o no cumple con los 487923 caracteres hexadecimales,
+        // te levanta una excepcion que rompe todo. podria agregar un chequeo de longitud
+        // en mi metodo getById? si. seria mejor en terminos de funcionamiento que hacer
+        // esto? no.
+        try {
+            let detailedProduct = await productsHelper.getByID(requestedProductId)
+        } catch {
+            let detailedProduct = []
+        }
+        let data = {name, userIsAdmin, requestedProductId, }
         if (detailedProduct && detailedProduct != []) {
             res.send(detailedProduct)
         } else {

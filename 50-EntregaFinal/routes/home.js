@@ -20,7 +20,7 @@ router.get('/error', async (req, res) => {
     renderErrorPage(req, res)
 })
 
-router.get('/detailed/:productId', async (req, res)=> {
+router.get('/detailed/:productId', isAuth, async (req, res)=> {
     renderDetailedProduct(req, res)
 })
 

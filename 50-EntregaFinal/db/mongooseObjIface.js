@@ -13,6 +13,9 @@ const productosHelper = require('./models/productosModel').productosHelper;
 const categoriesModel = require('./models/categoriesModel').categoriesModel;
 const categoriesHelper = require('./models/categoriesModel').categoriesHelper;
 
+const messagesModel = require('./models/messagesModel').messagesModel;
+const messagesHelper = require('./models/messagesModel').messagesHelper;
+
 
 class DbObjectInterface {
     static getAccountsModel() {
@@ -44,6 +47,12 @@ class DbObjectInterface {
     }
     static getCategoriasHelper() {
         return categoriesHelper
+    }
+    static getMessagesModel() {
+        return messagesModel
+    }
+    static getMessagesHelper() {
+        return messagesHelper
     }
 }
 

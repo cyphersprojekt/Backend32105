@@ -1,8 +1,8 @@
-const { productosHelper } = require('../db/models/productosModel');
 const ObjectInterface = require('../db/mongooseObjIface')
 const logger = require('./logControl').logger;
 const categoriesModel = ObjectInterface.getCategoriasModel()
 const categoriesHelper = ObjectInterface.getCategoriasHelper()
+const productosHelper = ObjectInterface.getProductosHelper()
 const renderErrorPage = require('./homeControl').renderErrorPage
 const renderSuccessPage = require('./homeControl').renderSuccessPage
 const isAdmin = require('./authControl').isAdmin
@@ -39,8 +39,6 @@ async function crearCategoria(req, res) {
     let newCategoryName = req.body.name
     let newCategoryObject = {name: newCategoryName}
     let checkExistingQuery = await categoriesModel.find({name: newCategoryName}).lean()
-    // por que no me funciona ni el length de un json lean ni el count() de un objeto de mongo?
-    // lo tengo asi en los carritos
     if (checkExistingQuery.length >= 1) {
         res.render('error', {data: 'Ya existe una categoria con ese nombre'})
     } else {
