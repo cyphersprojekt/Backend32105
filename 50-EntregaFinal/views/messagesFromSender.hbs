@@ -31,18 +31,25 @@
         <h1> Welcome, {{data.name}}</h1>
         </section>
 
-        <section id="list-messages">
-
-        </section>
-        <iframe name="dummyframe" id="dummyframe" style="display:none"></iframe>
+        <button type="button" onclick=window.location='/chat'>Back to chat</button>
+        <hr>
+        {{#if data.allMessagesFromSender.[0]}}
+        <h2>Rendering all messages from {{data.reqSender}}</h2>
         <table>
-            <td>
-                <p id="messageSender" name="messageSender">{{data.email}}</p>
-            </td>
-            <td>
-                <input type="text" id="messageVal" name="messageVal">
-            </td>
-            <td>
-                <button type="submit" onclick="sendMessage()">Enviar</button>
-            </td>
+            <tr>
+                <th>Sender</th>
+                <th>Message</th>
+                <th>Actions</th>
+            </tr>
+            {{#each data.allMessagesFromSender}}
+            <tr>
+                <td><a href='/chat/{{this.sender}}'>{{this.sender}}</a></td> 
+                {{!-- aca tengo que poner un link al filtro por remitente --}}
+                <td>{{this.value}}</td>
+                <td>Not implemented!</td>
+            </tr>
+            {{/each}}
         </table>
+        {{else}}
+        <h2>{{data.reqSender}} hasn't sent any messages yet!</h2>
+        {{/if}}

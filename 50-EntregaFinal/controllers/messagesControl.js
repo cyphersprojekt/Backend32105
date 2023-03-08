@@ -34,9 +34,16 @@ async function createNewMessage(messageObj) {
     await messagesHelper.insert(messageObj)
 }
 
-async function filterMessagesBySender(req, res) {
-    return true
+async function renderMessagesBySender(req, res) {
+    let reqSender = req.params.senderEmail
+    let allMessagesFromSender = await messagesModel.find({sender: reqSender}).lean()
+    let userIsAdmin = isAdmin(req.user)
+    let name = req.user.username
+    let email = req.user.email
+    let data = {reqSender, allMessagesFromSender, userIsAdmin, name, email}
+    res.render('messagesFromSender', {data: data})
 }
 
+exports.renderMessagesBySender = renderMessagesBySender
 exports.renderChatPage = renderChatPage
 exports.createNewMessage = createNewMessage

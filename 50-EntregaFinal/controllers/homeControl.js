@@ -97,16 +97,17 @@ async function renderDetailedProduct(req, res) {
         // te levanta una excepcion que rompe todo. podria agregar un chequeo de longitud
         // en mi metodo getById? si. seria mejor en terminos de funcionamiento que hacer
         // esto? no.
+        let detailedProduct
         try {
-            let detailedProduct = await productsHelper.getByID(requestedProductId)
+            detailedProduct = await productsHelper.getByID(requestedProductId)
         } catch {
-            let detailedProduct = []
+            detailedProduct = []
         }
-        let data = {name, userIsAdmin, requestedProductId, }
+        let data = {name, userIsAdmin, requestedProductId, detailedProduct}
         if (detailedProduct && detailedProduct != []) {
-            res.send(detailedProduct)
+            res.render('detailedProduct', {data: data})
         } else {
-            res.send('no se encontro el producto')
+            res.render('error', {data: 'no se encontro el producto'})
         }
     } catch {
         renderErrorPage(req, res, 'oops! Hubo un error al buscar tu producto')
