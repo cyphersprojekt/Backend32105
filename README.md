@@ -1,6 +1,104 @@
 # Coderhouse backend, comision 32105
 
+## 08/03/2023
+#### Entrega Final
 
+##### Consigna:
+* Desarrollar el backend de una aplicacion **e-commerce** para poder vender productos de un rubro a elección
+
+##### Deploy, testeo y funcionamiento:
+1. Para hacer un deploy local, el primer paso es crear los archivos 50-EntregaFinal/config/dev.env y 50-EntregaFinal/config/prod.env con el siguiente formato:
+````
+# Configuracion de base de datos
+mongoUrl=""                             # URL de conexión con una base de datos de mongo, puede ser
+                                        # tanto local como remota en Atlas
+
+# Configuracion de la app
+PORT = 8081                             # Puerto desde el cual se va a ejecutar nuestro servidor
+
+LAUNCH_MODE = 'standalone'              # Modo de ejecucion del servidor. 'standalone' ejecuta un
+                                        # unico proceso, 'cluster' va a ejecutar un proceso por cada
+                                        # nucleo de cpu disponible en el host donde vayamos a correrlo
+
+
+#Configuracion de mail
+SMTP_HOST="smtp.ethereal.email"         # Dominio de donde van a salir los correos
+SMTP_PORT=587                           # Puerto por el que van a salir los correos (465, 587, 25, 2525, etc)
+SMTP_SECURE=false                       # SSL, True para puerto 465, False para cualquier otro
+SMTP_USER=""                            # Usuario registrado en el dominio de donde sacar los correos
+SMTP_PASS=""                            # Contraseña del usuario definido arriba
+
+
+ADMIN_PHONE_NUMBER=""                   # Este va a recibir un sms cada vez que se confirma una compra
+
+ADMIN_ADDRESS="donny64@ethereal.email"  # Cuenta admin por default. Podemos tener tantos administradores como deseemos
+                                        # modificando directamente el campo 'admin' de cada uno de nuestros usuarios 
+                                        # en la base de datos, pero el usuario que esté registrado y su email matchee
+                                        # con el aquí configurado va a ser administrador independientemente de lo que
+                                        # su registro en la db diga
+
+
+
+#Configuracion de twilio
+TWILIO_SID=
+TWILIO_AUTH_TOKEN=
+TWILIO_NUMBER=
+TWILIO_WHATSAPP_NUMBER=
+````
+Para evitar leakear credenciales o tokens privados, serán provistos a través de la plataforma de Coder los .env con los que estuve trabajando.
+
+2. Ejecutar el servidor indicando por argv el entorno a utilizar. Dado que creamos dos archivos, un dev.env y un prod.env, las opciones son las siguientes:
+````
+npm run final dev
+````
+ó
+````
+npm run final prod
+````
+Cada una de ellas va a cargar su respectivo archivo. En caso de que no se le pase nada (haciendo npm run final) ó se le pase un entorno inexistente dentro de las opciones de configuración definidas dentro del código (por ejemplo npm run final QA), el programa va a defaultear a modo dev. Por último, en caso de que el archivo no exista o por algún motivo no sea posible leerlo, el programa va a intentar cargar un .env genérico en la raíz del proyecto (a la altura de este mismo readme, no adentro de 50-EntregaFinal/)
+
+3. Si todo salió bien, tendremos el servidor en funcionamiento. Una consideración a tener en cuenta es que, a medida que fue avanzando el curso y esta entrega creció en complejidad, fui "diseñando"(si es que se le puede llamar de esa manera) la aplicación alrededor de su front, y las rutas a las que era posible acceder a través de postman o insomnia fueron siendo reemplazadas y/o eliminadas. Obviamente, con suficiente maña todo va a poder ser "emulado" a través de requests manuales, pero hasta ahora yo no pude recrear los resultados de passport al enviar la información por fuera de un navegador.
+
+    1. Al acceder a nuestra web, lo primero que va a hacer falta es crear una cuenta. Recomiendo comenzar con la cuenta de administrador (definida por el *ADMIN_ADDRESS* que seteamos en nuestro .env) Para la instancia de esta app desplegada en railway, ya está creada la cuenta "admin" con contraseña "admin".  
+    ![register_page](./uploads/register.png)
+    2. Una vez registrado se inicia sesión de manera automática, y lo primero con lo que nos encontramos es que si no se crean categorías no podemos crear productos:  
+    ![home_sin_categorias](./uploads/no_categories.png)
+    3. Dirigiéndonos a /categorias (botón disponible en el menú superior si somos administradores) podemos generar una o varias siempre y cuando su nombre no esté ya cargado en esa colección:  
+    ![slash_categorias_sin_categorias](./uploads/no_loaded_categories.png)
+    4. Con la(s) categoría(s) ya cargada(s) se nos habilita el formulario de creación de productos y el botón de submit. El campo thumbnail es de tipo texto y hace referencia a una imagen externa, no a un archivo gestionado por multer:  
+    ![loaded_category_and_product](./uploads/loaded_category_and_product.png)
+    5. Teniendo ya los productos, podemos agregarlos a nuestro carrito a través del botón que nos presenta su respectiva vista. Adicionalmente podemos darle click al hipervínculo en su respectivo id para entrar a la vista "detallada" pero dado que los productos no poseen descripción esa vista contiene la misma información sólo que con otro layout. Existe un único carrito por usuario, por diseño jamás debería lograrse que existan dos o más carritos para la misma persona. Los carritos se crean con la generación del perfil, se modifican agregando o quitando productos de su atributo 'items' (type Array) y se borran al transformarse en una compra.  
+    ![carrito_con_producto](./uploads/carrito.png)
+    6. En caso de concretarse la compra con el botón de arriba, la misma se realiza, el carrito se "transforma" en una compra y podemos acceder a ella a través del historial:  
+    ![historial_de_compras](./uploads/buy_history.png)
+    7. La app también cuenta con un chat, en el cual los usuarios logueados tienen la posibilidad de enviar mensajes de manera global, así como también filtrar los mensajes por remitente dándole click al hipervínclo que aparece en el campo 'sender'.  
+    ![chat](./uploads/chat.png)  
+    ![chat_filtered](./uploads/chat_sender.png)  
+-----------------
+##### Bugs, faltantes y/o observaciones:
+1. De vez en cuando y todavía no sé por qué (dado que no sucede SIEMPRE) al enviar un mensaje en el chat, este se sube dos veces. Y después de un par de ocasiones en el que sean dos, empiezan a ser tres. Y así ad aeternum. Esto desaparece una vez que bajas la aplicación y la volves a levantar pero genuinamente no sé qué es lo que lo causa.
+2. Como se puede apreciar en las capturas, tengo un campo "Acciones" para cada uno de los mensajes cuyo único display es "Not implemented". La idea era hacer que los mensajes posean respuestas y que los administradores tengan la posibilidad de eliminar mensajes, pero no tuve tiempo.
+3. Muy infrecuentemente, hay *algo* que el navegador no me puede resolver y al cambiar de pestaña dentro del sitio la respuesta puede tardar múltiples segundos en aparecer. Dándole su tiempo termina avanzando y el problema no se vuelve a manifestar hasta luego de un rato. Lo raro es que sucede en TODAS las vistas, por más ligeras que sean. Intuyo que puede tratarse de lentitudes ocasionales con Atlas dado que mi authControl chequea si el usuario es admin para cada request para poder determinar si renderizar o no el menú superior.
+
+
+-----------------
+-----------------
+-----------------
+-----------------
+-----------------
+-----------------
+-----------------
+-----------------
+-----------------
+-----------------
+-----------------
+-----------------
+-----------------
+-----------------
+-----------------
+-----------------
+-----------------
+-----------------
 ## 20/02/2023
 #### Deno
 
